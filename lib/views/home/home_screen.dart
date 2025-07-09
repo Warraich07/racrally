@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Container(
-            height: 42.h,
+            height:Platform.isIOS?30.h: 42.h,
             decoration: BoxDecoration(
               color: AppTheme.secondaryColor,
               borderRadius: const BorderRadius.only(
@@ -120,10 +122,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
                 ),
               ],
-            ).paddingOnly(left: 16,right: 16,top: 40,bottom: 20),
+            ).paddingOnly(left: 16,right: 16,top:Platform.isIOS?60: 40,bottom: 20),
           ),
           SizedBox(
-            height: 45.h,
+            height:Platform.isIOS?57.h: 45.h,
             child: SingleChildScrollView(
               child: Column(
                 children: [
