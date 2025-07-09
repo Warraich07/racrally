@@ -1,0 +1,200 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:racrally/app_widgets/custom_button.dart';
+import 'package:sizer/sizer.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
+
+import '../app_theme/app_theme.dart';
+
+
+
+class CustomDialog {
+
+  static Future<dynamic> showDeleteDialog({
+    String title = 'Delete Event',
+    String description = 'This will remove the event from the system.',
+    String confirmText = 'Yes, Delete it',
+    VoidCallback? onConfirm,
+    String? iconPath,
+  }) {
+    return Get.dialog(
+
+      Dialog(
+        backgroundColor: AppTheme.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /// Top Row: Icon, Title, Close Button
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  iconPath != null
+                      ? Image.asset(iconPath, height: 24, width: 24,color: AppTheme.red,)
+                      : const Icon(Icons.delete_outline, color: Colors.red),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: AppTheme.mediumHeadingStyle,
+                        ),
+                        const SizedBox(height: 4),
+
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: const Icon(Icons.close, size: 20),
+                  )
+                ],
+              ),
+              Text(
+                description,
+                style: AppTheme.bodySmallGreyStyle,
+              ),
+              const SizedBox(height: 20),
+
+              /// Confirm Button
+              CustomButton(
+                borderColor: AppTheme.red,
+                buttonColor: AppTheme.red,
+                Text: "Yes, Delete it",
+                onTap: (){
+                Get.back();
+              if (onConfirm != null) onConfirm();},)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Future<dynamic> showErrorDialog({
+    String title = 'Error',
+    String? description = 'Something went wrong',
+    int? maxLine,
+    dynamic Function()? onTap,
+    String? buttonText,
+    bool showTitle=false,
+    String? iconPath
+  }) {
+    return Get.dialog(
+        Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                  20.0)), //this right here
+          child: Container(
+            height:380,
+            width: 100.w,
+            padding: const EdgeInsets.all(17),
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: AppTheme.primaryColor,
+              border: Border.all(color: AppTheme.whiteColor,width: 2.7),
+
+            ),
+            child: Column(
+              children: [
+
+               SizedBox(height: 50,),
+                // Image.asset(
+                //   iconPath?? AppIcons.errorIcon,
+                //   scale: 4.6,
+                // ),
+                SizedBox(height: 10,),
+                // const Spacer(),
+                showTitle? Text(
+                  title,
+                  style:  TextStyle(fontSize: 22,height: 1.2, fontFamily: "bold",color: AppTheme.whiteColor),
+                  textAlign: TextAlign.center,
+                ):Container(),
+                showTitle? SizedBox(height: 10):Container(),
+                SizedBox(height: 10,),
+                Text(
+                  description!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    height: 1.4,
+                    fontSize: 12,
+                    fontFamily: "Bold",
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 15),
+
+                const Spacer(),
+                ZoomTapAnimation(
+                    onTap: onTap??(){
+                      Get.back();
+                    },
+                    enableLongTapRepeatEvent: false,
+                    longTapRepeatDuration: const Duration(milliseconds: 100),
+                    begin: 1.0,
+                    end: 0.93,
+                    beginDuration: const Duration(milliseconds: 20),
+                    endDuration: const Duration(milliseconds: 120),
+                    beginCurve: Curves.decelerate,
+                    endCurve: Curves.fastOutSlowIn,
+                    child: Container(
+                      height: 55,
+                      width: 90.w,
+                      decoration: BoxDecoration(
+                        color: AppTheme.whiteColor,
+                      ),
+                      child: Center(
+                          child: Text(buttonText??"Back",
+                              style:  TextStyle(
+                                  color: AppTheme.primaryColor,
+
+
+                                  fontSize: 16,
+                                  fontFamily: "Bold"))),
+                    )),
+                SizedBox(height: 15),
+              ],
+            ),
+
+          ),
+        )
+    );
+  }
+
+
+
+
+  static void showLoading([String? message]) {
+    Get.dialog(
+      Center(
+        child: Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(color: Colors.deepOrangeAccent),
+                const SizedBox(height: 8),
+                Text(message ?? 'Loading...'),
+              ],
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  //hide loading
+  static void hideLoading() {
+    if (Get.isDialogOpen!) Get.back();
+  }
+}
+
