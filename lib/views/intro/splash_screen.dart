@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_theme/app_theme.dart';
@@ -48,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     valueColor: const AlwaysStoppedAnimation<Color>(
                         AppTheme.darkPrimaryColor),
                   )),
+                  Platform.isIOS?SizedBox().setHeight(40):SizedBox()
                 ],
               )
             ],
