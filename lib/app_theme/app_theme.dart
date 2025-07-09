@@ -33,12 +33,14 @@ class AppTheme {
   static const Color lightPrimaryColor = Color(0xFF4834CE);
   static const Color secondaryColor =  Color(0xFF625CF5);
   static const Color primaryColor = Color(0xFFFCFCFD);
+  static const Color dividerColor = Color(0xFFE3E8EF);
   static const Color primaryLittleDarkColor = Color(0xFFEEF2F6);
   static const Color primaryCardColor = Color(0xFF16B364);
   static const Color primaryDarkColor = Color(0xFFEEF1FF);
   static const Color primaryExtraLightColor = Color(0xFFFFFFFF);
   static const Color darkBackgroundColor = Color(0xFF121212);
   static const Color darkGreyColor = Color(0xFF697586);
+  static const Color mediumGreyColor = Color(0xFF2E2E2E);
   static const Color lightGreyColor = Color(0xFF9AA4B2);
   static const Color extraLightGreyColor = Color(0xFFF8FAFC);
   static const Color green =  Color(0xFF16B364);
@@ -93,7 +95,7 @@ class AppTheme {
   );
   static TextStyle get bodyExtraSmallWeight400Style => const TextStyle(
     fontFamily: AppFonts.medium,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     fontSize: 12,
     color: darkGreyColor,
   );
@@ -132,6 +134,12 @@ class AppTheme {
     fontFamily: AppFonts.medium,
     fontSize: 24,
     fontWeight: FontWeight.w700,
+    color: darkBackgroundColor,
+  );
+  static TextStyle get mediumLightHeadingStyle => const TextStyle(
+    fontFamily: AppFonts.medium,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
     color: darkBackgroundColor,
   );
   static TextStyle get mediumHeadingStyle => const TextStyle(

@@ -4,6 +4,7 @@ import 'package:racrally/app_widgets/custom_button.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/extensions/width_extension.dart';
 import 'package:racrally/views/events/widgets/custom_card_attendees.dart';
+import 'package:racrally/views/events/widgets/rsvp_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import '../../app_theme/app_theme.dart';
 import '../../constants/app_icons.dart';
@@ -21,7 +22,13 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return Scaffold(
       bottomSheet: Container(
             color: AppTheme.primaryExtraLightColor,
-          child: CustomButton(Text: "Enable RSVP").paddingSymmetric(horizontal: 16,vertical: 10)),
+          child: CustomButton(
+            onTap: (){
+              RSVPSheet.show(context);
+            },
+              Text: "Enable RSVP").paddingSymmetric(horizontal: 16,vertical: 10),
+
+      ),
       backgroundColor: AppTheme.primaryColor,
       body: Column(
         children: [
@@ -91,7 +98,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
              Container(
                padding: EdgeInsets.all(16),
                decoration: BoxDecoration(
-                   color: AppTheme.primaryLittleDarkColor.withOpacity(.2),
+                   color:AppTheme.primaryLittleDarkColor.withOpacity(.7),
                    borderRadius: BorderRadius.circular(12)),
 
                child: Column(

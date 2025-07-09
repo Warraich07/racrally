@@ -7,6 +7,7 @@ import '../../../constants/app_fonts.dart';
 
 class CustomDropdownField extends StatelessWidget {
   final String? hintText;
+  final double? fontSize;
   final String? fieldName;
   final List<DropdownMenuItem<String>> items;
   final String? value;
@@ -33,6 +34,7 @@ class CustomDropdownField extends StatelessWidget {
     this.inputTextColor,
     this.dropdownIconColor,
     this.isEditProfileInfoScreen = false,
+    this.fontSize
   }) : super(key: key);
 
   @override
@@ -100,10 +102,10 @@ class CustomDropdownField extends StatelessWidget {
         hintText ?? '',
         style:  TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 14,  fontFamily: AppFonts.medium,color: hintTextColor??AppTheme.lightGreyColor),
+            fontSize:fontSize?? 14,  fontFamily: AppFonts.medium,color: hintTextColor??AppTheme.lightGreyColor),
       ),
       style: TextStyle(
-        fontSize: 16,
+        fontSize:fontSize?? 16,
         fontFamily: "medium",
         color: inputTextColor ?? AppTheme.darkBackgroundColor,
       ),
