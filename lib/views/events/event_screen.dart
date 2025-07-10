@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:racrally/app_widgets/custom_button.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
 import 'package:racrally/extensions/height_extension.dart';
-import 'package:racrally/extensions/width_extension.dart';
 import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/utils/custom_dialog.dart';
 import 'package:racrally/views/events/widgets/create_event_bottom_sheet.dart';
 import 'package:racrally/views/events/widgets/custom_card.dart';
-import 'package:racrally/views/events/widgets/rsvp_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+
 
 import '../../app_theme/app_theme.dart';
 import '../../constants/app_icons.dart';
-import '../../constants/custom_validators.dart';
-import '../auth/widgets/custom_dropdown.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({super.key});

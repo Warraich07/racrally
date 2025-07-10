@@ -6,6 +6,7 @@ import '../../app_theme/app_theme.dart';
 import '../../constants/app_icons.dart';
 import '../events/event_screen.dart';
 import '../home/home_screen.dart';
+import '../team/controller/team_controller.dart';
 import '../team/team_screen.dart';
 import 'controller/bottom_bar_controller.dart';
 
@@ -18,7 +19,7 @@ class CustomBottomBarr extends StatefulWidget {
 
 class _CustomBottomBarrState extends State<CustomBottomBarr> {
   final GeneralController _generalController = Get.put(GeneralController());
-
+  TeamController teamController=Get.find();
   final List<Widget> pages = [
     const HomeScreen(),
     const TeamScreen(),
@@ -67,6 +68,13 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
         currentIndex: _generalController.currentIndex,
         onTap: (index) {
           _generalController.onBottomBarTapped(index);
+          if(index!=1){
+            // setState(() {
+              teamController.isTeamCreated.value=false;
+              teamController.isPlayerInvited.value=false;
+            // });
+
+          }
         },
         elevation: 0,
         type: BottomNavigationBarType.fixed,

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
+import 'package:racrally/extensions/width_extension.dart';
 import '../../../app_theme/app_theme.dart';
 import '../../../constants/app_icons.dart';
 
-class CustomCard extends StatelessWidget {
-  final bool? isUpComing;
+class CustomTeamCard extends StatelessWidget {
+  final bool? isActive;
   final String title;
-  final String dateTime;
+  final String teamCode;
   final String location;
   final VoidCallback? onEditTap;
   final VoidCallback? onDeleteTap;
 
-  const CustomCard({
+  const CustomTeamCard({
     super.key,
-    this.isUpComing = true,
+    this.isActive = true,
     required this.title,
-    required this.dateTime,
+    required this.teamCode,
     required this.location,
     this.onEditTap,
     this.onDeleteTap,
@@ -46,18 +48,50 @@ class CustomCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Info
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(title, style: AppTheme.bodyMediumFont600Style),
-                      const SizedBox().setHeight(1),
-                      Text(dateTime, style: AppTheme.bodyExtraSmallFontWeight500Style),
-                      const SizedBox().setHeight(1),
-                      Text(
-                        location,
-                        style: AppTheme.bodyExtraSmallStyle.copyWith(
-                          color: AppTheme.darkBackgroundColor,
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: AppTheme.darkBackgroundColor
                         ),
+                        child: Image.asset(AppImages.basketball).paddingAll(5),
+                      ),
+                      SizedBox().setWidth(10),
+                      // Image.asset("name"),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(title, style: AppTheme.bodyMediumFont600Style),
+                          const SizedBox().setHeight(1),
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(fontSize: 18, color: Colors.black),
+                              children: [
+                                TextSpan(
+                                    text: "Team Code",
+                                    style: AppTheme.bodyExtraSmallFontWeight500Style
+                                ),
+                                TextSpan(
+                                  text: teamCode,
+                                  style:  AppTheme.bodyMediumFont600Style.copyWith(color: AppTheme.secondaryColor),
+                                ),
+
+                              ],
+                            ),
+                          ),
+
+                          // Text(teamCode, style: AppTheme.bodyExtraSmallFontWeight500Style),
+                          const SizedBox().setHeight(1),
+                          Text(
+                            location,
+                            style: AppTheme.bodyExtraSmallStyle.copyWith(
+                              color: AppTheme.darkBackgroundColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -114,21 +148,21 @@ class CustomCard extends StatelessWidget {
             alignment: Alignment.topRight,
             child: Container(
               height: 18,
-              width: isUpComing == true ? 77 : 50,
+              width: isActive == true ? 60 : 70,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                color: isUpComing == true
+                color: isActive == true
                     ? AppTheme.lightGreen
                     : AppTheme.lightRed,
               ),
               child: Center(
                 child: Text(
-                  isUpComing == true ? "Upcoming" : "Past",
+                  isActive == true ? "Active" : "InActive",
                   style: AppTheme.bodyExtraSmallFontTenStyle.copyWith(
-                    color: isUpComing == true ? AppTheme.green : AppTheme.red,
+                    color: isActive == true ? AppTheme.green : AppTheme.red,
                   ),
                 ),
               ),

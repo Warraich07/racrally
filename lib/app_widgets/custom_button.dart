@@ -8,8 +8,9 @@ import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 
 class CustomButton extends StatefulWidget {
-  const CustomButton({super.key, required this.Text, this.width, this.height, this.textSize, this.maxlines, this.onTap, this.buttonColor, this.buttonName, this.textColor, this.fontFamily, this.decoration,this.borderColor,this.isAuth,this.isGoogle,this.isOnBoarding,this.onBoardingText});
+  const CustomButton({super.key, required this.Text, this.width, this.height, this.textSize, this.maxlines, this.onTap, this.buttonColor, this.buttonName, this.textColor, this.fontFamily, this.decoration,this.borderColor,this.isAuth,this.isGoogle,this.isOnBoarding,this.onBoardingText,this.iconPath});
   final String Text;
+  final String? iconPath;
   final String? fontFamily;
   final String? buttonName;
   final Color? textColor;
@@ -60,11 +61,14 @@ class _CustomButtonState extends State<CustomButton> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               widget.isGoogle==null? Image.asset(
-                AppIcons.facebook,
+                widget.iconPath?? AppIcons.facebook,
                 height: 18,
+                color:  widget.iconPath==null?null:AppTheme.primaryColor,
               ):Image.asset(
-                AppIcons.google,
+                widget.iconPath??AppIcons.google,
                 height: 18,
+                color:  widget.iconPath==null?null:AppTheme.primaryColor,
+
               ),
             Text(
               maxLines: widget.maxlines,

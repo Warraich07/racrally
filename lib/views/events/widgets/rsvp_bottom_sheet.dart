@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:racrally/views/events/widgets/controller/event_controller.dart';
-import 'package:sizer/sizer.dart';
 import '../../../app_theme/app_theme.dart';
 import '../../../app_widgets/custom_button.dart';
 import '../../../app_widgets/custom_text_field.dart';

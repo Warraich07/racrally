@@ -7,17 +7,19 @@ import '../../../constants/app_icons.dart';
 
 class CustomCardAttendees extends StatelessWidget {
   final bool? isAttending;
+  final bool? isTeamScreen;
   final String name;
   final String details;
-  final VoidCallback? onEditTap;
+  final VoidCallback? onTapSend;
   final VoidCallback? onDeleteTap;
 
   const CustomCardAttendees({
     super.key,
     this.isAttending,
+    this.isTeamScreen,
     required this.name,
     required this.details,
-    this.onEditTap,
+    this.onTapSend,
     this.onDeleteTap,
   });
 
@@ -64,38 +66,48 @@ class CustomCardAttendees extends StatelessWidget {
                  ),
 
                   // Popup menu
-                  PopupMenuButton<String>(
-                    color: AppTheme.primaryColor,
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'remove',
-                        child: Row(
-                          children: [
-                            Image.asset(AppIcons.delete, height: 20, width: 20),
-                            const SizedBox(width: 10),
-                            Text('Remove', style: AppTheme.bodyMediumGreyStyle),
-                          ],
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      popupMenuTheme: PopupMenuThemeData(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      PopupMenuItem(
-                        value: 'sendInvite',
-                        child: Row(
-                          children: [
-                            // Image.asset(AppIcons.delete, height: 20, width: 20),
-                            Icon(Icons.share,color: AppTheme.textfieldBorderColor,),
-                            const SizedBox(width: 10),
-                            Text('Send Invite', style: AppTheme.bodyMediumGreyStyle),
-                          ],
+                    ),
+                    child: PopupMenuButton<String>(
+                      color: AppTheme.primaryColor,
+                      itemBuilder: (context) => [
+
+                        PopupMenuItem(
+                          value:isTeamScreen==true?'sendInvite': 'sendInvite',
+                          child: Row(
+                            children: [
+                              Image.asset(AppIcons.share, height: 20, width: 20,color: AppTheme.textfieldBorderColor),
+
+                              const SizedBox(width: 10),
+                              Text(isTeamScreen==true?'ResendInvite':'Send Invite', style: AppTheme.bodyMediumGreyStyle),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                    onSelected: (value) {
-                      if (value == 'remove') {
-                        onEditTap?.call();
-                      } else if (value == 'sendInvite') {
-                        onDeleteTap?.call();
-                      }
-                    },
+                        PopupMenuItem(
+                          value: 'remove',
+                          child: Row(
+                            children: [
+                              Image.asset(AppIcons.delete, height: 20, width: 20,color: AppTheme.textfieldBorderColor),
+                              const SizedBox(width: 10),
+                              Text('Remove', style: AppTheme.bodyMediumGreyStyle),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 'remove') {
+                          onTapSend?.call();
+                        } else if (value == 'sendInvite') {
+                          onDeleteTap?.call();
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -119,7 +131,7 @@ class CustomCardAttendees extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  isAttending == true ? "ATTENDING" :isAttending == false ? "NOT ATTENDING":"NO RESPONSE",
+                  isAttending == true ? "JOINING" :isAttending == false ? "NOT JOINING":"NO RESPONSE",
                   style: AppTheme.bodyExtraSmallFontTenStyle.copyWith(
                     color: isAttending == true ? AppTheme.green :isAttending == false ? AppTheme.red:AppTheme.darkGreyColor,
                   ),

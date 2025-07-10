@@ -93,6 +93,12 @@ class AppTheme {
     fontSize: 12,
     color: darkGreyColor,
   );
+  static TextStyle get bodyExtraSmallWeight600Style => const TextStyle(
+    fontFamily: AppFonts.medium,
+    fontWeight: FontWeight.w600,
+    fontSize: 12,
+    color: darkBackgroundColor,
+  );
   static TextStyle get bodyExtraSmallWeight400Style => const TextStyle(
     fontFamily: AppFonts.medium,
     fontWeight: FontWeight.w400,
@@ -140,6 +146,12 @@ class AppTheme {
     fontFamily: AppFonts.medium,
     fontSize: 16,
     fontWeight: FontWeight.w500,
+    color: darkBackgroundColor,
+  );
+  static TextStyle get mediumLightHeadingWeight600Style => const TextStyle(
+    fontFamily: AppFonts.medium,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
     color: darkBackgroundColor,
   );
   static TextStyle get mediumHeadingStyle => const TextStyle(
