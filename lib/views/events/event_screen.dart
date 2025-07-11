@@ -38,57 +38,59 @@ class _EventScreenState extends State<EventScreen> {
       ),
 
       backgroundColor: AppTheme.primaryColor,
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Event Management",style: AppTheme.mediumHeadingStyle,),
-              Image.asset(AppIcons.event,height: 24,width: 24,)
-            ],
-          ),
-          SizedBox().setHeight(10),
-          CustomTextField(
-            hintText: "Search here",
-            prefixIcon: AppIcons.search,
-            prefixIconColor: AppTheme.lightGreyColor,
-          ),
-          SizedBox().setHeight(15),
-          GestureDetector(
-            onTap: (){
-              Get.toNamed(AppRoutes.eventDetail);
-            },
-            child: CustomCard(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Event Management",style: AppTheme.mediumHeadingStyle,),
+                Image.asset(AppIcons.event,height: 24,width: 24,)
+              ],
+            ),
+            SizedBox().setHeight(10),
+            CustomTextField(
+              hintText: "Search here",
+              prefixIcon: AppIcons.search,
+              prefixIconColor: AppTheme.lightGreyColor,
+            ),
+            SizedBox().setHeight(15),
+            GestureDetector(
+              onTap: (){
+                Get.toNamed(AppRoutes.eventDetail);
+              },
+              child: CustomCard(
+                  title: "Annual Team Lunch",
+                  dateTime: "Saturday, June 22 - 5:00 PM",
+                  location: "Maplewood Park - Field 3",
+                onDeleteTap: (){
+                    CustomDialog.showDeleteDialog(
+                      iconPath: AppIcons.delete
+                    );
+                },
+              ),
+            ),
+            GestureDetector(
+        
+              onTap: (){
+                Get.toNamed(AppRoutes.eventDetail);
+              },
+              child: CustomCard(
+                isUpComing:null,
                 title: "Annual Team Lunch",
                 dateTime: "Saturday, June 22 - 5:00 PM",
                 location: "Maplewood Park - Field 3",
-              onDeleteTap: (){
+                onDeleteTap: (){
                   CustomDialog.showDeleteDialog(
-                    iconPath: AppIcons.delete
+                      iconPath: AppIcons.delete
                   );
-              },
+                },
+              ),
             ),
-          ),
-          GestureDetector(
-
-            onTap: (){
-              Get.toNamed(AppRoutes.eventDetail);
-            },
-            child: CustomCard(
-              isUpComing:null,
-              title: "Annual Team Lunch",
-              dateTime: "Saturday, June 22 - 5:00 PM",
-              location: "Maplewood Park - Field 3",
-              onDeleteTap: (){
-                CustomDialog.showDeleteDialog(
-                    iconPath: AppIcons.delete
-                );
-              },
-            ),
-          ),
-
-        ],
-      ).paddingOnly(left: 16,right: 16,top: 40),
+        
+          ],
+        ).paddingOnly(left: 16,right: 16,top: 40),
+      ),
     );
   }
 }

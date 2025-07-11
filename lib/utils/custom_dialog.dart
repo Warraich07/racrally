@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:racrally/app_widgets/custom_button.dart';
 import 'package:sizer/sizer.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 import '../app_theme/app_theme.dart';
+import '../views/auth/widgets/custom_dropdown.dart';
 
 
 
@@ -71,6 +73,140 @@ class CustomDialog {
                 onTap: (){
                 Get.back();
               if (onConfirm != null) onConfirm();},)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Future<dynamic> showReminderDialog({
+    String title = 'Send RSVP Reminder',
+    String description = 'This will send a push notification and in-app message to Noraiz Shahid asking them to RSVP for the next game.',
+    String confirmText = 'Send Reminder',
+    VoidCallback? onConfirm,
+    String? iconPath,
+    String? inviteAttendee
+  }) {
+    return Get.dialog(
+
+      Dialog(
+        backgroundColor: AppTheme.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /// Top Row: Icon, Title, Close Button
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  iconPath != null
+                      ? Image.asset(iconPath, height: 24, width: 24,color: AppTheme.secondaryColor,)
+                      : const Icon(Icons.alarm, color: Colors.red),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: AppTheme.mediumHeadingStyle,
+                        ),
+                        const SizedBox(height: 4),
+
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: const Icon(Icons.close, size: 20),
+                  )
+                ],
+              ),
+              Text(
+                description,
+                style: AppTheme.bodySmallGreyStyle,
+              ),
+              const SizedBox(height: 20),
+            StatefulBuilder(
+              builder: (context, setState) {
+                final MultiSelectController<String> inviteController = MultiSelectController<String>();
+
+                return MultiDropdown<String>(
+                  controller: inviteController,
+                  items: [
+                    DropdownItem(label: 'vs Viper Saturday, June 22 – 5:00 PM', value: 'vs Viper Saturday, June 22 – 5:00 PM'),
+                    DropdownItem(label: 'vs Sultan Saturday, June 22 – 5:00 PM', value: 'vs Sultan Saturday, June 22 – 5:00 PM'),
+                  ],
+                  searchEnabled: false,
+                  chipDecoration: const ChipDecoration(
+                    wrap: true,
+                    spacing: 8,
+                    runSpacing: 4,
+                    backgroundColor: Colors.grey,
+                  ),
+                  selectedItemBuilder: (item) {
+                    // Extract only "vs TeamName"
+                    final parts = item.label.split(" ");
+                    final shortLabel = parts.length >= 2 ? "${parts[0]} ${parts[1]}" : item.label;
+
+                    return Chip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                        side: const BorderSide(color:AppTheme.secondaryColor),
+                      ),
+                      backgroundColor: AppTheme.secondaryColor,
+                      label: Text(
+                        shortLabel,
+                        style: AppTheme.bodyExtraSmallFontTenStyle.copyWith(
+                          color: AppTheme.primaryColor
+                        ),
+                      ),
+                      deleteIcon: const Icon(Icons.close, size: 16, color: Colors.white),
+                      onDeleted: () {
+                        inviteController.unselectWhere((e) => e.label == item.label);
+                      },
+                    );
+                  },
+                  fieldDecoration: FieldDecoration(
+                    labelText: "Upcoming Games",
+                    hintText: "",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide:  BorderSide(color: AppTheme.textfieldBorderColor.withOpacity(.3)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide:  BorderSide(color: AppTheme.textfieldBorderColor.withOpacity(.3)),
+                    ),
+                  ),
+
+                );
+              },
+            ),
+
+
+
+
+
+
+
+
+            const SizedBox(height: 20),
+
+              /// Confirm Button
+              CustomButton(
+                borderColor: AppTheme.secondaryColor,
+                buttonColor: AppTheme.secondaryColor,
+                Text: "Send Reminder",
+                onTap: (){
+                  Get.back();
+                  if (onConfirm != null) onConfirm();},)
             ],
           ),
         ),

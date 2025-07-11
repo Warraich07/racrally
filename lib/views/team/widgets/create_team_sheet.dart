@@ -15,7 +15,7 @@ import '../../../app_widgets/custom_text_field.dart';
 import '../../../utils/snackbar_utils.dart';
 
 class CreateTeamSheet {
-  static void show(BuildContext context) {
+  static void show(BuildContext context,bool isUpdate) {
 
     File? _pickedImage;
     int selectedIndex = -1;
@@ -219,7 +219,7 @@ class CreateTeamSheet {
                             type: SnackbarType.success,
                           );
                         },
-                        Text: "Create Team",
+                        Text:isUpdate?'Update': "Create Team",
                       ),
                     ],
                   ),

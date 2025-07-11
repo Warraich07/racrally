@@ -85,7 +85,7 @@ class CustomCardAttendees extends StatelessWidget {
                               Image.asset(AppIcons.share, height: 20, width: 20,color: AppTheme.textfieldBorderColor),
 
                               const SizedBox(width: 10),
-                              Text(isTeamScreen==true?'ResendInvite':'Send Invite', style: AppTheme.bodyMediumGreyStyle),
+                              Text(isTeamScreen==true?'Resend Invite':'Send Invite', style: AppTheme.bodyMediumGreyStyle),
                             ],
                           ),
                         ),

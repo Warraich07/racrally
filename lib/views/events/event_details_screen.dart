@@ -34,7 +34,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         children: [
           Container(
             width: double.infinity,
-        height: 25.h,
+        height: 21.h,
         decoration: BoxDecoration(
           color: AppTheme.primaryDarkColor,
           borderRadius: const BorderRadius.only(
@@ -52,7 +52,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         onTap: (){
                           Get.back();
                         },
-                        child: Image.asset(AppIcons.back_arrow,width: 24,)),
+                        child: Image.asset(AppIcons.arrow_back_sharp,width: 24,)),
                     Theme(
                       data: Theme.of(context).copyWith(
                         popupMenuTheme: PopupMenuThemeData(
@@ -96,7 +96,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     ),
                   ],
                 ),
-                Spacer(),
+                // Spacer(),
                 Center(child: Text("Annual Team Session",style: AppTheme.mediumHeadingFont600Style,)),
                 SizedBox().setHeight(10)
               ],
@@ -158,7 +158,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               ),
               SizedBox().setHeight(10),
               SizedBox(
-                height: 38.h,
+                height: 43.h,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [

@@ -4,6 +4,7 @@ import 'package:racrally/app_widgets/custom_button.dart';
 import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/extensions/width_extension.dart';
+import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/views/team/controller/team_controller.dart';
 import 'package:racrally/views/team/widgets/create_team_sheet.dart';
 import 'package:racrally/views/team/widgets/custom_team_card.dart';
@@ -42,12 +43,7 @@ class _TeamScreenState extends State<TeamScreen> {
               ],
             ),
             SizedBox().setHeight(10),
-            CustomTextField(
-              hintText: "Search here",
-              prefixIcon: AppIcons.search,
-              prefixIconColor: AppTheme.lightGreyColor,
-            ),
-            SizedBox().setHeight(15),
+
             Spacer(flex: 1,),
             Image.asset(AppImages.teamMembers,width: 35.w,),
             Text("You haven’t created a team yet",style: AppTheme.mediumLightHeadingWeight600Style,),
@@ -61,7 +57,7 @@ class _TeamScreenState extends State<TeamScreen> {
               width: 42.w,
               iconPath: AppIcons.addIcon,
               onTap: (){
-                CreateTeamSheet.show(context);
+                CreateTeamSheet.show(context,false);
               },
               Text: "Create Team",
               borderColor: AppTheme.secondaryColor,
@@ -141,9 +137,15 @@ class _TeamScreenState extends State<TeamScreen> {
                               ],
                               onSelected: (value) {
                                 if (value == 'edit') {
+                                  CreateTeamSheet.show(context,true);
+                                  print("edit");
                                   // onEditTap?.call();
                                 } else if (value == 'delete') {
                                   // onDeleteTap?.call();
+                                } else if (value == 'send rsvp') {
+                                  // onDeleteTap?.call();
+                                  print("object");
+                                  CustomDialog.showReminderDialog(iconPath: AppIcons.share);
                                 }
                               },
                             ),
@@ -168,7 +170,7 @@ class _TeamScreenState extends State<TeamScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Team Members",style: AppTheme.mediumHeadingStyle,),
+                            Text("Team Members",style: AppTheme.mediumLightHeadingWeight600Style,),
                             Row(
                               children: [
                                 Row(
@@ -178,7 +180,6 @@ class _TeamScreenState extends State<TeamScreen> {
                                 Row(
                                   children: [ Image.asset(AppIcons.cancelled,height: 18,width: 18,),const SizedBox().setWidth(3),Text("05",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
                                 ),
-
                               ],
                             ),
                           ],
@@ -242,19 +243,24 @@ class _TeamScreenState extends State<TeamScreen> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
-                                CustomCardAttendees(
-                                  name: 'Noraiz Shahid',
-                                  details:
-                                  'noraizshahid@gmail.com',
-                                  isAttending:true,
-                                  isTeamScreen:true,
-                                  onTapSend: (){
-                                  CustomDialog.showDeleteDialog(
-                                    title: "Remove Player",
-                                      description: "This will remove the role from the system",
-                                      iconPath: AppIcons.delete
-                                  );
-                                },),
+                                GestureDetector(
+                                  onTap: (){
+                                      Get.toNamed(AppRoutes.playerDetails);
+                                  },
+                                  child: CustomCardAttendees(
+                                    name: 'Noraiz Shahid',
+                                    details:
+                                    'noraizshahid@gmail.com',
+                                    isAttending:true,
+                                    isTeamScreen:true,
+                                    onTapSend: (){
+                                    CustomDialog.showDeleteDialog(
+                                      title: "Remove Player",
+                                        description: "This will remove the role from the system",
+                                        iconPath: AppIcons.delete
+                                    );
+                                  },),
+                                ),
                                 CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true,isTeamScreen:true,
 
                                   onTapSend: (){

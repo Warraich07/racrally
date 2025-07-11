@@ -4,6 +4,7 @@ class AppIcons {
   static String google = "assets/app_icons/auth/facebook_icon.png";
   static String facebook = "assets/app_icons/auth/google.png";
   static String back_arrow = "assets/app_icons/overall/back_arrow.png";
+  static String arrow_back_sharp = "assets/app_icons/overall/arrow_back_sharp.png";
 
   static String bottomBarOne = "assets/app_icons/bottom_bar/bottombar_one.png";
   static String bottomBarTwo = "assets/app_icons/bottom_bar/bottombar_two.png";
@@ -26,6 +27,7 @@ class AppIcons {
   static String teamMember = "assets/app_icons/overall/team_member.png";
   static String share = "assets/app_icons/overall/share.png";
   static String alarm = "assets/app_icons/overall/alarm.png";
+  static String email = "assets/app_icons/overall/email.png";
 
 
 }

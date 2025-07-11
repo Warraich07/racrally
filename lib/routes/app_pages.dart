@@ -7,6 +7,7 @@ import 'package:racrally/views/auth/verify_otp_screen.dart';
 import 'package:racrally/views/events/event_details_screen.dart';
 import 'package:racrally/views/home/notifications.dart';
 import 'package:racrally/views/intro/splash_screen.dart';
+import 'package:racrally/views/team/player_details_screen.dart';
 import '../views/auth/sign_up_screen.dart';
 import '../views/bottom_nav_bar/bottom_nav_bar.dart';
 import '../views/intro/onboarding_screen.dart';
@@ -25,6 +26,7 @@ class AppPages {
     GetPage(name: AppRoutes.resetPassword, page: () =>  const ResetPasswordScreen()),
     GetPage(name: AppRoutes.notifications, page: () =>  const NotificationScreen()),
     GetPage(name: AppRoutes.eventDetail, page: () =>  const EventDetailsScreen()),
+    GetPage(name: AppRoutes.playerDetails, page: () =>  const PlayerDetailsScreen()),
 
   ];
 }

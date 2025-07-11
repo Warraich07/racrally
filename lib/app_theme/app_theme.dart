@@ -130,6 +130,12 @@ class AppTheme {
     fontSize: 14,
     color:darkBackgroundColor ,
   );
+  static TextStyle get bodyMediumFont700Style => const TextStyle(
+    fontFamily: AppFonts.medium,
+    fontWeight: FontWeight.w700,
+    fontSize: 14,
+    color:darkBackgroundColor ,
+  );
   static TextStyle get headingStyle => const TextStyle(
     fontFamily: AppFonts.medium,
     fontSize: 30,
