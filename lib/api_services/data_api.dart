@@ -4,12 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../controllers/auth_controller.dart';
+import '../constants/app_urls.dart';
 import '../services/local_storage/shared_preferences.dart';
 import '../utils/custom_dialog.dart';
 import '../views/auth/controller/auth_controller.dart';
 import 'api_exceptions.dart';
-import 'api_urls.dart';
 
 // This is the DataApiService class. It contains two methods, get and post, to access the api
 // for both information retrieval and data updates. There is also a helper method named _processResponse

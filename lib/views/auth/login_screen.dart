@@ -25,9 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthController authController=Get.find();
   final GeneralController generalController=Get.find();
   bool showPassword=true;
+  bool rememberMe=false;
   final GlobalKey<FormState> _formKey = GlobalKey();
   FocusNode focusNodeEmail=FocusNode();
   FocusNode focusNodePassword=FocusNode();
+  final emailController=TextEditingController();
+  final passwordController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,11 +81,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                 
                     CustomTextField(
+                      controller: emailController,
                       focusNode: focusNodeEmail,
                       validator: (value) => CustomValidator.email(value),
                       fieldName: "Email",hintText: "Enter your Email",),
                     const SizedBox().setHeight(18),
                           CustomTextField(
+                            controller: passwordController,
                             focusNode: focusNodePassword,
                             validator: (value) => CustomValidator.password(value),
                             suffixIcon: showPassword?GestureDetector(
@@ -113,10 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         GestureDetector(
                           onTap: (){
-                            authController.toggleCheck();
+                            setState(() {
+                              rememberMe=!rememberMe;
+                            });
+
                           },
-                          child: Obx(
-                            ()=> Container(
+                          child: Container(
                               height: 20,
                               width: 20,
                               decoration: BoxDecoration(
@@ -128,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               child:  authController.showCheck.value? Icon(Icons.check, size: 13,color:  AppTheme.secondaryColor,).paddingAll(1):Container(),
                             ),
-                          ),
+
                         ),
                         const SizedBox().setWidth(5),
                         Text("Remember me", style: AppTheme.bodyExtraSmallStyle),
@@ -149,10 +156,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox().setHeight(14),
                     CustomButton(
                     onTap: (){
-                      // if(_formKey.currentState!.validate()){
-                      //   print("object");
-                      // }
-                      Get.offAndToNamed(AppRoutes.bottomBar);
+                      if(_formKey.currentState!.validate()){
+                        focusNodeEmail.unfocus();
+                        focusNodePassword.unfocus();
+                        authController.loginUser(emailController.text.toString(), passwordController.text.toString(),rememberMe);
+                        print("object");
+                        // Get.offAndToNamed(AppRoutes.bottomBar);
+                      }
+                     
                       // generalController.onBottomBarTapped(0);
                     },
                     Text: 'Sign In'),
@@ -174,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox().setHeight(18),
                      CustomButton(
                         onTap: (){
-                
+
                         },
                        Text: "Google",
                        borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),

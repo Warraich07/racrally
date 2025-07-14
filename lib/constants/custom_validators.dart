@@ -59,6 +59,16 @@ class CustomValidator {
     return null;
   }
 
+  static String? otp(String? value) {
+    if (value!.isEmpty) {
+      return 'Please enter otp';
+    }
+    if (value.length<4) {
+      return 'Please enter valid otp';
+    }
+    return null;
+  }
+
   static String? lastName(String? value) {
     if (value!.isEmpty) {
       return 'Please enter your Last Name';

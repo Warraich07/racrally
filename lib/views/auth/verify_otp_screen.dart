@@ -9,7 +9,9 @@ import 'package:racrally/routes/app_routes.dart';
 import 'package:sizer/sizer.dart';
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
+import '../../constants/custom_validators.dart';
 import '../../utils/snackbar_utils.dart';
+import 'controller/auth_controller.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   const VerifyOtpScreen({super.key});
@@ -20,6 +22,8 @@ class VerifyOtpScreen extends StatefulWidget {
 
 class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   final FocusNode _otpFocusNode = FocusNode();
+  final AuthController authController=Get.find();
+
   String otp = "";
   bool showMessage = false;
   late Timer _timer;
@@ -48,6 +52,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     startTimer(); // Start the timer again
   }
 
+
+  final GlobalKey<FormState> _formKey = GlobalKey();
   @override
   void initState() {
     // TODO: implement initState
@@ -79,45 +85,68 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
           Text("Enter Your OTP",style: AppTheme.subHeadingMediumStyle,),
           Text("Enter your OTP you got on your email",style: AppTheme.bodySmallGreyStyle,),
           SizedBox().setHeight(4.h),
-          PinCodeTextField(
-            focusNode: _otpFocusNode,
-            appContext: context,
-            length: 5,
-            obscureText: false,
-            animationType: AnimationType.none,
-            cursorColor: Colors.black,
-            textStyle:  TextStyle(fontSize: 16,fontFamily: "medium",color: AppTheme.darkBackgroundColor),
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.box,
-              borderRadius: BorderRadius.circular(8),
-              fieldHeight: 48,
-              fieldWidth: 62,
-              borderWidth: 1,
-              activeColor: AppTheme.textfieldBorderColor.withOpacity(.3), // 👈 Border color when filled and active
-              inactiveColor: AppTheme.textfieldBorderColor.withOpacity(.3), // 👈 Border color when empty/inactive
-              selectedColor: AppTheme.secondaryColor, // 👈 Border color when selected/focused
-              activeFillColor: AppTheme.primaryColor,
-              inactiveFillColor: AppTheme.primaryColor,
-              selectedFillColor: AppTheme.primaryColor,
+          Form(
+            key: _formKey,
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                inputDecorationTheme: InputDecorationTheme(
+                  errorStyle: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.secondaryColor,
+
+                  ),
+                ),
+              ),
+              child: PinCodeTextField(
+
+                validator: (value) => CustomValidator.otp(value),
+                focusNode: _otpFocusNode,
+                appContext: context,
+                length: 4,
+                obscureText: false,
+                animationType: AnimationType.none,
+                cursorColor: Colors.black,
+                textStyle:  TextStyle(fontSize: 16,fontFamily: "medium",color: AppTheme.darkBackgroundColor),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(8),
+                  fieldHeight: 48,
+                  fieldWidth: 62,
+                  borderWidth: 1,
+                  activeColor: AppTheme.textfieldBorderColor.withOpacity(.3), // 👈 Border color when filled and active
+                  inactiveColor: AppTheme.textfieldBorderColor.withOpacity(.3), // 👈 Border color when empty/inactive
+                  selectedColor: AppTheme.secondaryColor, // 👈 Border color when selected/focused
+                  activeFillColor: AppTheme.primaryColor,
+                  inactiveFillColor: AppTheme.primaryColor,
+                  selectedFillColor: AppTheme.primaryColor,
+                ),
+                enableActiveFill: true,
+                onChanged: (String value) {
+                  setState(() {
+                    otp = value;
+                  });
+                },
+                onCompleted: (String value) {
+                  setState(() {
+                    otp = value;
+                    print("Completed OTP: $otp");
+                    _otpFocusNode.unfocus();
+                  });
+                },
+              ),
             ),
-            enableActiveFill: true,
-            onChanged: (String value) {
-              setState(() {
-                otp = value;
-              });
-            },
-            onCompleted: (String value) {
-              setState(() {
-                otp = value;
-                print("Completed OTP: $otp");
-                _otpFocusNode.unfocus();
-              });
-            },
           ),
+          // Row(
+          //   children: [
+          //     otp.isEmpty? Text("Enter otp",style: TextStyle(fontSize: 10,color:AppTheme.secondaryColor,fontWeight: FontWeight.bold),):
+          //     otp.length<4?Text("Enter otp",style: TextStyle(fontSize: 10,color:AppTheme.secondaryColor,fontWeight: FontWeight.bold),):Container(),
+          //   ],
+          // ),
           _resendVisible
               ? Row(
                 children: [
@@ -150,12 +179,16 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
           Spacer(),
           CustomButton(
               onTap: (){
+                if(_formKey.currentState!.validate()){
+                  _otpFocusNode.unfocus();
+                  authController.verifyEmail(otp);
+                }
                 // if(otp.isEmpty){
                 //   SnackbarUtil.showSnackbar(message: "Please enter OTP", type: SnackbarType.info);
                 // }else if(otp.length<4){
                 //   SnackbarUtil.showSnackbar(message: "Please enter valid OTP code", type: SnackbarType.info);
                 // }
-                Get.toNamed(AppRoutes.resetPassword);
+                // Get.toNamed(AppRoutes.resetPassword);
               },
               Text: 'Next'),
         ],
