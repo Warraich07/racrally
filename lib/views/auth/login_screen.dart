@@ -118,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         GestureDetector(
                           onTap: (){
+                            print("object");
                             setState(() {
                               rememberMe=!rememberMe;
                             });
@@ -133,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: AppTheme.textfieldBorderColor.withOpacity(0.3),
                                 ),
                               ),
-                              child:  authController.showCheck.value? Icon(Icons.check, size: 13,color:  AppTheme.secondaryColor,).paddingAll(1):Container(),
+                              child:  rememberMe? Icon(Icons.check, size: 13,color:  AppTheme.secondaryColor,).paddingAll(1):Container(),
                             ),
 
                         ),

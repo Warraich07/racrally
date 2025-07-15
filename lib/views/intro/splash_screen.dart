@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    controller.startProgressTimer();
+    controller.maintainSessionAndNavigate();
   }
 
   @override

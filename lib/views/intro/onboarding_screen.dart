@@ -10,6 +10,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../app_widgets/custom_button.dart';
 import '../../routes/app_routes.dart';
+import '../../services/local_storage/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -55,7 +56,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Align(
                 alignment: Alignment.topRight,
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: ()async {
+                    await AuthPreference.instance.setFirstTime(false);
                     Get.offAndToNamed(AppRoutes.login);
                   },
                   child: Text('Skip',style: AppTheme.bodyMediumStyle,),
@@ -128,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     SizedBox(
                       width: 30.w,
                       child: CustomButton(
-                        onTap: () {
+                        onTap: ()async {
                           if (_currentIndex < _pages.length - 1) {
                             _pageController.nextPage(
                               duration: const Duration(milliseconds: 300),
@@ -136,6 +138,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             );
                           } else {
                             print("object");
+                            await AuthPreference.instance.setFirstTime(false);
                             Get.offAndToNamed(AppRoutes.login);
                             // Finish onboarding
                           }

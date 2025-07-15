@@ -7,6 +7,7 @@ import 'app_theme/app_theme.dart';
 import 'controllers/lazy_controller.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

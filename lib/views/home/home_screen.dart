@@ -66,7 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
-                    Image.asset(AppIcons.userIcon,height: 40,),
+                    GestureDetector(
+                        onTap:(){
+                          Get.toNamed(AppRoutes.profile);
+                              },
+                        child: Image.asset(AppIcons.userIcon,height: 40,)),
                     const SizedBox(width: 5),
                     Column(
                       children: [

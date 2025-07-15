@@ -10,6 +10,27 @@ class CustomValidator {
     return null;
   }
 
+  static String? team(String? value) {
+    if (value!.isEmpty) {
+      return ' Enter team name';
+    }
+    return null;
+  }
+  static String? role(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Select role';
+    }
+    return null;
+  }
+
+
+  static String? location(String? value) {
+    if (value!.isEmpty) {
+      return ' Enter location';
+    }
+    return null;
+  }
+
   static String? password(String? value) {
     if (value!.isEmpty) {
       return 'Enter password';

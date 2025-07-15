@@ -28,6 +28,7 @@ class AppIcons {
   static String share = "assets/app_icons/overall/share.png";
   static String alarm = "assets/app_icons/overall/alarm.png";
   static String email = "assets/app_icons/overall/email.png";
+  static String arrow_forward = "assets/app_icons/overall/arrow_forward.png";
 
 
 }

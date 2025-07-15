@@ -48,7 +48,8 @@ class AuthController extends GetxController {
     if (result['success'].toString()=="true") {
       userData.value=UserModel.fromJson(result['data']);
       accessToken.value=result['data']['token'];
-      _authPreference.saveUserData(token: jsonEncode(userData.value.toString()));
+      _authPreference.saveUserData(data: jsonEncode(userData.value?.toJson()));
+      print("${jsonEncode(userData.value?.toJson())} this is user data");
       _authPreference.saveUserDataToken(token: accessToken.value);
       Get.offAndToNamed(AppRoutes.bottomBar);
       if(rememberMe==true){

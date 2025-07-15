@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:racrally/app_widgets/custom_button.dart';
 import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
@@ -25,8 +26,13 @@ class TeamScreen extends StatefulWidget {
   State<TeamScreen> createState() => _TeamScreenState();
 }
 class _TeamScreenState extends State<TeamScreen> {
-  bool isTeamCreated=true;
   TeamController teamController=Get.find();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    teamController.getTeam();
+  }
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -77,138 +83,154 @@ class _TeamScreenState extends State<TeamScreen> {
           children: [
             Column(
               children: [
-                CustomHeader(),
+                CustomHeader(
+                  title: teamController.teamList[0].name,
+                  subTitle: teamController.teamList[0].location,
+                  onMenuSelected: (value) {
+                    if (value == 'edit') {
+                      CreateTeamSheet.show(context, true);
+                      print("Edit selected");
+                    } else if (value == 'delete') {
+                      print("Delete selected");
+                    } else if (value == 'send rsvp') {
+                      CustomDialog.showReminderDialog(iconPath: AppIcons.share);
+                    }
+                  },
+                ),
                 teamController.isPlayerInvited.value==true?
-                    Column(
-                      children: [
-                        CustomButton(
-                            onTap: (){
-                              // RSVPSheet.show(context);
-                            },
-                            Text: "Invite Member"),
-                        SizedBox().setHeight(15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Team Members",style: AppTheme.mediumLightHeadingWeight600Style,),
-                            Row(
-                              children: [
-                                Row(
-                                  children: [ Image.asset(AppIcons.accepted,height: 18,width: 18,),const SizedBox().setWidth(3),Text("12",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
-                                ),
-                                const SizedBox().setWidth(5),
-                                Row(
-                                  children: [ Image.asset(AppIcons.cancelled,height: 18,width: 18,),const SizedBox().setWidth(3),Text("05",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox().setHeight(10),
-                       Container(
-                         height: 40,
-                         decoration: BoxDecoration(
-                           color: AppTheme.darkGreyColor.withOpacity(0.1),
-                           borderRadius: BorderRadius.circular(8)
+                    SizedBox(
+                      height: 51.h,
+                      child: Column(
+                        children: [
+                          CustomButton(
+                              onTap: (){
+                                // RSVPSheet.show(context);
+                              },
+                              Text: "Invite Member"),
+                          SizedBox().setHeight(15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Team Members",style: AppTheme.mediumLightHeadingWeight600Style,),
+                              Row(
+                                children: [
+                                  Row(
+                                    children: [ Image.asset(AppIcons.accepted,height: 18,width: 18,),const SizedBox().setWidth(3),Text("12",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                                  ),
+                                  const SizedBox().setWidth(5),
+                                  Row(
+                                    children: [ Image.asset(AppIcons.cancelled,height: 18,width: 18,),const SizedBox().setWidth(3),Text("05",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox().setHeight(10),
+                         Container(
+                           height: 40,
+                           decoration: BoxDecoration(
+                             color: AppTheme.darkGreyColor.withOpacity(0.1),
+                             borderRadius: BorderRadius.circular(8)
+                           ),
+                           child: Row(
+                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                             children: [
+                               GestureDetector(
+                                 onTap: (){
+                                   teamController.toggleRoaster();
+                                 },
+                                 child: Container(
+                                   height: 32,
+                                   width: 43.w,
+                                   decoration: BoxDecoration(
+                                       color:teamController.isActiveRoaster.value==true?AppTheme.extraLightGreyColor: null,
+                                       borderRadius: BorderRadius.circular(8)
+                                   ),
+                                   child: Center(
+                                       child: Text(
+                                         "Active Roasters",
+                                         style: AppTheme.bodyExtraSmallWeight600Style.copyWith(
+                                             color:teamController.isActiveRoaster.value==true?AppTheme.darkBackgroundColor: AppTheme.darkGreyColor
+
+                                         ),)),
+                                 ),
+                               ),
+                               GestureDetector(
+                                 onTap: (){
+                                   teamController.toggleRoaster();
+                                 },
+                                 child: Container(
+                                   height: 32,
+                                   width: 43.w,
+                                   decoration: BoxDecoration(
+                                       color:teamController.isActiveRoaster.value==false?AppTheme.extraLightGreyColor: null,
+                                       borderRadius: BorderRadius.circular(8)
+                                   ),
+                                   child: Center(
+                                       child: Text(
+                                     "Reserve Players",
+                                     style: AppTheme.bodyExtraSmallWeight600Style.copyWith(
+                                     color:teamController.isActiveRoaster.value==false?AppTheme.darkBackgroundColor: AppTheme.darkGreyColor
+
+                                   ),)),
+                                 ),
+                               ),
+                             ],
+                           ).paddingSymmetric(horizontal: 5),
                          ),
-                         child: Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                           children: [
-                             GestureDetector(
-                               onTap: (){
-                                 teamController.toggleRoaster();
-                               },
-                               child: Container(
-                                 height: 32,
-                                 width: 43.w,
-                                 decoration: BoxDecoration(
-                                     color:teamController.isActiveRoaster.value==true?AppTheme.extraLightGreyColor: null,
-                                     borderRadius: BorderRadius.circular(8)
-                                 ),
-                                 child: Center(
-                                     child: Text(
-                                       "Active Roasters",
-                                       style: AppTheme.bodyExtraSmallWeight600Style.copyWith(
-                                           color:teamController.isActiveRoaster.value==true?AppTheme.darkBackgroundColor: AppTheme.darkGreyColor
-
-                                       ),)),
-                               ),
-                             ),
-                             GestureDetector(
-                               onTap: (){
-                                 teamController.toggleRoaster();
-                               },
-                               child: Container(
-                                 height: 32,
-                                 width: 43.w,
-                                 decoration: BoxDecoration(
-                                     color:teamController.isActiveRoaster.value==false?AppTheme.extraLightGreyColor: null,
-                                     borderRadius: BorderRadius.circular(8)
-                                 ),
-                                 child: Center(
-                                     child: Text(
-                                   "Reserve Players",
-                                   style: AppTheme.bodyExtraSmallWeight600Style.copyWith(
-                                   color:teamController.isActiveRoaster.value==false?AppTheme.darkBackgroundColor: AppTheme.darkGreyColor
-
-                                 ),)),
-                               ),
-                             ),
-                           ],
-                         ).paddingSymmetric(horizontal: 5),
-                       ),
-                        SizedBox().setHeight(10),
-                        SizedBox(
-                          height: 24.h,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: (){
-                                      Get.toNamed(AppRoutes.playerDetails);
-                                  },
-                                  child: CustomCardAttendees(
-                                    name: 'Noraiz Shahid',
-                                    details:
-                                    'noraizshahid@gmail.com',
-                                    isAttending:true,
-                                    isTeamScreen:true,
-                                    onTapSend: (){
-                                    CustomDialog.showDeleteDialog(
-                                      title: "Remove Player",
-                                        description: "This will remove the role from the system",
-                                        iconPath: AppIcons.delete
-                                    );
-                                  },),
-                                ),
-                                CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true,isTeamScreen:true,
-
-                                  onTapSend: (){
-                                    CustomDialog.showDeleteDialog(
+                          SizedBox().setHeight(10),
+                          SizedBox(
+                            height: 24.h,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                        Get.toNamed(AppRoutes.playerDetails);
+                                    },
+                                    child: CustomCardAttendees(
+                                      name: 'Noraiz Shahid',
+                                      details:
+                                      'noraizshahid@gmail.com',
+                                      isAttending:true,
+                                      isTeamScreen:true,
+                                      onTapSend: (){
+                                      CustomDialog.showDeleteDialog(
                                         title: "Remove Player",
-                                        description: "This will remove the role from the system",
-                                        iconPath: AppIcons.delete
-                                    );
-                                  },),
-                                CustomCardAttendees(
-                                    name: 'Umer',
-                                    details: 'umer12@gmail.com',
-                                    isAttending:false,
-                                    isTeamScreen:true,
+                                          description: "This will remove the role from the system",
+                                          iconPath: AppIcons.delete
+                                      );
+                                    },),
+                                  ),
+                                  CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true,isTeamScreen:true,
+
                                     onTapSend: (){
-                          CustomDialog.showDeleteDialog(
-                          title: "Remove Player",
-                          description: "This will remove the role from the system",
-                          iconPath: AppIcons.delete
-                          );
-                          }),
-                                CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false,isTeamScreen:true),
-                              ],
+                                      CustomDialog.showDeleteDialog(
+                                          title: "Remove Player",
+                                          description: "This will remove the role from the system",
+                                          iconPath: AppIcons.delete
+                                      );
+                                    },),
+                                  CustomCardAttendees(
+                                      name: 'Umer',
+                                      details: 'umer12@gmail.com',
+                                      isAttending:false,
+                                      isTeamScreen:true,
+                                      onTapSend: (){
+                            CustomDialog.showDeleteDialog(
+                            title: "Remove Player",
+                            description: "This will remove the role from the system",
+                            iconPath: AppIcons.delete
+                            );
+                            }),
+                                  CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false,isTeamScreen:true),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ).paddingOnly(left: 16,right: 16,top: 10)
+                        ],
+                      ).paddingOnly(left: 16,right: 16,top: 10),
+                    )
                     :Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -259,11 +281,25 @@ class _TeamScreenState extends State<TeamScreen> {
                       color: AppTheme.darkBackgroundColor,
                     ),
                     child: ClipOval(
-                      child: Image.asset(
-                        AppImages.basketball, // use your image path
+                      child: CachedNetworkImage(
+
+                        imageUrl:teamController.teamList[0].image,
+                        placeholder: (context, url) =>
+                            Center(
+                                child: CircularProgressIndicator(
+                                  color: AppTheme.secondaryColor,
+                                )),
+                        errorWidget: (context, url,
+                            error) =>
+                            Image.asset(
+                              AppImages.topbar_ellipses,scale: 5.3,
+                              // color:   widget.forMyProfile==false?AppColors.whiteColor:AppColors.primaryColor,
+
+                            ),
                         fit: BoxFit.cover,
+                        // scale:20 ,
                       ),
-                    ).paddingOnly(bottom: 14,left: 10,right: 10,top: 5),
+                    ),
                   ),
 
                 ],

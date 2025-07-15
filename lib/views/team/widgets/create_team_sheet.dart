@@ -12,6 +12,7 @@ import 'package:sizer/sizer.dart';
 import '../../../app_theme/app_theme.dart';
 import '../../../app_widgets/custom_button.dart';
 import '../../../app_widgets/custom_text_field.dart';
+import '../../../constants/custom_validators.dart';
 import '../../../utils/snackbar_utils.dart';
 
 class CreateTeamSheet {
@@ -20,6 +21,12 @@ class CreateTeamSheet {
     File? _pickedImage;
     int selectedIndex = -1;
     final TeamController teamController=Get.find();
+    final GlobalKey<FormState> _formKey = GlobalKey();
+    final teamNameController=TextEditingController();
+    final locationController=TextEditingController();
+     XFile? image;
+     String imagePath='';
+     String teamColor='';
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -54,174 +61,188 @@ class CreateTeamSheet {
                   ),
                   padding: const EdgeInsets.all(16),
                   width: double.infinity,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(60),
-                          child: Container(
-                            width: 76,
-                            height: 5,
-                            color: AppTheme.dividerColor,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Container(
+                              width: 76,
+                              height: 5,
+                              color: AppTheme.dividerColor,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 18),
+                        const SizedBox(height: 18),
 
-                    Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 100,
-                            width: 100,
+                      Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(
+                                  width: 1,
+                                  color: AppTheme.textfieldBorderColor.withOpacity(.3),
+                                ),
+                              ),
+                              child: Center(
+                                child: _pickedImage != null
+                                    ? ClipOval(
+                                  child: Image.file(
+                                    _pickedImage!,
+                                    height: 100,
+                                    width: 100,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                                    : Image.asset(
+                                  AppImages.placeHolder,
+                                  height: 27,
+                                  width: 30,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            CustomButton(
+                              textSize: 12,
+                              width: 35.w,
+                              height: 40,
+                              iconPath: AppIcons.addIcon,
+                              onTap: () async {
+                                final ImagePicker picker = ImagePicker();
+                                 image = await picker.pickImage(source: ImageSource.gallery);
+                                 imagePath=image!.path;
+
+                                if (image != null) {
+                                  setState(() {
+                                    _pickedImage = File(image!.path);
+                                    print(_pickedImage);
+                                    print(image?.path);
+                                  });
+                                } else {
+                                  print('No image selected.');
+                                }
+                              },
+                              Text: "Upload Logo",
+                              borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
+                              buttonColor: AppTheme.primaryColor,
+                              textColor: AppTheme.darkBackgroundColor,
+                              isAuth: true,
+                              isGoogle: false,
+                            ),
+                          ],
+                        ),
+                      ),
+                        const SizedBox(height: 20),
+                        CustomTextField(
+                          controller: teamNameController,
+                          validator: (value) => CustomValidator.team(value),
+                          fieldName: "Team Name",
+                          hintText: "Enter team name...",
+                        ),
+                        const SizedBox(height: 18),
+                        CustomTextField(
+                          controller: locationController,
+                          validator: (value) => CustomValidator.location(value),
+                          fieldName: "Location",
+                          hintText: "Enter address...",
+                        ),
+                        const SizedBox(height: 18),
+                        Container(
+                          width: double.infinity,
+                            height: 92,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 width: 1,
                                 color: AppTheme.textfieldBorderColor.withOpacity(.3),
                               ),
-                            ),
-                            child: Center(
-                              child: _pickedImage != null
-                                  ? ClipOval(
-                                child: Image.file(
-                                  _pickedImage!,
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                                  : Image.asset(
-                                AppImages.placeHolder,
-                                height: 27,
-                                width: 30,
+                        ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Team Color",
+                              style: AppTheme.bodyExtraSmallWeight400Style.copyWith(
+                                color: AppTheme.darkBackgroundColor
                               ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          CustomButton(
-                            textSize: 12,
-                            width: 35.w,
+                              ),
+                              SizedBox().setHeight(10),
+                          SizedBox(
                             height: 40,
-                            iconPath: AppIcons.addIcon,
-                            onTap: () async {
-                              final ImagePicker picker = ImagePicker();
-                              final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: teamColors.length,
+                              itemBuilder: (context, index) {
+                                final isSelected = selectedIndex == index;
 
-                              if (image != null) {
-                                setState(() {
-                                  _pickedImage = File(image.path);
-                                });
-                              } else {
-                                print('No image selected.');
-                              }
-                            },
-                            Text: "Upload Logo",
-                            borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
-                            buttonColor: AppTheme.primaryColor,
-                            textColor: AppTheme.darkBackgroundColor,
-                            isAuth: true,
-                            isGoogle: false,
-                          ),
-                        ],
-                      ),
-                    ),
-                      const SizedBox(height: 20),
-                      CustomTextField(
-                        fieldName: "Team Name",
-                        hintText: "Enter team name...",
-                      ),
-                      const SizedBox(height: 18),
-                      CustomTextField(
-                        fieldName: "Location",
-                        hintText: "Enter address...",
-                      ),
-                      const SizedBox(height: 18),
-                      Container(
-                        width: double.infinity,
-                          height: 92,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              width: 1,
-                              color: AppTheme.textfieldBorderColor.withOpacity(.3),
-                            ),
-                      ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Team Color",
-                            style: AppTheme.bodyExtraSmallWeight400Style.copyWith(
-                              color: AppTheme.darkBackgroundColor
-                            ),
-                            ),
-                            SizedBox().setHeight(10),
-                        SizedBox(
-                          height: 40,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: teamColors.length,
-                            itemBuilder: (context, index) {
-                              final isSelected = selectedIndex == index;
-
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedIndex = index;
-                                  });
-                                  print("Selected index: $index");
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(right: 4),
-                                  padding: const EdgeInsets.all(5),
-                                  height: 30,
-                                  width: 38,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(22),
-                                    color: isSelected ? AppTheme.primaryColor : teamColors[index],
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
-                                        blurRadius: 3,
-                                      ),
-                                    ],
-                                  ),
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedIndex = index;
+                                      print(teamColors[index]);
+                                      teamColor=teamColors[index].toString();
+                                    });
+                                    print("Selected index: $index");
+                                  },
                                   child: Container(
-                                    height: 27,
-                                    width: 27,
+                                    margin: const EdgeInsets.only(right: 4),
+                                    padding: const EdgeInsets.all(5),
+                                    height: 30,
+                                    width: 38,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: teamColors[index],
+                                      borderRadius: BorderRadius.circular(22),
+                                      color: isSelected ? AppTheme.primaryColor : teamColors[index],
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          blurRadius: 3,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Container(
+                                      height: 27,
+                                      width: 27,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: teamColors[index],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                          ],
-                        ).paddingOnly(left: 16,right: 16,top: 10,bottom: 6),
-                      ),
-                      const SizedBox(height: 18),
-                      CustomButton(
-                        onTap: () {
-                          Get.back();
-                          teamController.isTeamCreated.value=true;
+                                );
+                              },
+                            ),
+                          )
+                            ],
+                          ).paddingOnly(left: 16,right: 16,top: 10,bottom: 6),
+                        ),
+                        const SizedBox(height: 18),
+                        CustomButton(
+                          onTap: () {
+                            if(_formKey.currentState!.validate()){
+                              if(imagePath.isEmpty){
+                                SnackbarUtil.showSnackbar(message: "Please select image", type: SnackbarType.info);
+                              }else if(selectedIndex==-1){
+                                SnackbarUtil.showSnackbar(message: "Please select team color", type: SnackbarType.info);
+                              }else{
+                                teamController.createTeam(teamNameController.text.toString(), locationController.text.toString(), teamColor, imagePath);
+                              }
+                            }
 
-                          // Get.toNamed(AppRoutes.teamDetail);
-                          SnackbarUtil.showSnackbar(
-                            message: "Team Created",
-                            type: SnackbarType.success,
-                          );
-                        },
-                        Text:isUpdate?'Update': "Create Team",
-                      ),
-                    ],
+                          },
+                          Text:isUpdate?'Update': "Create Team",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

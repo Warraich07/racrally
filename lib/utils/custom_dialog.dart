@@ -18,6 +18,7 @@ class CustomDialog {
     String confirmText = 'Yes, Delete it',
     VoidCallback? onConfirm,
     String? iconPath,
+    bool? showIcon,
   }) {
     return Get.dialog(
 
@@ -36,9 +37,11 @@ class CustomDialog {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  iconPath != null
-                      ? Image.asset(iconPath, height: 24, width: 24,color: AppTheme.red,)
-                      : const Icon(Icons.delete_outline, color: Colors.red),
+                  showIcon==false?Container(): SizedBox(
+                    child: iconPath != null
+                        ? Image.asset(iconPath, height: 24, width: 24,color: AppTheme.red,)
+                        : const Icon(Icons.delete_outline, color: Colors.red),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -69,7 +72,7 @@ class CustomDialog {
               CustomButton(
                 borderColor: AppTheme.red,
                 buttonColor: AppTheme.red,
-                Text: "Yes, Delete it",
+                Text: confirmText,
                 onTap: (){
                 Get.back();
               if (onConfirm != null) onConfirm();},)

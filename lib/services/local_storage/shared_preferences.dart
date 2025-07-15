@@ -14,6 +14,18 @@ class AuthPreference {
     // prefs.setString("userType", userType);
   }
 
+  Future setFirstTime(bool key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("isFirstTime", key);
+    // prefs.setString("userType", userType);
+  }
+  Future getFirstTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var log = prefs.getBool("isFirstTime") ?? true;
+    return log;
+  }
+
+
   Future<Map<String, dynamic>> getUserLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var log = prefs.getBool("isLoggedIn") ?? false;
@@ -35,9 +47,9 @@ class AuthPreference {
     return result;
   }
 
-  void saveUserData({@required token}) async {
+  void saveUserData({@required data}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString("userData", token.toString());
+    await pref.setString("userData", data.toString());
   }
 
   Future getUserData() async {

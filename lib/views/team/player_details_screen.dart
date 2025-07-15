@@ -52,7 +52,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
                             onTap: (){
                               Get.back();
                             },
-                            child: Image.asset(AppIcons.arrow_back_sharp,width: 24,)),
+                            child: Image.asset(AppIcons.arrow_back_sharp,width: 20,)),
                         Theme(
                           data: Theme.of(context).copyWith(
                             popupMenuTheme: PopupMenuThemeData(

@@ -1,4 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:racrally/app_widgets/custom_text_field.dart';
+import 'package:racrally/extensions/height_extension.dart';
+import 'package:racrally/routes/app_routes.dart';
+import 'package:racrally/views/profile/widgets/profile_screen.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../app_theme/app_theme.dart';
+import '../../app_widgets/custom_button.dart';
+import '../../app_widgets/custom_header.dart';
+import '../../constants/app_icons.dart';
+import '../../constants/app_images.dart';
+import '../../constants/custom_validators.dart';
+import '../../services/local_storage/shared_preferences.dart';
+import '../../utils/custom_dialog.dart';
+import '../auth/widgets/custom_dropdown.dart';
+import '../team/widgets/create_team_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -8,12 +25,179 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? selectedGender;
+  final AuthPreference _authPreference = AuthPreference.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      backgroundColor: AppTheme.primaryColor,
+      body: Stack(
         children: [
+          Column(
+            children: [
+              SizedBox(
+                height: 34.h,
+                child: Stack(
+                  children: [
+                    CustomHeader(
+                      showBackArrow: true,
+                      showPopUpMenu: false,
+                      title: "Talha Warraich",
+                      showSubtitle: false,
+                      onMenuSelected: (value) {
+                        if (value == 'edit') {
+                          CreateTeamSheet.show(context, true);
+                          print("Edit selected");
+                        } else if (value == 'delete') {
+                          print("Delete selected");
+                        } else if (value == 'send rsvp') {
+                          CustomDialog.showReminderDialog(iconPath: AppIcons.share);
+                        }
+                      },
+                    ),
+                    Positioned(
+                      top: 20.h - 50, // adjust this to control how much overlaps
+                      left: MediaQuery.of(context).size.width / 2 - 50,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 100,
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipOval(
+                              child: Image.asset(
+                                AppIcons.userIcon, // use your image path
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
 
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 29.h,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      CustomTextField(
+                        fieldName: "Name",
+                        hintText: "Talha Warraich",
+                      ),
+                      const SizedBox().setHeight(18),
+                      CustomTextField(
+                        fieldName: "Email",
+                        hintText: "talha@gmail.com",
+                      ),
+                      const SizedBox().setHeight(18),
+                      CustomDropdownField(
+                        validator: (value) => CustomValidator.selectGenderRange(value),
+                        fieldName: "Gender",
+                        hintText: "Select gender",
+                        value: selectedGender,
+                        items: const [
+                          DropdownMenuItem(value: "Male", child: Text("Male")),
+                          DropdownMenuItem(value: "Female", child: Text("Female")),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            selectedGender = value;
+                          });
+                        },
+                      ),
+                      const SizedBox().setHeight(18),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: AppTheme.darkGreyColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Column(
+                          children: [
+                            CustomTile(title: "Allow Notifications",isNotificationTile:true),
+                            CustomTile(title: "Privacy Policy",),
+                            CustomTile(title: "Terms & Conditions",),
+                            CustomTile(title: "Contact Us",),
+                            CustomTile(title: "Rate Us",),
+                          ],
+                        ).paddingOnly(top: 5),
+                      )
+                    ],
+                  ).paddingOnly(left: 16,right: 16,bottom: 16),
+                ),
+              )
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              color: AppTheme.primaryColor,
+              width: 91.w,
+              child: Column(
+
+                children: [
+                  SizedBox().setHeight(10),
+                  CustomButton(
+                    onTap: () {
+                        CustomDialog.showDeleteDialog(
+
+                          showIcon: false,
+                          title: "Logout",
+                          description: "Are you sure you want to logout?",
+                          confirmText: "Yes",
+                          onConfirm: (){
+                            _authPreference.setUserLoggedIn(false);
+                            Get.offAndToNamed(AppRoutes.login);
+                          }
+                        );
+                    },
+                    Text: "",
+                    borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
+                    buttonColor: AppTheme.primaryColor,
+                    textColor: AppTheme.darkBackgroundColor,
+                    isAuth: true,
+                    isGoogle: false,
+                    isOnBoarding: true,
+                    onBoardingText: Text("Logout"),
+                  ),
+                  SizedBox().setHeight(10),
+                  CustomButton(
+                    onTap: () {
+              
+                    },
+                    Text: "",
+                    borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
+                    buttonColor: AppTheme.primaryColor,
+                    textColor: AppTheme.darkBackgroundColor,
+                    isAuth: true,
+                    isGoogle: false,
+                    isOnBoarding: true,
+                    onBoardingText: Text("Change Password"),
+                  ),
+                  SizedBox().setHeight(10),
+                  CustomButton(
+                    onTap: () {
+
+                    },
+                    Text: "",
+                    borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
+                    buttonColor: AppTheme.primaryColor,
+                    textColor: AppTheme.darkBackgroundColor,
+                    isAuth: true,
+                    isGoogle: false,
+                    isOnBoarding: true,
+                    onBoardingText: Text("Delete Account"),
+                  ),
+                  SizedBox().setHeight(10),
+                  CustomButton(Text: "Save Changes")
+                ],
+              ),
+            ).paddingAll(16),
+          )
         ],
       ),
     );

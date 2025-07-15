@@ -80,7 +80,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               onTap: (){
                 Get.back();
               },
-              child: Image.asset(AppIcons.back_arrow,width: 24,)),
+              child: Image.asset(AppIcons.arrow_back_sharp,width: 20,)),
           SizedBox().setHeight(5.h),
           Text("Enter Your OTP",style: AppTheme.subHeadingMediumStyle,),
           Text("Enter your OTP you got on your email",style: AppTheme.bodySmallGreyStyle,),

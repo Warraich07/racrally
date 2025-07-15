@@ -130,7 +130,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 focusedErrorBorder:  OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide:  BorderSide(
-                        width: 1.3,color:widget.isEditProfileInfoScreen? AppTheme.secondaryColor:Colors.white)
+                        width: 1.3,color:widget.isEditProfileInfoScreen? AppTheme.secondaryColor:AppTheme.secondaryColor)
                 ),
                 hintText: widget.hintText,
                 errorStyle:  TextStyle(fontSize: 8,color:AppTheme.secondaryColor,fontWeight: FontWeight.bold),

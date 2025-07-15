@@ -29,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               GestureDetector(
                   onTap: (){
                     Get.back();},
-                  child: Image.asset(AppIcons.back_arrow,width: 24,)),
+                  child: Image.asset(AppIcons.arrow_back_sharp,width: 20,)),
               Text("Pending Requests",style: AppTheme.mediumHeadingStyle,),
               Container(width: 50,)
             ],

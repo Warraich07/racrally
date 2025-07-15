@@ -6,6 +6,7 @@ import 'package:racrally/views/team/controller/team_controller.dart';
 import '../../../app_theme/app_theme.dart';
 import '../../../app_widgets/custom_button.dart';
 import '../../../app_widgets/custom_text_field.dart';
+import '../../../constants/custom_validators.dart';
 import '../../../utils/snackbar_utils.dart';
 import '../../auth/widgets/custom_dropdown.dart';
 
@@ -13,8 +14,10 @@ class InvitePlayerSheet {
   static void show(BuildContext context) {
 
 
-    String? inviteAttendee;
+    String? playerType;
+    final emailController=TextEditingController();
     final TeamController teamController=Get.find();
+    final GlobalKey<FormState> _formKey = GlobalKey();
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -40,61 +43,71 @@ class InvitePlayerSheet {
                   ),
                   padding: const EdgeInsets.all(16),
                   width: double.infinity,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(60),
-                          child: Container(
-                            width: 76,
-                            height: 5,
-                            color: AppTheme.dividerColor,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Container(
+                              width: 76,
+                              height: 5,
+                              color: AppTheme.dividerColor,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text("Invite Player", style: AppTheme.mediumHeadingStyle),
-                      ),
-                      const SizedBox(height: 18),
-                      CustomTextField(
-                        fieldName: "Email",
-                        hintText: "Enter email address...",
-                      ),
-                      const SizedBox(height: 18),
-                      CustomDropdownField(
-                        fieldName: "Role",
-                        hintText: "Select",
-                        value: inviteAttendee,
-                        items: const [
-                          DropdownMenuItem(value: "Active Roaster", child: Text("Active Roaster")),
-                          DropdownMenuItem(value: "Reserve Player", child: Text("Reserve Player")),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            inviteAttendee = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 18),
-                      CustomButton(
-                        onTap: () {
-                          Get.back();
-                          teamController.isPlayerInvited.value=true;
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text("Invite Player", style: AppTheme.mediumHeadingStyle),
+                        ),
+                        const SizedBox(height: 18),
+                        CustomTextField(
+                          validator:  (value) => CustomValidator.email(value),
+                          controller: emailController,
+                          fieldName: "Email",
+                          hintText: "Enter email address...",
+                        ),
+                        const SizedBox(height: 18),
+                        CustomDropdownField(
+                          validator:  (value) => CustomValidator.role(value),
+                          fieldName: "Role",
+                          hintText: "Select",
+                          value: playerType,
+                          items: const [
+                            DropdownMenuItem(value: "Active Roaster", child: Text("Active Roaster")),
+                            DropdownMenuItem(value: "Reserve Player", child: Text("Reserve Player")),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              playerType = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 18),
+                        CustomButton(
+                          onTap: () {
+                            // if(_formKey.currentState!.validate()){
+                              // teamController.sendInvite(emailController.text.toString(), playerType!);
+                              Get.back();
+                              teamController.isPlayerInvited.value=true;
+                            // }
 
-                          // Get.toNamed(AppRoutes.teamDetail);
-                          // SnackbarUtil.showSnackbar(
-                          //   message: "Invite Sent",
-                          //   type: SnackbarType.success,
-                          // );
-                        },
-                        Text: "Invite Player",
-                      ),
-                    ],
+
+                            // Get.toNamed(AppRoutes.teamDetail);
+                            // SnackbarUtil.showSnackbar(
+                            //   message: "Invite Sent",
+                            //   type: SnackbarType.success,
+                            // );
+                          },
+                          Text: "Invite Player",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -10,4 +10,5 @@ abstract class AppRoutes {
   static const notifications = '/notifications';
   static const eventDetail = '/eventDetail';
   static const playerDetails = '/playerDetails';
+  static const profile = '/profile';
 }
