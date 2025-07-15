@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/routes/app_routes.dart';
+import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:racrally/views/profile/widgets/profile_screen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,6 +28,20 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String? selectedGender;
   final AuthPreference _authPreference = AuthPreference.instance;
+  AuthController authController=Get.find();
+  final emailController=TextEditingController();
+  final nameController=TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      emailController.text=authController.userData.value!.email;
+      nameController.text=authController.userData.value!.firstName.capitalizeFirst!+" "+authController.userData.value!.lastName.capitalizeFirst!;
+      selectedGender=authController.userData.value!.gender;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,13 +51,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Column(
             children: [
               SizedBox(
-                height: 34.h,
+                height: 35.h,
                 child: Stack(
                   children: [
                     CustomHeader(
                       showBackArrow: true,
                       showPopUpMenu: false,
-                      title: "Talha Warraich",
+                      title: authController.userData.value!.firstName.capitalizeFirst!+" "+authController.userData.value!.lastName.capitalizeFirst!,
                       showSubtitle: false,
                       onMenuSelected: (value) {
                         if (value == 'edit') {
@@ -80,17 +95,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
+
               SizedBox(
                 height: 29.h,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      SizedBox().setHeight(5),
                       CustomTextField(
+                        controller: nameController,
                         fieldName: "Name",
                         hintText: "Talha Warraich",
                       ),
                       const SizedBox().setHeight(18),
                       CustomTextField(
+                        controller: emailController,
                         fieldName: "Email",
                         hintText: "talha@gmail.com",
                       ),

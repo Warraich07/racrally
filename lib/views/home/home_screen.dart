@@ -8,6 +8,7 @@ import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/routes/app_pages.dart';
 import 'package:racrally/routes/app_routes.dart';
+import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:racrally/views/home/widgets/custom_event_card.dart';
 import 'package:racrally/views/home/widgets/custom_team_card.dart';
 import 'package:sizer/sizer.dart';
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     '40'
   ];
   int _currentIndex = 0;
+  AuthController authController=Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       children: [
                         Text("Welcome 👋",style: AppTheme.bodyMediumStyle.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor),),
-                        Text("Noraiz Shahid",style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.primaryColor),)
+                        Text(authController.userData.value!.firstName.capitalizeFirst!+" "+authController.userData.value!.lastName,style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.primaryColor),)
                       ],
                     ),
                     const Spacer(),

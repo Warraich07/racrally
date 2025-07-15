@@ -319,7 +319,7 @@ class CustomDialog {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircularProgressIndicator(color: Colors.deepOrangeAccent),
+                const CircularProgressIndicator(color: AppTheme.secondaryColor),
                 const SizedBox(height: 8),
                 Text(message ?? 'Loading...'),
               ],
