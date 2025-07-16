@@ -1,4 +1,4 @@
-package com.example.racrally
+package com.racrally.app
 
 import io.flutter.embedding.android.FlutterActivity
 
