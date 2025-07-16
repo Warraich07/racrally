@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
@@ -64,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       ),
                     ],
-                  ).paddingOnly(left: 16, right: 16),
+                  ).paddingOnly(left: 16, right: 16,top: Platform.isIOS?80:0),
                 ],
               ),
 

@@ -131,12 +131,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ).paddingOnly(left: 16,right: 16,top:Platform.isIOS?60: 40,bottom: 20),
           ),
-          SizedBox(
+          Container(
+            // color: Colors.yellow,
             height:Platform.isIOS?57.h: 45.h,
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   GridView.builder(
+                    padding: EdgeInsets.only(top: 20),
                     shrinkWrap: true,
                     itemCount: 4,
                     physics: NeverScrollableScrollPhysics(),

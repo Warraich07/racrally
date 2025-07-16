@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
@@ -51,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Column(
             children: [
               SizedBox(
-                height: 35.h,
+                height:Platform.isIOS?30.h: 35.h,
                 child: Stack(
                   children: [
                     CustomHeader(
@@ -97,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
               SizedBox(
-                height: 29.h,
+                height:Platform.isIOS?40.h: 29.h,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -212,7 +214,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onBoardingText: Text("Delete Account"),
                   ),
                   SizedBox().setHeight(10),
-                  CustomButton(Text: "Save Changes")
+                  CustomButton(Text: "Save Changes"),
+                  
+                  SizedBox(height: Platform.isIOS?20:0,)
                 ],
               ),
             ).paddingAll(16),

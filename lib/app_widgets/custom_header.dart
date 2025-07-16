@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,6 +47,7 @@ class CustomHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: Platform.isIOS?30:0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -65,6 +67,7 @@ class CustomHeader extends StatelessWidget {
                         ),
                       ),
                       child: PopupMenuButton<String>(
+                        icon: Icon(Icons.more_vert),
                         color: AppTheme.primaryColor,
                         itemBuilder: (context) => [
                           PopupMenuItem(

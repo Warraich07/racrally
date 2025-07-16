@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,7 +93,7 @@ class _EventScreenState extends State<EventScreen> {
                 Text("Event Management",style: AppTheme.mediumHeadingStyle,),
                 Image.asset(AppIcons.event,height: 24,width: 24,)
               ],
-            ),
+            ).paddingOnly(top: Platform.isIOS?30:0),
             SizedBox().setHeight(10),
             CustomTextField(
               focusNode: focusNodeSearchHere,

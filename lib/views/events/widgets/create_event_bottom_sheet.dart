@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -288,6 +290,7 @@ class CreateEventSheet {
                           },
                           Text: "Create Event",
                         ),
+                        SizedBox(height: Platform.isIOS?30:0,)
                       ],
                     ),
                   ),

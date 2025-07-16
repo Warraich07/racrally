@@ -242,6 +242,7 @@ class CreateTeamSheet {
                           },
                           Text:isUpdate?'Update': "Create Team",
                         ),
+                        SizedBox(height: Platform.isIOS?20:0,)
                       ],
                     ),
                   ),
