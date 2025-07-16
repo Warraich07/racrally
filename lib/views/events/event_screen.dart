@@ -78,7 +78,7 @@ class _EventScreenState extends State<EventScreen> {
             backgroundColor: AppTheme.secondaryColor,
             onPressed: () {
               focusNodeSearchHere.unfocus();
-              CreateEventSheet.show(context);
+              CreateEventSheet.show(context, "name", "location", "dateAndTime", false, "inviteAttendee", "eventId", false,"dateandtimeforupdate");
             },
             child: Icon(Icons.add,color: AppTheme.primaryColor,),
           ),
@@ -118,13 +118,22 @@ class _EventScreenState extends State<EventScreen> {
                     return GestureDetector(
                       onTap: () => Get.toNamed(AppRoutes.eventDetail),
                       child: CustomCard(
+                        onEditTap: (){
+                          CreateEventSheet.show(context, event.name.capitalizeFirst!, event.location.capitalizeFirst!, eventController.formatDate(event.date.toString()).capitalizeFirst!, false, event.inviteAttandee, event.id.toString(),true,event.date.toString());
+                          print("object");
+                        },
+                        onDeleteTap:(){
+                          CustomDialog.showDeleteDialog(
+                              onConfirm: (){
+                                eventController.deleteEvent(event.id.toString());
+                              },
+                              iconPath: AppIcons.delete);
+                        },
                         isUpComing: true,
                         title: event.name.capitalizeFirst!,
                         dateTime: eventController.formatDate(event.date.toString()).capitalizeFirst!,
                         location: event.location.capitalizeFirst!,
-                        onDeleteTap: () {
-                          CustomDialog.showDeleteDialog(iconPath: AppIcons.delete);
-                        },
+
                       ),
                     );
                   },

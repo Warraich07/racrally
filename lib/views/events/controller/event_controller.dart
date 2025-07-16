@@ -63,6 +63,96 @@ class EventController extends GetxController {
     }
   }
 
+  Future updateEvent(String name,String location,String dateAndTime,bool rsvp,String inviteAttendee ,String eventId) async {
+    isLoading.value=true;
+    final BaseController _baseController = BaseController.instance;
+    Map<String, String> body = {
+      "name": name,
+      "location": location,
+      "date": dateAndTime,
+      "rsvp": rsvp.toString(),
+      "inviteAttandee": inviteAttendee
+    };
+    var response = await DataApiService.instance
+        .put("/event/$eventId", body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    isLoading.value=false;
+    if (result['success'].toString()=="true") {
+      getEvents();
+      Get.back();
+      SnackbarUtil.showSnackbar(
+        message: "Event Updated",
+        type: SnackbarType.success,
+      );
+
+      // Handle success case
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      isLoading.value=false;
+      print("error is here");
+      String message = result['data']['message'];
+      print(message);
+      if(message.toString()=='Event not found'){
+      }
+      // SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future deleteEvent(String eventId) async {
+    isLoading.value=true;
+    final BaseController _baseController = BaseController.instance;
+
+    var response = await DataApiService.instance
+        .delete("/event/$eventId")
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    isLoading.value=false;
+    if (result['success'].toString()=="true") {
+      eventList.clear();
+      getEvents();
+      Get.back();
+      SnackbarUtil.showSnackbar(
+        message: "Event Deleted",
+        type: SnackbarType.success,
+      );
+
+      // Handle success case
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      isLoading.value=false;
+      print("error is here");
+      String message = result['data']['message'];
+      print(message);
+      if(message.toString()=='Event not found'){
+      }
+      // SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+
   Future getEvents() async {
     isLoading.value=true;
     final BaseController _baseController = BaseController.instance;

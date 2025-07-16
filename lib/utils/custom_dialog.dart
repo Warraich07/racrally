@@ -75,7 +75,8 @@ class CustomDialog {
                 Text: confirmText,
                 onTap: (){
                 Get.back();
-              if (onConfirm != null) onConfirm();},)
+              if (onConfirm != null) onConfirm();
+              },)
             ],
           ),
         ),

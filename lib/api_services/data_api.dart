@@ -43,7 +43,7 @@ class DataApiService {
     try {
       var response = await http.delete(uri, headers: {
         // please uncomment it
-        // "Authorization": "Bearer ${authController.accessToken.value}",
+        "Authorization": "Bearer ${authController.accessToken.value}",
       }).timeout(const Duration(seconds: TIME_OUT_DURATION));
       return _processResponse(response);
     } on SocketException {
@@ -139,6 +139,36 @@ class DataApiService {
 
       http.Response response = await http
           .post(
+        uri,
+        headers: {
+
+          "Authorization": "Bearer ${authController.accessToken.value}",
+        },
+        body: body,
+      )
+          .timeout(const Duration(seconds: TIME_OUT_DURATION));
+      print(response);
+      return _processResponse(response);
+
+    } on SocketException {
+      throw FetchDataException('No Internet connection', uri.toString());
+    } on TimeoutException {
+      throw ApiNotRespondingException(
+          'API not responded in time', uri.toString());
+    }
+  }
+
+  Future<dynamic> put(
+      String api,
+      dynamic body, ) async {
+
+    Uri uri = Uri.parse(BASE_URL + api);
+    print(BASE_URL + api);
+    print(body);
+    try {
+
+      http.Response response = await http
+          .put(
         uri,
         headers: {
 

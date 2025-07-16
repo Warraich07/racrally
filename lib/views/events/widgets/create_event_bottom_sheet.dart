@@ -13,7 +13,7 @@ import '../../auth/widgets/custom_dropdown.dart';
 import '../controller/event_controller.dart';
 
 class CreateEventSheet {
-  static void show(BuildContext context) {
+  static void show(BuildContext context,String? name,String? location,String? formattedDate,bool? rsvp,String? inviteAttendee ,String? eventId,bool? isUpdate,String? dateAndTimeForUpdateEvent) {
     final EventController controller = Get.find();
     final focusNodePassword = FocusNode();
     EventController eventController=Get.find();
@@ -32,16 +32,28 @@ class CreateEventSheet {
     bool isSwitched = false;
     String dateAndTime='';
 
+    bool isInitialized = false;
     showModalBottomSheet(
+
       isScrollControlled: true,
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
+
       builder: (context) {
 
         return StatefulBuilder(
           builder: (context, setState) {
+            if (isUpdate == true && !isInitialized) {
+              eventNameController.text = name ?? '';
+              venueController.text = location ?? '';
+              dateAndTimeController.text = formattedDate ?? '';
+              playerType = inviteAttendee ?? '';
+              isSwitched = rsvp ?? false;
+              dateAndTime = dateAndTimeForUpdateEvent ?? '';
+              isInitialized = true;
+            }
             return Padding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -78,7 +90,7 @@ class CreateEventSheet {
                         const SizedBox(height: 10),
                         Align(
                           alignment: Alignment.center,
-                          child: Text("Create Event", style: AppTheme.mediumHeadingStyle),
+                          child: Text(isUpdate==true?"Update Event":"Create Event", style: AppTheme.mediumHeadingStyle),
                         ),
                         const SizedBox(height: 20),
                         CustomTextField(
@@ -272,23 +284,35 @@ class CreateEventSheet {
                         CustomButton(
                           onTap: () {
                            if(_formKey.currentState!.validate()){
-                             print(dateAndTimeController.text.toString());
-                             print(playerType);
-                             eventController.eventList.clear();
-                             eventController.createEvent(
-                                 eventNameController.text.toString(),
-                                 venueController.text.toString(),
-                                 dateAndTime,
-                                 false,
-                                 playerType!);
-                             // Get.back();
-                             // SnackbarUtil.showSnackbar(
-                             //   message: "Event Created",
-                             //   type: SnackbarType.success,
-                             // );
+                            if(isUpdate==true){
+                              print(dateAndTimeController.text.toString());
+                              print(playerType);
+                              eventController.eventList.clear();
+                              print("updation");
+                              eventController.updateEvent(
+                                  eventNameController.text.toString(),
+                                  venueController.text.toString(),
+                                  dateAndTime,
+                                  false,
+                                  playerType!,
+                                eventId.toString()
+                              );
+                            }else{
+                              print("creation");
+                              print(dateAndTimeController.text.toString());
+                              print(playerType);
+                              eventController.eventList.clear();
+                              eventController.createEvent(
+                                  eventNameController.text.toString(),
+                                  venueController.text.toString(),
+                                  dateAndTime,
+                                  false,
+                                  playerType!);
+                            }
+
                            }
                           },
-                          Text: "Create Event",
+                          Text:isUpdate==true?"Update Event":"Create Event",
                         ),
                         SizedBox(height: Platform.isIOS?30:0,)
                       ],
