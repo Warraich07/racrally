@@ -6,6 +6,7 @@ import '../../app_theme/app_theme.dart';
 import '../../constants/app_icons.dart';
 import '../events/event_screen.dart';
 import '../home/home_screen.dart';
+import '../season/season_screen.dart';
 import '../team/controller/team_controller.dart';
 import '../team/team_screen.dart';
 import 'controller/bottom_bar_controller.dart';
@@ -24,8 +25,8 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
     const HomeScreen(),
     const TeamScreen(),
     const EventScreen(),
-    const HomeScreen(),
-    const HomeScreen(),
+    const SeasonScreen(),
+    const SeasonScreen(),
   ];
 
   @override

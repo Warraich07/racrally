@@ -70,8 +70,51 @@ class CustomSeasonCard extends StatelessWidget {
                         ),
                       ],
                     ),
+
+
                   ],
                 ),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      popupMenuTheme: PopupMenuThemeData(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    child: PopupMenuButton<String>(
+                      color: AppTheme.primaryColor,
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Image.asset(AppIcons.edit, height: 20, width: 20),
+                              const SizedBox(width: 10),
+                              Text('Edit', style: AppTheme.bodyMediumGreyStyle),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Image.asset(AppIcons.delete, height: 20, width: 20),
+                              const SizedBox(width: 10),
+                              Text('Delete', style: AppTheme.bodyMediumGreyStyle),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          onEditTap?.call();
+                        } else if (value == 'delete') {
+                          onDeleteTap?.call();
+                        }
+                      },
+                    ),
+                  ),
 
                 ],
               ),

@@ -16,6 +16,33 @@ class CustomValidator {
     }
     return null;
   }
+
+  static String? event(String? value) {
+    if (value!.isEmpty) {
+      return ' Enter event name';
+    }
+    return null;
+  }
+  static String? venue(String? value) {
+    if (value!.isEmpty) {
+      return ' Enter venue address';
+    }
+    return null;
+  }
+  static String? dateAndTime(String? value) {
+    if (value!.isEmpty) {
+      return ' Please select date and Time';
+    }
+    return null;
+  }
+
+  static String? attendee(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select attendee';
+    }
+    return null;
+  }
+
   static String? role(String? value) {
     if (value == null || value.isEmpty) {
       return 'Select role';

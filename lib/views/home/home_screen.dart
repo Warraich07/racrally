@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Image.asset(AppIcons.userIcon,height: 40,)),
                     const SizedBox(width: 5),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Welcome 👋",style: AppTheme.bodyMediumStyle.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor),),
                         Text(authController.userData.value!.firstName.capitalizeFirst!+" "+authController.userData.value!.lastName,style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.primaryColor),)

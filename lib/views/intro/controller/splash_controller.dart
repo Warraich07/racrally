@@ -47,6 +47,7 @@ class SplashController extends GetxController {
         }else if(isLoggedIn==false&&isFirstTime==true){
           Get.offNamed(AppRoutes.onboarding);
         }else{
+          // Get.offAndToNamed(AppRoutes.bottomBar);
           Get.offNamed(AppRoutes.login);
         }
         // Get.offAndToNamed(AppRoutes.bottomBar);

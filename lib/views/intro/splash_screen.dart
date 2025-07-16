@@ -25,35 +25,40 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.secondaryColor,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(),
-              Image.asset(AppIcons.splash, height: 80, width: 80),
-              Column(
-                children: [
-                  Text(
-                    "Organize your team, the easy way",
-                    style: AppTheme.bodySmallStyle,
-                  ),
-                  const SizedBox().setHeight(10),
-                  Obx(() => LinearProgressIndicator(
-                    borderRadius: BorderRadius.circular(10),
-                    value: controller.progress.value,
-                    minHeight: 10,
-                    backgroundColor: Colors.white,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppTheme.darkPrimaryColor),
-                  )),
-                  Platform.isIOS?SizedBox().setHeight(40):SizedBox()
-                ],
-              )
-            ],
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: AppTheme.secondaryColor,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(),
+                Image.asset(AppIcons.splash, height: 80, width: 80),
+                Column(
+                  children: [
+                    Text(
+                      "Organize your team, the easy way",
+                      style: AppTheme.bodySmallStyle,
+                    ),
+                    const SizedBox().setHeight(10),
+                    Obx(() => LinearProgressIndicator(
+                      borderRadius: BorderRadius.circular(10),
+                      value: controller.progress.value,
+                      minHeight: 10,
+                      backgroundColor: Colors.white,
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                          AppTheme.darkPrimaryColor),
+                    )),
+                    Platform.isIOS?SizedBox().setHeight(40):SizedBox()
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -113,6 +113,7 @@ class CreateTeamSheet {
                             ),
                             const SizedBox(height: 10),
                             CustomButton(
+                              iconColor: AppTheme.darkBackgroundColor,
                               textSize: 12,
                               width: 35.w,
                               height: 40,

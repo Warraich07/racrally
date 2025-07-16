@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/utils/custom_dialog.dart';
+import 'package:racrally/views/events/controller/event_controller.dart';
 import 'package:racrally/views/events/widgets/create_event_bottom_sheet.dart';
 import 'package:racrally/views/events/widgets/custom_card.dart';
+import 'package:sizer/sizer.dart';
 
 
 import '../../app_theme/app_theme.dart';
@@ -23,23 +27,64 @@ class _EventScreenState extends State<EventScreen> {
   String? selectedFirstReminder;
   FocusNode focusNodePassword=FocusNode();
   final TextEditingController dateController = TextEditingController();
+  Timer? _debounce;
+  EventController eventController=Get.find();
+
+  void onSearchChanged(String value) {
+    // Cancel previous timer
+    setState(() {
+      eventController.eventList.clear();
+    });
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    // Start a new timer
+    _debounce = Timer(const Duration(milliseconds: 700), () {
+
+      if(value.isEmpty){
+        eventController.getEvents();
+      }else{
+        eventController.searchEvents(value);
+      }
+
+      print("User stopped typing. Final value: $value");
+    });
+  }
+  final focusNodeSearchHere=FocusNode();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      eventController.eventList.clear();
+    });
+    eventController.getEvents();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel(); // Clean up
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: ClipRRect(
-        borderRadius: BorderRadius.circular(100),
-        child: FloatingActionButton(
-          backgroundColor: AppTheme.secondaryColor,
-          onPressed: () {
-            CreateEventSheet.show(context);
-          },
-          child: Icon(Icons.add,color: AppTheme.primaryColor,),
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        floatingActionButton: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: FloatingActionButton(
+            backgroundColor: AppTheme.secondaryColor,
+            onPressed: () {
+              focusNodeSearchHere.unfocus();
+              CreateEventSheet.show(context);
+            },
+            child: Icon(Icons.add,color: AppTheme.primaryColor,),
+          ),
         ),
-      ),
 
-      backgroundColor: AppTheme.primaryColor,
-      body: SingleChildScrollView(
-        child: Column(
+        backgroundColor: AppTheme.primaryColor,
+        body: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,44 +95,47 @@ class _EventScreenState extends State<EventScreen> {
             ),
             SizedBox().setHeight(10),
             CustomTextField(
+              focusNode: focusNodeSearchHere,
               hintText: "Search here",
               prefixIcon: AppIcons.search,
               prefixIconColor: AppTheme.lightGreyColor,
+              onChanged: onSearchChanged,
             ),
             SizedBox().setHeight(15),
-            GestureDetector(
-              onTap: (){
-                Get.toNamed(AppRoutes.eventDetail);
-              },
-              child: CustomCard(
-                  title: "Annual Team Lunch",
-                  dateTime: "Saturday, June 22 - 5:00 PM",
-                  location: "Maplewood Park - Field 3",
-                onDeleteTap: (){
-                    CustomDialog.showDeleteDialog(
-                      iconPath: AppIcons.delete
+            Expanded(
+              child: Obx(
+                    () => eventController.isLoading.value
+                    ? Center(
+                  child: CircularProgressIndicator(color: AppTheme.secondaryColor),
+                )
+                    : eventController.eventList.isNotEmpty
+                    ? ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: eventController.eventList.length,
+                  itemBuilder: (context, index) {
+                    final event = eventController.eventList[index];
+                    return GestureDetector(
+                      onTap: () => Get.toNamed(AppRoutes.eventDetail),
+                      child: CustomCard(
+                        isUpComing: true,
+                        title: event.name.capitalizeFirst!,
+                        dateTime: eventController.formatDate(event.date.toString()).capitalizeFirst!,
+                        location: event.location.capitalizeFirst!,
+                        onDeleteTap: () {
+                          CustomDialog.showDeleteDialog(iconPath: AppIcons.delete);
+                        },
+                      ),
                     );
-                },
+                  },
+                )
+                    : Center(
+                  child: Text("No Events Found.", style: AppTheme.mediumLightHeadingWeight600Style),
+                ),
               ),
-            ),
-            GestureDetector(
-        
-              onTap: (){
-                Get.toNamed(AppRoutes.eventDetail);
-              },
-              child: CustomCard(
-                isUpComing:null,
-                title: "Annual Team Lunch",
-                dateTime: "Saturday, June 22 - 5:00 PM",
-                location: "Maplewood Park - Field 3",
-                onDeleteTap: (){
-                  CustomDialog.showDeleteDialog(
-                      iconPath: AppIcons.delete
-                  );
-                },
-              ),
-            ),
-        
+            )
+
+
+
           ],
         ).paddingOnly(left: 16,right: 16,top: 40),
       ),

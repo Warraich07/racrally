@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:get/get.dart';
 import 'package:racrally/models/team_model.dart';
 
 import '../../../api_services/api_exceptions.dart';
 import '../../../api_services/data_api.dart';
 import '../../../controllers/base_controller.dart';
-import '../../../utils/custom_dialog.dart';
 import '../../../utils/snackbar_utils.dart';
 
 class TeamController extends GetxController {

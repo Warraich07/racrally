@@ -328,8 +328,8 @@ AuthController _authController=Get.find();
       case 400:
         return responseJson;
 
-      case 401:
-        // return responseJson ;
+      case 404:
+        return responseJson ;
         {
           // Get.put(AuthController()).signOut();
           // Get.offAll(()=>SignIn());

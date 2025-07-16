@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 import '../../../app_theme/app_theme.dart';
 import '../../../app_widgets/custom_button.dart';
 import '../../../app_widgets/custom_text_field.dart';
+import '../../../constants/custom_validators.dart';
 import '../../../utils/snackbar_utils.dart';
 import '../../auth/widgets/custom_dropdown.dart';
 import '../controller/event_controller.dart';
@@ -13,14 +14,21 @@ class CreateEventSheet {
   static void show(BuildContext context) {
     final EventController controller = Get.find();
     final focusNodePassword = FocusNode();
-
+    EventController eventController=Get.find();
     // Separate state variables
-    String? inviteAttendee;
+    String? playerType;
     String? firstReminder;
     String? lastReminder;
-    final TextEditingController dateAndTimeController = TextEditingController();
+    final  dateAndTimeController = TextEditingController();
+    final  eventNameController = TextEditingController();
+    final  venueController = TextEditingController();
+    final  attendeeController = TextEditingController();
     final TextEditingController rsvpDeadlineController = TextEditingController();
+    final GlobalKey<FormState> _formKey = GlobalKey();
+    final focusNodeEvent=FocusNode();
+    final focusNodeVenue=FocusNode();
     bool isSwitched = false;
+    String dateAndTime='';
 
     showModalBottomSheet(
       isScrollControlled: true,
@@ -29,6 +37,7 @@ class CreateEventSheet {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
+
         return StatefulBuilder(
           builder: (context, setState) {
             return Padding(
@@ -47,209 +56,240 @@ class CreateEventSheet {
                   ),
                   padding: const EdgeInsets.all(16),
                   width: double.infinity,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(60),
-                          child: Container(
-                            width: 76,
-                            height: 5,
-                            color: AppTheme.dividerColor,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: Container(
+                              width: 76,
+                              height: 5,
+                              color: AppTheme.dividerColor,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text("Create Event", style: AppTheme.mediumHeadingStyle),
-                      ),
-                      const SizedBox(height: 20),
-                      CustomTextField(
-                        fieldName: "Event Name",
-                        hintText: "Enter event name...",
-                      ),
-                      const SizedBox(height: 18),
-                      CustomTextField(
-                        fieldName: "Venue",
-                        hintText: "Enter venue address...",
-                      ),
-                      const SizedBox(height: 18),
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text("Create Event", style: AppTheme.mediumHeadingStyle),
+                        ),
+                        const SizedBox(height: 20),
+                        CustomTextField(
+                          focusNode: focusNodeEvent,
+                          controller: eventNameController,
+                          validator: (value) => CustomValidator.event(value),
+                          fieldName: "Event Name",
+                          hintText: "Enter event name...",
+                        ),
+                        const SizedBox(height: 18),
+                        CustomTextField(
+                          focusNode: focusNodeVenue,
+                          validator: (value) => CustomValidator.venue(value),
+                          controller: venueController,
+                          fieldName: "Venue",
+                          hintText: "Enter venue address...",
+                        ),
+                        const SizedBox(height: 18),
 
-                      // Date Picker
-                      GestureDetector(
-                        onTap: () {
-                          pickDate(context, dateAndTimeController);
-                        },
-                        child: AbsorbPointer(
-                          child: CustomTextField(
-                            controller: dateAndTimeController,
-                            focusNode: focusNodePassword,
-                            suffixIcon: const Icon(Icons.calendar_today_outlined, size: 24),
-                            isObscure: false,
-                            fieldName: "Date & Time",
-                            hintText: "Select",
+                        // Date Picker
+                        GestureDetector(
+                          onTap: () {
+                            focusNodeEvent.unfocus();
+                            focusNodeVenue.unfocus();
+                            pickDate(context, dateAndTimeController, (selectedDate) {
+                              dateAndTime = selectedDate;
+                            });
+
+                          },
+                          child: AbsorbPointer(
+                            child: CustomTextField(
+                              validator: (value) => CustomValidator.dateAndTime(value),
+                              controller: dateAndTimeController,
+                              focusNode: focusNodePassword,
+                              suffixIcon: const Icon(Icons.calendar_today_outlined, size: 24),
+                              isObscure: false,
+                              fieldName: "Date & Time",
+                              hintText: "Select",
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 18),
+                        const SizedBox(height: 18),
 
-                      // Invite Attendee Dropdown
-                      CustomDropdownField(
-                        fieldName: "Invite Attendee",
-                        hintText: "Select",
-                        value: inviteAttendee,
-                        items: const [
-                          DropdownMenuItem(value: "Invite All", child: Text("Invite All")),
-                          DropdownMenuItem(value: "Substitute Only", child: Text("Substitute Only")),
-                          DropdownMenuItem(value: "Players Only", child: Text("Players Only")),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            inviteAttendee = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 18),
-
-                      // RSVP Switch
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: AppTheme.primaryLittleDarkColor.withOpacity(.7),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Enable RSVP", style: AppTheme.bodyMediumFont600Style),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "To send reminders and RSVP\nto attendees, make sure you enable it",
-                                  style: AppTheme.bodyExtraSmallWeight400Style.copyWith(
-                                    color: AppTheme.mediumGreyColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Switch(
-                              value: isSwitched,
-                              onChanged: (value) {
-                                setState(() {
-                                  isSwitched = value;
-                                });
-                              },
-                              activeColor: AppTheme.primaryColor,
-                              activeTrackColor: AppTheme.secondaryColor,
-                              inactiveThumbColor: AppTheme.primaryColor,
-                              inactiveTrackColor: AppTheme.lightGreyColor,
-                            ),
+                        // Invite Attendee Dropdown
+                        CustomDropdownField(
+                          validator: (value) => CustomValidator.attendee(value),
+                          // controller: dateAndTimeController,
+                          fieldName: "Invite Attendee",
+                          hintText: "Select",
+                          value: playerType,
+                          items: const [
+                            DropdownMenuItem(value: "all", child: Text("Invite All")),
+                            DropdownMenuItem(value: "reserve_player", child: Text("Substitute Only")),
+                            DropdownMenuItem(value: "active_roaster", child: Text("Players Only")),
                           ],
-                        ).paddingAll(16),
-                      ),
+                          onChanged: (value) {
+                            setState(() {
+                              playerType = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 18),
 
-                      const SizedBox(height: 18),
+                        // RSVP Switch
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: AppTheme.primaryLittleDarkColor.withOpacity(.7),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Enable RSVP", style: AppTheme.bodyMediumFont600Style),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    "To send reminders and RSVP\nto attendees, make sure you enable it",
+                                    style: AppTheme.bodyExtraSmallWeight400Style.copyWith(
+                                      color: AppTheme.mediumGreyColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Switch(
+                                value: isSwitched,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isSwitched = value;
+                                  });
+                                },
+                                activeColor: AppTheme.primaryColor,
+                                activeTrackColor: AppTheme.secondaryColor,
+                                inactiveThumbColor: AppTheme.primaryColor,
+                                inactiveTrackColor: AppTheme.lightGreyColor,
+                              ),
+                            ],
+                          ).paddingAll(16),
+                        ),
 
-                      // RSVP fields
-                      if (isSwitched)
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                pickDate(context, rsvpDeadlineController);
-                              },
-                              child: AbsorbPointer(
-                                child: CustomTextField(
-                                  controller: rsvpDeadlineController,
-                                  focusNode: focusNodePassword,
-                                  suffixIcon: const Icon(Icons.calendar_today_outlined),
-                                  isObscure: false,
-                                  fieldName: "RSVP Deadline",
-                                  hintText: "Select",
+                        const SizedBox(height: 18),
+
+                        // RSVP fields
+                        if (isSwitched)
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  pickDate(context, rsvpDeadlineController, (selectedDate) {
+                                    dateAndTime = selectedDate;
+                                  });
+
+                                },
+                                child: AbsorbPointer(
+                                  child: CustomTextField(
+                                    controller: rsvpDeadlineController,
+                                    focusNode: focusNodePassword,
+                                    suffixIcon: const Icon(Icons.calendar_today_outlined),
+                                    isObscure: false,
+                                    fieldName: "RSVP Deadline",
+                                    hintText: "Select",
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 18),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // First Reminder Dropdown
-                                SizedBox(
-                                  width: 44.w,
-                                  child: CustomDropdownField(
-                                    fontSize: 13,
-                                    fieldName: "First Reminder",
-                                    hintText: "Select",
-                                    value: firstReminder,
-                                    items: const [
-                                      DropdownMenuItem(
-                                          value: "24 hours before",
-                                          child: Text("24 hours before")),
-                                      DropdownMenuItem(
-                                          value: "16 hours before",
-                                          child: Text("16 hours before")),
-                                      DropdownMenuItem(
-                                          value: "8 hours before",
-                                          child: Text("8 hours before")),
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        firstReminder = value;
-                                      });
-                                    },
+                              const SizedBox(height: 18),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // First Reminder Dropdown
+                                  SizedBox(
+                                    width: 44.w,
+                                    child: CustomDropdownField(
+                                      fontSize: 13,
+                                      fieldName: "First Reminder",
+                                      hintText: "Select",
+                                      value: firstReminder,
+                                      items: const [
+                                        DropdownMenuItem(
+                                            value: "24 hours before",
+                                            child: Text("24 hours before")),
+                                        DropdownMenuItem(
+                                            value: "16 hours before",
+                                            child: Text("16 hours before")),
+                                        DropdownMenuItem(
+                                            value: "8 hours before",
+                                            child: Text("8 hours before")),
+                                      ],
+                                      onChanged: (value) {
+                                        setState(() {
+                                          firstReminder = value;
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
 
-                                // Last Reminder Dropdown
-                                SizedBox(
-                                  width: 44.w,
-                                  child: CustomDropdownField(
-                                    fontSize: 10,
-                                    fieldName: "Last Reminder",
-                                    hintText: "Select",
-                                    value: lastReminder,
-                                    items: const [
-                                      DropdownMenuItem(
-                                          value: "8 hours before",
-                                          child: Text("8 hours before")),
-                                      DropdownMenuItem(
-                                          value: "4 hours before",
-                                          child: Text("4 hours before")),
-                                      DropdownMenuItem(
-                                          value: "2 hours before",
-                                          child: Text("2 hours before")),
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        lastReminder = value;
-                                      });
-                                    },
+                                  // Last Reminder Dropdown
+                                  SizedBox(
+                                    width: 44.w,
+                                    child: CustomDropdownField(
+                                      fontSize: 10,
+                                      fieldName: "Last Reminder",
+                                      hintText: "Select",
+                                      value: lastReminder,
+                                      items: const [
+                                        DropdownMenuItem(
+                                            value: "8 hours before",
+                                            child: Text("8 hours before")),
+                                        DropdownMenuItem(
+                                            value: "4 hours before",
+                                            child: Text("4 hours before")),
+                                        DropdownMenuItem(
+                                            value: "2 hours before",
+                                            child: Text("2 hours before")),
+                                      ],
+                                      onChanged: (value) {
+                                        setState(() {
+                                          lastReminder = value;
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
+                                ],
+                              )
+                            ],
+                          ),
+
+                        const SizedBox(height: 18),
+                        CustomButton(
+                          onTap: () {
+                           if(_formKey.currentState!.validate()){
+                             print(dateAndTimeController.text.toString());
+                             print(playerType);
+                             eventController.eventList.clear();
+                             eventController.createEvent(
+                                 eventNameController.text.toString(),
+                                 venueController.text.toString(),
+                                 dateAndTime,
+                                 false,
+                                 playerType!);
+                             // Get.back();
+                             // SnackbarUtil.showSnackbar(
+                             //   message: "Event Created",
+                             //   type: SnackbarType.success,
+                             // );
+                           }
+                          },
+                          Text: "Create Event",
                         ),
-
-                      const SizedBox(height: 18),
-                      CustomButton(
-                        onTap: () {
-                          Get.back();
-                          SnackbarUtil.showSnackbar(
-                            message: "Event Created",
-                            type: SnackbarType.success,
-                          );
-                        },
-                        Text: "Create Event",
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -260,7 +300,12 @@ class CreateEventSheet {
     );
   }
 
-  static Future<void> pickDate(BuildContext context, TextEditingController controller) async {
+
+  static Future<void> pickDate(
+      BuildContext context,
+      TextEditingController controller,
+      Function(String) onDateSelected,
+      ) async {
     final ThemeData theme = ThemeData(
       brightness: Brightness.light,
       colorScheme: ColorScheme.light(
@@ -273,22 +318,57 @@ class CreateEventSheet {
       ),
     );
 
+    final DateTime now = DateTime.now();
+
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
+      initialDate: now,
+      firstDate: now,
       lastDate: DateTime(2030),
-      builder: (context, child) {
-        return Theme(data: theme, child: child!);
-      },
+      builder: (context, child) => Theme(data: theme, child: child!),
     );
 
     if (pickedDate != null) {
-      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      controller.text = formattedDate;
-      printSelectedDate(pickedDate);
+      // Hide keyboard input mode by setting MediaQuery config
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (context, child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: Theme(data: theme, child: child!),
+          );
+        },
+      );
+
+      if (pickedTime != null) {
+        final selectedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        if (selectedDateTime.isAfter(now)) {
+          final utcDateTime = selectedDateTime.toUtc();
+          final formattedDateForApi =
+          utcDateTime.toIso8601String().replaceFirst('.000Z', 'Z');
+          final formattedReadableDate =
+          DateFormat('EEEE, MMMM d – h:mm a').format(selectedDateTime);
+
+          controller.text = formattedReadableDate;
+          onDateSelected(formattedDateForApi);
+        } else {
+          controller.clear(); // optional
+        }
+      }
     }
   }
+
+
+
+
 
   static void printSelectedDate(DateTime date) {
     final String formatted = DateFormat('EEEE, dd MMMM yyyy').format(date);
