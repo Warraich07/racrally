@@ -162,11 +162,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox().setHeight(14),
                       CustomButton(
-                      onTap: (){
+                      onTap: ()async{
                         if(_formKey.currentState!.validate()){
                           focusNodeEmail.unfocus();
                           focusNodePassword.unfocus();
-                          authController.loginUser(emailController.text.toString(), passwordController.text.toString(),rememberMe);
+                        await  authController.loginUser(emailController.text.toString(), passwordController.text.toString(),rememberMe);
                           print("object");
                           // Get.offAndToNamed(AppRoutes.bottomBar);
                         }
@@ -228,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-
+                      SizedBox(height:Platform.isIOS? 20:0,)
                     ],
                   ).paddingOnly(left: 16, right: 16, top: 32,bottom: 16),
                 ),
