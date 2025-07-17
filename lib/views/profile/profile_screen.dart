@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             bottom: 0,
             child: Container(
               color: AppTheme.primaryColor,
-              width: 91.w,
+              width: 92.w,
               child: Column(
 
                 children: [

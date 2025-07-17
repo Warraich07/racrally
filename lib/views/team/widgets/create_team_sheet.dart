@@ -202,7 +202,7 @@ class CreateTeamSheet {
                                     print("Selected index: $index");
                                   },
                                   child: Container(
-                                    margin: const EdgeInsets.only(right: 4),
+                                    margin: const EdgeInsets.only(right: 18),
                                     padding: const EdgeInsets.all(5),
                                     height: 30,
                                     width: 38,

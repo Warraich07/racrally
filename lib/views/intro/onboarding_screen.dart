@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_theme/app_theme.dart';
@@ -63,6 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Text('Skip',style: AppTheme.bodyMediumStyle,),
                 ),
               ),
+              SizedBox(height: Platform.isIOS?60:0),
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
