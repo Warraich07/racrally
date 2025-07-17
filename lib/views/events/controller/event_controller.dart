@@ -134,7 +134,7 @@ class EventController extends GetxController {
     if (result['success'].toString()=="true") {
       eventList.clear();
       getEvents();
-      Get.back();
+      // Get.back();
       SnackbarUtil.showSnackbar(
         message: "Event Deleted",
         type: SnackbarType.success,

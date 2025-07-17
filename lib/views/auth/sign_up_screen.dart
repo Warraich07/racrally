@@ -200,7 +200,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onTap: (){
                             if(_formKey.currentState!.validate()){
                             if(showCheck==false){
-                              SnackbarUtil.showSnackbar(message: "Please select terms and conditions", type: SnackbarType.warning);
+                              SnackbarUtil.showSnackbar(message: "Please select terms and conditions", type: SnackbarType.info);
                             }else{
                               focusNodeFirstName.unfocus();
                               focusNodeLastName.unfocus();

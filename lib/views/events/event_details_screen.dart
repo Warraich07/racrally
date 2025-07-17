@@ -10,7 +10,7 @@ import '../../app_theme/app_theme.dart';
 import '../../constants/app_icons.dart';
 
 class EventDetailsScreen extends StatefulWidget {
-  const EventDetailsScreen({super.key});
+   EventDetailsScreen({super.key});
 
   @override
   State<EventDetailsScreen> createState() => _EventDetailsScreenState();
@@ -19,6 +19,7 @@ class EventDetailsScreen extends StatefulWidget {
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> data = Get.arguments;
     return Scaffold(
       bottomSheet: Container(
             color: AppTheme.primaryExtraLightColor,
@@ -97,7 +98,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   ],
                 ),
                 // Spacer(),
-                Center(child: Text("Annual Team Session",style: AppTheme.mediumHeadingFont600Style,)),
+                Center(child: Text(data['eventName'],style: AppTheme.mediumHeadingFont600Style,)),
                 SizedBox().setHeight(10)
               ],
             ).paddingOnly(top: 40,left: 16),
@@ -116,7 +117,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                      children: [
                        Image.asset(AppIcons.calendar,height: 20,width: 20,),
                        SizedBox().setWidth(5),
-                       Text("Saturday, June 22 – 5:00 PM",style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
+                       Text(data['date'],style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
 
                      ],
                    ),
@@ -127,7 +128,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                      children: [
                        Image.asset(AppIcons.location,height: 20,width: 20,),
                        SizedBox().setWidth(5),
-                       Text("Maplewood Park - Field 3",style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
+                       Text(data['location'],style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
 
                      ],
                    )
@@ -161,11 +162,18 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 height: 43.h,
                 child: SingleChildScrollView(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomCardAttendees(name: 'Noraiz Shahid', details: 'noraizshahid@gmail.com',isAttending:null),
-                      CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true),
-                      CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
-                      CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
+                      SizedBox(
+                        height: 43.h,
+                        child: Center(
+                          child: Text("No Attendees Yet",style: AppTheme.mediumLightHeadingWeight600Style),
+                        ),
+                      )
+                      // CustomCardAttendees(name: 'Noraiz Shahid', details: 'noraizshahid@gmail.com',isAttending:null),
+                      // CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true),
+                      // CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
+                      // CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
                     ],
                   ),
                 ),

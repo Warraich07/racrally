@@ -26,7 +26,7 @@ class AppPages {
     GetPage(name: AppRoutes.bottomBar, page: () =>  CustomBottomBarr()),
     GetPage(name: AppRoutes.resetPassword, page: () =>  const ResetPasswordScreen()),
     GetPage(name: AppRoutes.notifications, page: () =>  const NotificationScreen()),
-    GetPage(name: AppRoutes.eventDetail, page: () =>  const EventDetailsScreen()),
+    GetPage(name: AppRoutes.eventDetail, page: () =>   EventDetailsScreen()),
     GetPage(name: AppRoutes.playerDetails, page: () =>  const PlayerDetailsScreen()),
     GetPage(name: AppRoutes.profile, page: () =>  const ProfileScreen()),
 

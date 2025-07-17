@@ -116,7 +116,11 @@ class _EventScreenState extends State<EventScreen> {
                   itemBuilder: (context, index) {
                     final event = eventController.eventList[index];
                     return GestureDetector(
-                      onTap: () => Get.toNamed(AppRoutes.eventDetail),
+                      onTap: () => Get.toNamed(AppRoutes.eventDetail,arguments: {
+                        'eventName': event.name.capitalizeFirst!,
+                        'date': eventController.formatDate(event.date.toString()).capitalizeFirst!,
+                        'location': event.location.capitalizeFirst,
+                      }),
                       child: CustomCard(
                         onEditTap: (){
                           CreateEventSheet.show(context, event.name.capitalizeFirst!, event.location.capitalizeFirst!, eventController.formatDate(event.date.toString()).capitalizeFirst!, false, event.inviteAttandee, event.id.toString(),true,event.date.toString());
@@ -139,7 +143,7 @@ class _EventScreenState extends State<EventScreen> {
                   },
                 )
                     : Center(
-                  child: Text("No Events Found.", style: AppTheme.mediumLightHeadingWeight600Style),
+                  child: Text("No Events Found", style: AppTheme.mediumLightHeadingWeight600Style),
                 ),
               ),
             )

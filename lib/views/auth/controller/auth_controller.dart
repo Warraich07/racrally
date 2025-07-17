@@ -22,11 +22,12 @@ class AuthController extends GetxController {
 
   Future loginUser(String email,String password,bool rememberMe) async {
     _baseController.showLoading();
+    print("entry 1");
     Map<String, String> body = {
       "email":email,
       "password":password
     };
-
+    print("entry 2");
     var response = await DataApiService.instance
         .post('/login', body)
         .catchError((error) {
@@ -38,7 +39,7 @@ class AuthController extends GetxController {
         _baseController.handleError(error);
       }
     });
-
+    print("entry 3");
     update();
     _baseController.hideLoading();
     if (response == null) return;

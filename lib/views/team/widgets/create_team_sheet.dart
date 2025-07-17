@@ -24,6 +24,8 @@ class CreateTeamSheet {
     final GlobalKey<FormState> _formKey = GlobalKey();
     final teamNameController=TextEditingController();
     final locationController=TextEditingController();
+    final focusNodeTeamName=FocusNode();
+    final focusNodeLocation=FocusNode();
      XFile? image;
      String imagePath='';
      String teamColor='';
@@ -145,6 +147,7 @@ class CreateTeamSheet {
                       ),
                         const SizedBox(height: 20),
                         CustomTextField(
+                          focusNode: focusNodeTeamName,
                           controller: teamNameController,
                           validator: (value) => CustomValidator.team(value),
                           fieldName: "Team Name",
@@ -152,6 +155,7 @@ class CreateTeamSheet {
                         ),
                         const SizedBox(height: 18),
                         CustomTextField(
+                          focusNode: focusNodeLocation,
                           controller: locationController,
                           validator: (value) => CustomValidator.location(value),
                           fieldName: "Location",
@@ -188,6 +192,8 @@ class CreateTeamSheet {
 
                                 return GestureDetector(
                                   onTap: () {
+                                    focusNodeTeamName.unfocus();
+                                    focusNodeLocation.unfocus();
                                     setState(() {
                                       selectedIndex = index;
                                       print(teamColors[index]);
