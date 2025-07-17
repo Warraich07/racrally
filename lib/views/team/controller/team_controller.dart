@@ -78,7 +78,7 @@ class TeamController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
-      final teams = result['data']['teams'] ?? [];
+      final teams = result['data']?? [];
 
       teamList.value = List<TeamModel>.from(
           teams.map((x) => TeamModel.fromJson(x))
