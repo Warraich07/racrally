@@ -106,7 +106,7 @@ class InvitePlayerSheet {
                           },
                           Text: "Invite Player",
                         ),
-                        SizedBox(height: Platform.isIOS?30:0,)
+                        SizedBox(height: Platform.isIOS?20:0,)
                       ],
                     ),
                   ),

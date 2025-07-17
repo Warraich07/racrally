@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Container(
-            height:Platform.isIOS?30.h: 42.h,
+            height:Platform.isIOS?28.h: 42.h,
             decoration: BoxDecoration(
               color: AppTheme.secondaryColor,
               borderRadius: const BorderRadius.only(
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Container(
                         width: 40.w,
-                        height: 110,
+                        height:Platform.isIOS?130: 110,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
@@ -163,8 +163,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(cardTexts[index],style: AppTheme.bodyExtraSmallStyle,).paddingSymmetric(horizontal: 10),
+                            Spacer(flex: 1,),
                             Text(cardAnalysis[index],style: AppTheme.subHeadingStyle,).paddingSymmetric(horizontal: 10),
-                            Spacer(),
+                            Spacer(flex: 2,),
                             Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
