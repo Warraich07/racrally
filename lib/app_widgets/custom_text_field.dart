@@ -133,7 +133,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         width: 1.3,color:widget.isEditProfileInfoScreen? AppTheme.secondaryColor:AppTheme.secondaryColor)
                 ),
                 hintText: widget.hintText,
-                errorStyle:  TextStyle(fontSize: 8,color:AppTheme.secondaryColor,fontWeight: FontWeight.bold),
+                errorStyle:  TextStyle(fontSize: 10,color:AppTheme.secondaryColor,fontWeight: FontWeight.bold),
                 errorMaxLines: 3,
                 hintStyle:
                 TextStyle(

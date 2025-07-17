@@ -17,6 +17,8 @@ class AuthController extends GetxController {
   RxBool showCheck = false.obs;
   RxBool showPassword = false.obs;
   RxString checkedItem = ''.obs;
+  RxString storedEmailForLogin = ''.obs;
+  RxString storedPasswordForLogin = ''.obs;
   final BaseController _baseController = BaseController.instance;
   Rxn<UserModel> userData=Rxn<UserModel>();
 
@@ -92,8 +94,7 @@ class AuthController extends GetxController {
 
     var result = json.decode(response);
     if (result['success'].toString()=="true") {
-      Get.toNamed(AppRoutes.login);
-
+        loginUser(storedEmailForLogin.value, storedPasswordForLogin.value, true);
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");
@@ -138,8 +139,8 @@ class AuthController extends GetxController {
       accessToken.value=result['data']['token'];
       signUpOtp.value=result['data']['otp'];
       SnackbarUtil.showSnackbar(message: signUpOtp.value, type: SnackbarType.success);
-      print(accessToken.value);
-      print(signUpOtp.value);
+      storedEmailForLogin.value=email;
+      storedPasswordForLogin.value=password;
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true"){
       print("error is here");

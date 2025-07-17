@@ -95,7 +95,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                 data: Theme.of(context).copyWith(
                   inputDecorationTheme: InputDecorationTheme(
                     errorStyle: TextStyle(
-                      fontSize: 8,
+                      fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.secondaryColor,
 
