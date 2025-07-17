@@ -78,7 +78,14 @@ class TeamController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
-      teamList.value = List<TeamModel>.from(result['data'].map((x) => TeamModel.fromJson(x)));
+      final teams = result['data']['teams'] ?? [];
+
+      teamList.value = List<TeamModel>.from(
+          teams.map((x) => TeamModel.fromJson(x))
+      );
+
+      // isTeamCreated.value = teamList.isNotEmpty;
+
       if(teamList.isNotEmpty){
         isTeamCreated.value=true;
       }
