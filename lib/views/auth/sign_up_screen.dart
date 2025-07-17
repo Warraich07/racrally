@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -274,7 +276,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ).paddingOnly(left: 5),
                           ),
                         ],
-                      )
+                      ),
+                          SizedBox(height:Platform.isIOS? 20:0,)
 
                     ],
                   ).paddingOnly(left: 16, right: 16, top: 32,bottom: 16),

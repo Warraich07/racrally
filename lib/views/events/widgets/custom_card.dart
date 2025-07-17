@@ -72,6 +72,7 @@ class CustomCard extends StatelessWidget {
                       ),
                     ),
                     child: PopupMenuButton<String>(
+                       icon: Icon(Icons.more_vert),
                       color: AppTheme.primaryColor,
                       itemBuilder: (context) => [
                         PopupMenuItem(

@@ -31,6 +31,7 @@ class CustomDialog {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               /// Top Row: Icon, Title, Close Button
@@ -65,7 +66,7 @@ class CustomDialog {
               Text(
                 description,
                 style: AppTheme.bodySmallGreyStyle,
-              ),
+              ).paddingOnly(left: 5),
               const SizedBox(height: 20),
 
               /// Confirm Button

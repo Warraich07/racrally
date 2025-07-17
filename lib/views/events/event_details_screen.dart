@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_button.dart';
@@ -27,7 +29,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             onTap: (){
               RSVPSheet.show(context);
             },
-              Text: "Enable RSVP").paddingSymmetric(horizontal: 16,vertical: 10),
+              Text: "Enable RSVP").paddingSymmetric(horizontal: 16,vertical: Platform.isIOS?30:0),
 
       ),
       backgroundColor: AppTheme.primaryColor,
@@ -35,7 +37,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         children: [
           Container(
             width: double.infinity,
-        height: 21.h,
+        height: 20.h,
         decoration: BoxDecoration(
           color: AppTheme.primaryDarkColor,
           borderRadius: const BorderRadius.only(
@@ -46,6 +48,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                 SizedBox(height: Platform.isIOS?30:0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -63,6 +66,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                         ),
                       ),
                       child: PopupMenuButton<String>(
+                         icon: Icon(Icons.more_vert),
                         color: AppTheme.primaryColor,
                         itemBuilder: (context) => [
                           PopupMenuItem(
@@ -97,7 +101,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     ),
                   ],
                 ),
-                // Spacer(),
+                Spacer(),
                 Center(child: Text(data['eventName'],style: AppTheme.mediumHeadingFont600Style,)),
                 SizedBox().setHeight(10)
               ],
