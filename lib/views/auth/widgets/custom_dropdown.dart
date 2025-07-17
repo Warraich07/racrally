@@ -93,8 +93,8 @@ class CustomDropdownField extends StatelessWidget {
           ),
         ),
         errorStyle: TextStyle(
-          fontSize: 10,
-          color: AppTheme.secondaryColor,
+          fontSize: 12,
+          color: Colors.red,
           fontWeight: FontWeight.bold,
         ),
       ),

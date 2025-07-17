@@ -21,6 +21,7 @@ class AppIcons {
   static String edit = "assets/app_icons/overall/edit.png";
   static String delete = "assets/app_icons/overall/delete.png";
   static String event = "assets/app_icons/overall/event.png";
+  static String event_icon = "assets/app_icons/overall/event_icon.png";
   static String calendar = "assets/app_icons/overall/calendar.png";
   static String location = "assets/app_icons/overall/location.png";
   static String addIcon = "assets/app_icons/overall/plus.png";

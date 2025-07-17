@@ -11,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final String? prefixIcon;
   final bool? isObscure;
+  final bool? isChangeErrorFont;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final FormFieldValidator<String>? validator;
@@ -36,6 +37,7 @@ class CustomTextField extends StatefulWidget {
   void Function(String)? onFieldSubmitted;
   CustomTextField(
       {super.key,
+        this.isChangeErrorFont,
         this.hintText,
         this.suffixIcon,
         this.isObscure,
@@ -133,7 +135,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         width: 1.3,color:widget.isEditProfileInfoScreen? AppTheme.secondaryColor:AppTheme.secondaryColor)
                 ),
                 hintText: widget.hintText,
-                errorStyle:  TextStyle(fontSize: 10,color:AppTheme.secondaryColor,fontWeight: FontWeight.bold),
+                errorStyle:  TextStyle(fontSize:widget.isChangeErrorFont==true?8: 12,color:Colors.red,fontWeight: FontWeight.bold),
                 errorMaxLines: 3,
                 hintStyle:
                 TextStyle(

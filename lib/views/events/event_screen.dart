@@ -14,7 +14,10 @@ import 'package:sizer/sizer.dart';
 
 
 import '../../app_theme/app_theme.dart';
+import '../../app_widgets/custom_button.dart';
 import '../../constants/app_icons.dart';
+import '../../constants/app_images.dart';
+import '../team/widgets/create_team_sheet.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({super.key});
@@ -38,7 +41,7 @@ class _EventScreenState extends State<EventScreen> {
     });
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     // Start a new timer
-    _debounce = Timer(const Duration(milliseconds: 700), () {
+    _debounce = Timer(const Duration(milliseconds: 0), () {
 
       if(value.isEmpty){
         eventController.getEvents();
@@ -72,15 +75,19 @@ class _EventScreenState extends State<EventScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        floatingActionButton: ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: FloatingActionButton(
-            backgroundColor: AppTheme.secondaryColor,
-            onPressed: () {
-              focusNodeSearchHere.unfocus();
-              CreateEventSheet.show(context, "name", "location", "dateAndTime", false, "inviteAttendee", "eventId", false,"dateandtimeforupdate");
-            },
-            child: Icon(Icons.add,color: AppTheme.primaryColor,),
+        floatingActionButton:Obx(
+            ()=> Container(
+            child: eventController.eventList.isEmpty?Container(): ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: FloatingActionButton(
+                backgroundColor: AppTheme.secondaryColor,
+                onPressed: () {
+                  focusNodeSearchHere.unfocus();
+                  CreateEventSheet.show(context, "name", "location", "dateAndTime", false, "inviteAttendee", "eventId", false,"dateandtimeforupdate");
+                },
+                child: Icon(Icons.add,color: AppTheme.primaryColor,),
+              ),
+            ),
           ),
         ),
 
@@ -143,7 +150,33 @@ class _EventScreenState extends State<EventScreen> {
                   },
                 )
                     : Center(
-                  child: Text("No Events Found", style: AppTheme.mediumLightHeadingWeight600Style),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(AppIcons.event_icon,width: 35.w,),
+                      Text("No Events Yet!",style: AppTheme.mediumLightHeadingWeight600Style,),
+                      Center(child: Text(
+                        "Start creating events and invite members.",
+                        textAlign: TextAlign.center,
+                        style: AppTheme.bodyExtraSmallWeight400Style,)),
+                      SizedBox().setHeight(10),
+                      CustomButton(
+                        height: 40,
+                        width: 42.w,
+                        iconPath: AppIcons.addIcon,
+                        onTap: (){
+                          CreateEventSheet.show(context, "name", "location", "formattedDate", false, "inviteAttendee", "eventId", false, "dateAndTimeForUpdateEvent");
+                        },
+                        Text: "Create Event",
+                        borderColor: AppTheme.secondaryColor,
+                        buttonColor: AppTheme.secondaryColor,
+                        textColor: AppTheme.primaryColor,
+                        isAuth: true,
+                        isGoogle: false,
+                      ),
+                      SizedBox().setHeight(20),
+                    ],
+                  ),
                 ),
               ),
             )

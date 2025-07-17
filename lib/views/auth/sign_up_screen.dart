@@ -96,6 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Row(
                         children: [
                           Expanded(child: CustomTextField(
+                            isChangeErrorFont:true,
                             controller: firstNameController,
                             focusNode: focusNodeFirstName,
                             validator: (value) => CustomValidator.firstName(value),
@@ -103,6 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             hintText: "Enter first name...",)),
                           SizedBox().setWidth(10),
                           Expanded(child: CustomTextField(
+                            isChangeErrorFont:true,
                             controller: lastNameController,
                             focusNode: focusNodeLastName,
                             validator: (value) => CustomValidator.lastName(value),

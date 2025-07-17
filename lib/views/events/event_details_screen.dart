@@ -29,7 +29,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             onTap: (){
               RSVPSheet.show(context);
             },
-              Text: "Enable RSVP").paddingSymmetric(horizontal: 16,vertical: Platform.isIOS?30:0),
+              Text: "Enable RSVP").paddingSymmetric(horizontal: 16,vertical: Platform.isIOS?30:20),
 
       ),
       backgroundColor: AppTheme.primaryColor,

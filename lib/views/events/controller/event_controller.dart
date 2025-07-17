@@ -15,6 +15,7 @@ class EventController extends GetxController {
   // final BaseController _baseController = BaseController.instance;
   // Rxn<TeamModel> teamData=Rxn<TeamModel>();
   RxList<EventModel> eventList=<EventModel>[].obs;
+  RxList<EventModel> eventListBackup=<EventModel>[].obs;
 
   Future createEvent(String name,String location,String dateAndTime,bool rsvp,String inviteAttendee ) async {
     isLoading.value=true;
