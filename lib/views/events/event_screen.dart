@@ -57,9 +57,7 @@ class _EventScreenState extends State<EventScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      eventController.eventList.clear();
-    });
+   
     eventController.getEvents();
   }
 
