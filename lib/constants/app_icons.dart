@@ -29,7 +29,13 @@ class AppIcons {
   static String share = "assets/app_icons/overall/share.png";
   static String alarm = "assets/app_icons/overall/alarm.png";
   static String email = "assets/app_icons/overall/email.png";
+  static String dot = "assets/app_icons/overall/dot.png";
   static String arrow_forward = "assets/app_icons/overall/arrow_forward.png";
+  static String competition = "assets/app_icons/overall/competition.png";
+  static String cost = "assets/app_icons/overall/costs.png";
+  static String games = "assets/app_icons/overall/games.png";
+  static String raoster = "assets/app_icons/overall/roaster.png";
+  static String color_picker = "assets/app_icons/overall/color_picker.png";
 
 
 }

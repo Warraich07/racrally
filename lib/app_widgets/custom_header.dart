@@ -16,14 +16,20 @@ class CustomHeader extends StatelessWidget {
     this.title,
     this.subTitle,
     this.showSubtitle,
+    this.showBody,
     this.showPopUpMenu,
     this.showBackArrow,
     this.onMenuSelected,
+    this.body,
+    this.type,
   });
 
   final String? title;
   final String? subTitle;
+  final String? body;
+  final String? type;
   final bool? showSubtitle;
+  final bool? showBody;
   final bool? showPopUpMenu;
   final bool? showBackArrow;
   final void Function(String)? onMenuSelected;
@@ -31,7 +37,7 @@ class CustomHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 36.h,
+      height:showBody==true?39.h: 36.h,
       child: Column(
         children: [
           Container(
@@ -114,6 +120,18 @@ class CustomHeader extends StatelessWidget {
           showSubtitle == false
               ? Container()
               : Text(subTitle ?? "Manchester,London,UK", style: AppTheme.bodyExtraSmallWeight400Style),
+          showBody == true
+              ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(body ?? "Manchester,London,UK", style: AppTheme.bodyExtraSmallStyle),
+                  Image.asset(AppIcons.dot),
+                  Text(type ?? " Cricket", style: AppTheme.bodyExtraSmallStyle.copyWith(color: AppTheme.secondaryColor)),
+
+                ],
+              )
+              :Container(),
+
         ],
       ),
     );

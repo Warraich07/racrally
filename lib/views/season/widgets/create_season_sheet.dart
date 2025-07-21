@@ -5,13 +5,14 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../app_theme/app_theme.dart';
-import '../../../../app_widgets/custom_button.dart';
-import '../../../../app_widgets/custom_text_field.dart';
-import '../../../../constants/app_icons.dart';
-import '../../../../constants/app_images.dart';
-import '../../../../utils/snackbar_utils.dart';
-import '../../../auth/widgets/custom_dropdown.dart';
+import '../../../app_theme/app_theme.dart';
+import '../../../app_widgets/custom_button.dart';
+import '../../../app_widgets/custom_text_field.dart';
+import '../../../constants/app_icons.dart';
+import '../../../constants/app_images.dart';
+import '../../../models/text_field_model.dart';
+import '../../../utils/snackbar_utils.dart';
+import '../../auth/widgets/custom_dropdown.dart';
 
 class CreateSeasonSheet {
   static void show(BuildContext context) {
@@ -21,6 +22,11 @@ class CreateSeasonSheet {
     XFile? image;
     String imagePath='';
     File? _pickedImage;
+    List<VenueField> venueFields = [
+      VenueField(label: "Venue"),
+      VenueField(label: "Venue"),
+    ];
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -95,6 +101,7 @@ class CreateSeasonSheet {
                             ),
                             const SizedBox(height: 10),
                             CustomButton(
+                              iconColor: AppTheme.darkBackgroundColor,
                               textSize: 12,
                               width: 35.w,
                               height: 40,
@@ -135,24 +142,43 @@ class CreateSeasonSheet {
                         hintText: "Enter season name...",
                       ),
                       const SizedBox(height: 18),
-                      CustomTextField(
-                        fieldName: "Season Cost",
-                        hintText: "Enter cost...",
+                      ListView.builder(
+                        itemCount: venueFields.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context,index){
+                            return Column(
+                              children: [
+                                CustomTextField(
+                                  controller: venueFields[index].controller,
+                                  fieldName: venueFields[index].label.toString()+" "+(index+1).toString(),
+                                  hintText: "Enter venue...",
+                                ),
+                                const SizedBox(height: 18),
+                              ],
+                            );
+                          }
                       ),
-                      const SizedBox(height: 18),
-                      CustomTextField(
-                        fieldName: "Sponsor Name (Optional)",
-                        hintText: "Enter name...",
-                      ),
-                      const SizedBox(height: 18),
-                      CustomTextField(
-                        fieldName: "Sponsor Contribution",
-                        hintText: "Enter contribution...",
-                      ),
-                      const SizedBox(height: 18),
-                      CustomTextField(
-                        fieldName: "Other Contribution",
-                        hintText: "Enter contribution...",
+
+
+                      CustomButton(
+                        iconHeight: 20,
+                        iconColor: AppTheme.darkBackgroundColor,
+                        textSize: 14,
+                        // width: 35.w,
+                        height: 55,
+                        iconPath: AppIcons.addIcon,
+                        onTap: () async {
+
+                            setState(() {
+                              venueFields.add(VenueField(label: "Venue"));
+                            });
+                        },
+                        Text: "Add another venue",
+                        borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
+                        buttonColor: AppTheme.primaryColor,
+                        textColor: AppTheme.darkBackgroundColor,
+                        isAuth: true,
+                        isGoogle: false,
                       ),
                       const SizedBox(height: 18),
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +30,14 @@ class CreateTeamSheet {
      XFile? image;
      String imagePath='';
      String teamColor='';
+    List<Color> teamColors=[
+      Color(0xFFD93229),
+      Color(0xFF00C352),
+      Color(0xFFFBBC05),
+      Color(0xFF4285F4),
+      Color(0xFF19AFFF),
+      Color(0xFF9719FF),
+    ];
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -38,15 +47,7 @@ class CreateTeamSheet {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            List<Color> teamColors=[
-              Color(0xFFD93229),
-              Color(0xFF00C352),
-              Color(0xFFFBBC05),
-              Color(0xFF4285F4),
-              Color(0xFF19AFFF),
-              Color(0xFF9719FF),
-              Color(0xFF00BFC3),
-            ];
+
             return Padding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -180,57 +181,142 @@ class CreateTeamSheet {
                               style: AppTheme.bodyExtraSmallWeight400Style.copyWith(
                                 color: AppTheme.darkBackgroundColor
                               ),
-                              ),
+                              ).paddingOnly(left: 16,right: 16,),
                               SizedBox().setHeight(10),
-                          SizedBox(
-                            height: 40,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: teamColors.length,
-                              itemBuilder: (context, index) {
-                                final isSelected = selectedIndex == index;
+                              SizedBox(
+                                height: 40,
+                                child: ListView.builder(
+                                  padding: EdgeInsets.only(left: 16),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: teamColors.length + 1, // +1 for the icon
+                                  itemBuilder: (context, index) {
+                                    if (index == teamColors.length) {
+                                      // Color Picker Icon
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          Color pickerColor = Colors.red;
+                                          await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                backgroundColor: AppTheme.primaryColor,
+                                                title: const Text('Pick a color'),
+                                                content: SingleChildScrollView(
+                                                  child: ColorPicker(
+                                                    pickerColor: pickerColor,
+                                                    onColorChanged: (color) {
+                                                      pickerColor = color;
+                                                    },
+                                                    enableAlpha: false,
+                                                    pickerAreaHeightPercent: 0.8,
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () => Navigator.of(context).pop(),
+                                                    child:  Text(
+                                                      'Cancel',
+                                                      style: AppTheme.bodyExtraSmallStyle.copyWith(color: AppTheme.secondaryColor),
+                                                    ),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed:(){
+                                                      print(pickerColor.toString());
 
-                                return GestureDetector(
-                                  onTap: () {
-                                    focusNodeTeamName.unfocus();
-                                    focusNodeLocation.unfocus();
-                                    setState(() {
-                                      selectedIndex = index;
-                                      print(teamColors[index]);
-                                      teamColor=teamColors[index].toString();
-                                    });
-                                    print("Selected index: $index");
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 18),
-                                    padding: const EdgeInsets.all(5),
-                                    height: 30,
-                                    width: 38,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(22),
-                                      color: isSelected ? AppTheme.primaryColor : teamColors[index],
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.3),
-                                          blurRadius: 3,
+                                                      print(teamColors);
+                                                      setState(() {
+                                                        teamColors.add(pickerColor);
+                                                        selectedIndex = teamColors.length - 1;
+                                                        teamColor = pickerColor.toString();
+                                                        Get.back();
+                                                      });
+                                                    },
+                                                    child:  Text(
+                                                      'Select',
+                                                      style: AppTheme.bodyExtraSmallStyle.copyWith(color: AppTheme.secondaryColor),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+
+                                          // Add picked color and select it
+                                          // setState(() {
+                                          //   teamColors.add(pickerColor);
+                                          //   selectedIndex = teamColors.length - 1;
+                                          //   teamColor = pickerColor.toString();
+                                          // });
+                                        },
+
+                                        child: Container(
+                                          margin: const EdgeInsets.only(right: 8),
+                                          height: 38,
+                                          width: 38,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(22),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black.withOpacity(0.15),
+                                                blurRadius: 2,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Image.asset(
+                                            AppIcons.color_picker,
+                                            height: 36,
+                                            width: 36,
+                                            fit: BoxFit.contain,
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                    child: Container(
-                                      height: 27,
-                                      width: 27,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: teamColors[index],
+                                      );
+                                    }
+
+                                    // Color Dot
+                                    final isSelected = selectedIndex == index;
+                                    return GestureDetector(
+                                      onTap: () {
+                                        focusNodeTeamName.unfocus();
+                                        focusNodeLocation.unfocus();
+                                        setState(() {
+                                          selectedIndex = index;
+                                          teamColor = teamColors[index].toString();
+                                        });
+                                        print("Selected index: $index");
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.only(right: 6),
+                                        padding: const EdgeInsets.all(5),
+                                        height: 30,
+                                        width: 38,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(22),
+                                          color: isSelected ? AppTheme.primaryColor : teamColors[index],
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.3),
+                                              blurRadius: 3,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Container(
+                                          height: 27,
+                                          width: 27,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
+                                            color: teamColors[index],
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
+                                    );
+                                  },
+                                ),
+                              )
+
+
+
                             ],
-                          ).paddingOnly(left: 16,right: 16,top: 10,bottom: 6),
+                          ).paddingOnly(top: 10,bottom: 6),
                         ),
                         const SizedBox(height: 18),
                         CustomButton(

@@ -8,6 +8,9 @@ import 'package:racrally/views/events/event_details_screen.dart';
 import 'package:racrally/views/home/notifications.dart';
 import 'package:racrally/views/intro/splash_screen.dart';
 import 'package:racrally/views/profile/profile_screen.dart';
+import 'package:racrally/views/season/games/create_game_screen.dart';
+import 'package:racrally/views/season/games/game_details_screen.dart';
+import 'package:racrally/views/season/season_details_screen.dart';
 import 'package:racrally/views/team/player_details_screen.dart';
 import '../views/auth/sign_up_screen.dart';
 import '../views/bottom_nav_bar/bottom_nav_bar.dart';
@@ -29,6 +32,9 @@ class AppPages {
     GetPage(name: AppRoutes.eventDetail, page: () =>   EventDetailsScreen()),
     GetPage(name: AppRoutes.playerDetails, page: () =>  const PlayerDetailsScreen()),
     GetPage(name: AppRoutes.profile, page: () =>  const ProfileScreen()),
+    GetPage(name: AppRoutes.seasonDetails, page: () =>  const SeasonDetailsScreen()),
+    GetPage(name: AppRoutes.createGame, page: () =>  const CreateGameScreen()),
+    GetPage(name: AppRoutes.gameDetails, page: () =>  const GameDetailsScreen()),
 
   ];
 }

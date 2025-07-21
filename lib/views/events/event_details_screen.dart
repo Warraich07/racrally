@@ -37,7 +37,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         children: [
           Container(
             width: double.infinity,
-        height: 20.h,
+        height: 21.h,
         decoration: BoxDecoration(
           color: AppTheme.primaryDarkColor,
           borderRadius: const BorderRadius.only(

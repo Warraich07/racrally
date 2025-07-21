@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> cardTexts=[
     'Total Players',
     'Games This Week',
-    'Bill Splitted',
+    'Unpaid Amount',
     'Events This Week'
   ];
   List<String> cardAnalysis=[
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Container(
-            height:Platform.isIOS?28.h: 42.h,
+            height:Platform.isIOS?28.h: 45.h,
             decoration: BoxDecoration(
               color: AppTheme.secondaryColor,
               borderRadius: const BorderRadius.only(
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const CustomTeamCard();
                   },
                   options: CarouselOptions(
-                    height: 100,
+                    height: 114,
                     enlargeCenterPage: true,
                     enableInfiniteScroll: false,
                     viewportFraction: 1,
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
             // color: Colors.yellow,
-            height:Platform.isIOS?57.h: 45.h,
+            height:Platform.isIOS?57.h: 42.h,
             child: SingleChildScrollView(
               child: Column(
                 children: [

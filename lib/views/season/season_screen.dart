@@ -14,7 +14,7 @@ import '../../constants/app_images.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/custom_dialog.dart';
 import '../events/widgets/custom_card.dart';
-import 'controller/widgets/create_season_sheet.dart';
+import 'widgets/create_season_sheet.dart';
 
 class SeasonScreen extends StatefulWidget {
   const SeasonScreen({super.key});
@@ -83,7 +83,17 @@ class _SeasonScreenState extends State<SeasonScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:true),
+                      GestureDetector(
+                          onTap:(){
+                              Get.toNamed(AppRoutes.seasonDetails);
+                          },
+                          child: CustomSeasonCard(
+
+                              imagePath: AppImages.basketball,
+                              title: "Major Cricket League",
+                              dateTime: "27 Jun 2025 - 27 Jul 2025",
+                              location: "Lahore, Punjab, PK",
+                              isCurrent:true)),
                       CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:false),
                       CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:null),
                     ],

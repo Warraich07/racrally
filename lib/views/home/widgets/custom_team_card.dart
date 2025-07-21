@@ -18,7 +18,7 @@ class _CustomTeamCardState extends State<CustomTeamCard> {
   Widget build(BuildContext context) {
     return Container(
       // width: 90.w,
-      height: 100,
+      height: 114,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: AppTheme.primaryDarkColor,
@@ -75,32 +75,55 @@ class _CustomTeamCardState extends State<CustomTeamCard> {
                   const SizedBox().setHeight(5),
                   Row(
                     children: [
+                      Text("Venue: ",style: AppTheme.bodyExtraSmallStyle,),
                       Text("Maplewood Park – Field 3",style: AppTheme.bodyExtraSmallStyle.copyWith(color:AppTheme.darkBackgroundColor ),),
 
                     ],
                   ),
-                  const SizedBox().setHeight(5),
                   Row(
                     children: [
-                      Row(
-                        children: [ Image.asset(AppIcons.accepted,height: 18,width: 18,),const SizedBox().setWidth(3),Text("12",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
-                      ),
-                      const SizedBox().setWidth(5),
-                      Row(
-                        children: [ Image.asset(AppIcons.cancelled,height: 18,width: 18,),const SizedBox().setWidth(3),Text("05",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
-                      ),
-                      const SizedBox().setWidth(5),
-                      Row(
-                        children: [ Image.asset(AppIcons.pending,height: 18,width: 18,),const SizedBox().setWidth(3),Text("10",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
-                      )
+                      Text("Sub Venue: ",style: AppTheme.bodyExtraSmallStyle,),
+                      Text("Leads Stadium 18B near",style: AppTheme.bodyExtraSmallStyle.copyWith(color:AppTheme.darkBackgroundColor ),),
                     ],
                   ),
-
-
+                  const SizedBox().setHeight(5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(AppIcons.accepted, height: 18, width: 18),
+                              const SizedBox(width: 3),
+                              Text("12", style: AppTheme.bodyExtraSmallStyle.copyWith(color: AppTheme.darkBackgroundColor)),
+                            ],
+                          ),
+                          const SizedBox(width: 5),
+                          Row(
+                            children: [
+                              Image.asset(AppIcons.cancelled, height: 18, width: 18),
+                              const SizedBox(width: 3),
+                              Text("05", style: AppTheme.bodyExtraSmallStyle.copyWith(color: AppTheme.darkBackgroundColor)),
+                            ],
+                          ),
+                          const SizedBox(width: 5),
+                          Row(
+                            children: [
+                              Image.asset(AppIcons.pending, height: 18, width: 18),
+                              const SizedBox(width: 3),
+                              Text("10", style: AppTheme.bodyExtraSmallStyle.copyWith(color: AppTheme.darkBackgroundColor)),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox().setWidth(65),
+                      Text("8:00 PM", style: AppTheme.bodyExtraSmallStyle),
+                    ],
+                  ),
                 ],
               ),
-              const Spacer(),
-              Text("8:00PM",style: AppTheme.bodyExtraSmallStyle,)
+
             ],
           ).paddingSymmetric(horizontal: 12)
         ],
