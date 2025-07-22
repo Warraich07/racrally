@@ -14,6 +14,7 @@ class AppIcons {
   static String halfEllipses = "assets/app_icons/bottom_bar/half_ellipses.png";
   static String notification = "assets/app_icons/overall/notification.png";
   static String userIcon = "assets/app_icons/overall/user_one.png";
+  static String dots_grid = "assets/app_icons/overall/dots-grid.png";
   static String accepted = "assets/app_icons/overall/accepted.png";
   static String cancelled = "assets/app_icons/overall/cancelled.png";
   static String pending = "assets/app_icons/overall/pending.png";

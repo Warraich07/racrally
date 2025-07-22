@@ -32,7 +32,9 @@ class CustomToggleBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 width: 1,
-                color:isSelected? AppTheme.darkGreyColor:AppTheme.darkGreyColor.withOpacity(0.3),
+                color:isSelected?
+                AppTheme.darkGreyColor:
+                AppTheme.darkGreyColor.withOpacity(0.1),
               ),
             ),
             child: Center(

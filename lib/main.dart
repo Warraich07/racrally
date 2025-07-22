@@ -1,13 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:racrally/routes/app_pages.dart';
 import 'package:racrally/routes/app_routes.dart';
 import 'package:sizer/sizer.dart';
-import 'app_theme/app_theme.dart';
 import 'controllers/lazy_controller.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  final FirebaseApp app = Firebase.app();
+  final FirebaseOptions options = app.options;
+  print("Firebase Project Number: ${options.appId}");
   runApp(const MyApp());
 }
 

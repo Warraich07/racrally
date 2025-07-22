@@ -8,6 +8,7 @@ import 'package:racrally/extensions/alignment_extension.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/extensions/width_extension.dart';
 import 'package:racrally/views/auth/controller/auth_controller.dart';
+import 'package:racrally/views/auth/controller/social_sign_in_controller.dart';
 import 'package:racrally/views/bottom_nav_bar/controller/bottom_bar_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -26,6 +27,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final AuthController authController=Get.find();
   final GeneralController generalController=Get.find();
+  final SocialSignInController socialSignInController=Get.find();
   bool showPassword=true;
   bool rememberMe=false;
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -192,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox().setHeight(18),
                        CustomButton(
                           onTap: (){
-
+                            socialSignInController.signInWithGoogle();
                           },
                          Text: "Google",
                          borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
