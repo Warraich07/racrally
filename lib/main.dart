@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:racrally/routes/app_pages.dart';
 import 'package:racrally/routes/app_routes.dart';

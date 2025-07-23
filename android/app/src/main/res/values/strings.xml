@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">racrally</string>
+
+    <!-- Facebook Config -->
+    <string name="facebook_app_id">677739195301434</string>
+    <string name="fb_login_protocol_scheme">fb677739195301434</string>
+    <string name="facebook_client_token">ea5d66ec33988891fa38f1abe067bef6</string>
+</resources>

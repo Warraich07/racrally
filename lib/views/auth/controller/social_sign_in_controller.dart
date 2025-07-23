@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -70,47 +73,49 @@ class SocialSignInController extends GetxController {
     }
   }
 
+  // Future<void> signInWithFacebook() async {
+  //   try {
+  //     final LoginResult result = await FacebookAuth.i.login(
+  //       permissions: ['email', 'public_profile'],
+  //       // loginBehavior: LoginBehavior.webOnly,
+  //     );
+  //
+  //     if (result.status == LoginStatus.success) {
+  //       final OAuthCredential credential = FacebookAuthProvider.credential(
+  //         result.accessToken!.tokenString,
+  //       );
+  //       await FirebaseAuth.instance.signInWithCredential(credential);
+  //     } else {
+  //       throw Exception('Login failed: ${result.status}');
+  //     }
+  //   } catch (e) {
+  //     debugPrint('Facebook login error: $e');
+  //     rethrow;
+  //   }
+  // }
+
   Future<void> signInWithFacebook() async {
     try {
       _baseController.showLoading();
+      await FacebookAuth.instance.logOut();
+      // Use web-only login with timeout
+      final loginResult = await FacebookAuth.instance.login(
+        permissions: ['email', 'public_profile'],
+        loginBehavior: LoginBehavior.nativeOnly,
+      ).timeout(Duration(seconds: 5));
 
-      // Trigger the Facebook Login
-      final LoginResult loginResult = await FacebookAuth.instance.login();
-
-      if (loginResult.status == LoginStatus.success) {
-        final accessToken = loginResult.accessToken;
-
-        // Create a credential for Firebase
-        final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(accessToken!.tokenString);
-
-        // Sign in to Firebase
-        final UserCredential userCredential = await FirebaseAuth.instance
-            .signInWithCredential(facebookAuthCredential);
-
-        final User? user = userCredential.user;
-        if (user != null) {
-          userId.value = user.uid;
-          userName.value = user.displayName ?? "No Name";
-          userEmail.value = user.email ?? "No Email";
-          userPhoto.value = user.photoURL ?? "";
-
-          print("Facebook User ID: ${userId.value}");
-          print("Facebook Name: ${userName.value}");
-          print("Facebook Email: ${userEmail.value}");
-          print("Facebook Photo: ${userPhoto.value}");
-
-          // You can call your backend registration/auth methods here
-          // authController.signUp(...);
-        }
-      } else {
-        print("Facebook Sign-In Failed: ${loginResult.status}");
+      if (loginResult.status != LoginStatus.success) {
+        throw Exception('Login failed: ${loginResult.status}');
       }
-
-      _baseController.hideLoading();
+      // Continue with Firebase auth...
+    } on TimeoutException {
+      await FacebookAuth.instance.logOut(); // Clear stuck state
+      Get.snackbar('Timeout', 'Please try again');
     } catch (e) {
+      await FacebookAuth.instance.logOut(); // Reset auth state
+      Get.snackbar('Error', 'Login failed. Try another method.');
+    } finally {
       _baseController.hideLoading();
-      print("Facebook Sign-In Error: $e");
     }
   }
 

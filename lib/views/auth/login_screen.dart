@@ -204,7 +204,9 @@ class _LoginScreenState extends State<LoginScreen> {
                        ),
                       const SizedBox().setHeight(14),
                        CustomButton(
-                         onTap: (){},
+                         onTap: (){
+                           socialSignInController.signInWithFacebook();
+                         },
                          Text: "Facebook",
                          borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
                          buttonColor: AppTheme.primaryColor,
