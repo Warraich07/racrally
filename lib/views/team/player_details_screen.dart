@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
+import '../../app_widgets/custom_header.dart';
 import '../../constants/app_icons.dart';
 import '../../constants/app_images.dart';
 import '../../utils/custom_dialog.dart';
@@ -32,76 +33,27 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
         children: [
           Column(
             children: [
-              Container(
-                width: double.infinity,
-                height: 20.h,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryDarkColor,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(24),
-                    bottomRight: Radius.circular(24),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                            onTap: (){
-                              Get.back();
-                            },
-                            child: Image.asset(AppIcons.arrow_back_sharp,width: 20,)),
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            popupMenuTheme: PopupMenuThemeData(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                          child: PopupMenuButton<String>(
-                            color: AppTheme.primaryColor,
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: 'delete',
-                                child: Row(
-                                  children: [
-                                    Image.asset(AppIcons.delete, height: 20, width: 20),
-                                    const SizedBox(width: 10),
-                                    Text('Delete', style: AppTheme.bodyMediumGreyStyle),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem(
-                                value: 'send rsvp',
-                                child: Row(
-                                  children: [
-                                    Image.asset(AppIcons.alarm, height: 20, width: 20,color: AppTheme.darkGreyColor,),
-                                    const SizedBox(width: 10),
-                                    Text('Send RSVP', style: AppTheme.bodyMediumGreyStyle),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            onSelected: (value) {
-                              if (value == 'edit') {
-                                // onEditTap?.call();
-                              } else if (value == 'delete') {
-                                // onDeleteTap?.call();
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ).paddingOnly(top: 40, left: 16),
+              CustomHeader(
+                showPopUpMenu: false,
+                showBackArrow: true,
+                title: "Noraiz XI",
+                subTitle: "Manchester,London,UK",
+                onMenuSelected: (value) {
+                  if (value == 'edit') {
+                    print(teamController.teamList[0].name);
+                    print(teamController.teamList[0].location);
+                    print(teamController.teamList[0].image);
+                    // CreateTeamSheet.show(context, true,teamController.teamList[0].name,teamController.teamList[0].location,teamController.teamList[0].image,teamController.teamList[0].color);
+                    print("Edit selected");
+                  } else if (value == 'delete') {
+                    print("Delete selected");
+                  }
+                  // else if (value == 'send rsvp') {
+                  //   CustomDialog.showReminderDialog(iconPath: AppIcons.share);
+                  // }
+                },
               ),
-              SizedBox(height: 50), // space for the overlapping image
-              Text("Noraiz XI",style: AppTheme.mediumHeadingFont600Style,),
-              Text("Manchester,London,UK",style: AppTheme.bodyExtraSmallWeight400Style,),
+
 
               Column(
                 children: [
@@ -152,9 +104,9 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:true),
-                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:false),
-                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:null),
+                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:true,showPopUpMenu: false,),
+                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:false,showPopUpMenu: false,),
+                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:null,showPopUpMenu: false,),
                         ],
                       ),
                     ),

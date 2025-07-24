@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       showSubtitle: false,
                       onMenuSelected: (value) {
                         if (value == 'edit') {
-                          CreateTeamSheet.show(context, true);
+                          // CreateTeamSheet.show(context, true);
                           print("Edit selected");
                         } else if (value == 'delete') {
                           print("Delete selected");

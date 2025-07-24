@@ -14,11 +14,16 @@ class AuthController extends GetxController {
 
   RxString accessToken = "".obs;
   RxString signUpOtp = "".obs;
+  RxString forgetPasswordOtp = "".obs;
   RxBool showCheck = false.obs;
   RxBool showPassword = false.obs;
   RxString checkedItem = ''.obs;
-  RxString storedEmailForLogin = ''.obs;
-  RxString storedPasswordForLogin = ''.obs;
+  RxString storedEmailForReuse = ''.obs;
+  RxString storedPasswordForReuse = ''.obs;
+  RxString storedFirstNameForReuse = ''.obs;
+  RxString storedLastNameForReuse = ''.obs;
+  RxString storedRoleForReuse = ''.obs;
+  RxString storedGenderForReuse = ''.obs;
   final BaseController _baseController = BaseController.instance;
   Rxn<UserModel> userData=Rxn<UserModel>();
 
@@ -94,8 +99,148 @@ class AuthController extends GetxController {
 
     var result = json.decode(response);
     if (result['success'].toString()=="true") {
-        loginUser(storedEmailForLogin.value, storedPasswordForLogin.value, true);
+        loginUser(storedEmailForReuse.value, storedPasswordForReuse.value, true);
       // Handle success case
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future forgetPassword(String email) async {
+    _baseController.showLoading();
+    Map<String, String> body = {
+      "email":email
+    };
+
+    var response = await DataApiService.instance
+        .post('/forget-password', body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        CustomDialog.showErrorDialog(
+            title: 'Error!', showTitle: true, description: apiError["reason"]);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    if (result['success'].toString()=="true") {
+      forgetPasswordOtp.value=result['data']['otp'];
+      accessToken.value=result['data']['token'];
+      storedEmailForReuse.value=email;
+      Get.toNamed(AppRoutes.verifyOtp,arguments: {
+        "isFromSignUp":"false"
+      });
+      SnackbarUtil.showSnackbar(message: forgetPasswordOtp.value, type: SnackbarType.success);
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future resentForgetPasswordOtp() async {
+    _baseController.showLoading();
+    Map<String, String> body = {
+      "email":storedEmailForReuse.value
+    };
+
+    var response = await DataApiService.instance
+        .post('/forget-password', body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        CustomDialog.showErrorDialog(
+            title: 'Error!', showTitle: true, description: apiError["reason"]);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    if (result['success'].toString()=="true") {
+      forgetPasswordOtp.value=result['data']['otp'];
+      accessToken.value=result['data']['token'];
+      SnackbarUtil.showSnackbar(message: forgetPasswordOtp.value, type: SnackbarType.success);
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future verifyOtpForgetPassowrd(String otp) async {
+    _baseController.showLoading();
+    Map<String, String> body = {
+      "otp":otp
+    };
+
+    var response = await DataApiService.instance
+        .post('/verify-forget-password', body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        CustomDialog.showErrorDialog(
+            title: 'Error!', showTitle: true, description: apiError["reason"]);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+
+    var result = json.decode(response);
+    if (result['success'].toString()=="true") {
+      Get.offAndToNamed(AppRoutes.resetPassword);
+
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future resetPassword(String newPassword) async {
+    _baseController.showLoading();
+    Map<String, String> body = {
+      "newPassword":newPassword
+    };
+
+    var response = await DataApiService.instance
+        .post('/reset-password', body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        CustomDialog.showErrorDialog(
+            title: 'Error!', showTitle: true, description: apiError["reason"]);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+
+    var result = json.decode(response);
+    if (result['success'].toString()=="true") {
+      Get.offAndToNamed(AppRoutes.login);
+
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");
       String message = result['data']['message'];
@@ -134,13 +279,60 @@ class AuthController extends GetxController {
 
     var result = json.decode(response);
     if (result['success'].toString()=="true" && result['message']=="Successful") {
-      Get.toNamed(AppRoutes.verifyOtp);
+      Get.toNamed(AppRoutes.verifyOtp,arguments: {
+        "isFromSignUp":"true"
+      });
       print("logged in");
       accessToken.value=result['data']['token'];
       signUpOtp.value=result['data']['otp'];
       SnackbarUtil.showSnackbar(message: signUpOtp.value, type: SnackbarType.success);
-      storedEmailForLogin.value=email;
-      storedPasswordForLogin.value=password;
+      storedEmailForReuse.value=email;
+      storedPasswordForReuse.value=password;
+      storedFirstNameForReuse.value=firstName;
+      storedLastNameForReuse.value=lastName;
+      storedRoleForReuse.value='Admin';
+      storedGenderForReuse.value=gender;
+      // Handle success case
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true"){
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future resendOtpForVerifyEmail() async {
+    _baseController.showLoading();
+    Map<String, String> body = {
+      "firstName": storedFirstNameForReuse.value,
+      "lastName": storedLastNameForReuse.value,
+      "email": storedEmailForReuse.value,
+      "password": storedPasswordForReuse.value,
+      "gender": storedGenderForReuse.value,
+      "role": storedRoleForReuse.value
+    };
+
+    var response = await DataApiService.instance
+        .post('/signup', body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        CustomDialog.showErrorDialog(
+            title: 'Error!', showTitle: true, description: apiError["reason"]);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+
+    var result = json.decode(response);
+    if (result['success'].toString()=="true" && result['message']=="Successful") {
+      accessToken.value=result['data']['token'];
+      signUpOtp.value=result['data']['otp'];
+      SnackbarUtil.showSnackbar(message: signUpOtp.value, type: SnackbarType.success);
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true"){
       print("error is here");

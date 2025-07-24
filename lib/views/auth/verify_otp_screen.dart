@@ -16,6 +16,7 @@ import 'controller/auth_controller.dart';
 class VerifyOtpScreen extends StatefulWidget {
   const VerifyOtpScreen({super.key});
 
+
   @override
   State<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
 }
@@ -27,7 +28,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   String otp = "";
   bool showMessage = false;
   late Timer _timer;
-  int _countdown = 30;
+  int _countdown = 5;
   bool _resendVisible = false;
   void startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -46,7 +47,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   void resendOtp() {
     // Logic to resend OTP, e.g., make API call
     setState(() {
-      _countdown = 30; // Reset countdown
+      _countdown = 5; // Reset countdown
       _resendVisible = false; // Hide resend button
     });
     startTimer(); // Start the timer again
@@ -69,6 +70,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   }
   @override
   Widget build(BuildContext context) {
+
+    final isFromSignUp = (Get.arguments != null && Get.arguments['isFromSignUp'] == 'true');
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
@@ -156,9 +159,21 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   children: [
                     Text("Did’nt receive? ",style: AppTheme.bodyMediumGreyStyle,),
                     GestureDetector(
-                    onTap: () {
-                      _otpFocusNode.unfocus();
-                      resendOtp();
+                    onTap: () async{
+
+                      // if(_formKey.currentState!.validate()){
+                        _otpFocusNode.unfocus();
+                        if(isFromSignUp.toString()=='true'){
+                          await authController.resendOtpForVerifyEmail();
+                          resendOtp();
+                        }else if(isFromSignUp.toString()=='false'){
+                          await authController.resentForgetPasswordOtp();
+                          resendOtp();
+                          print("re-send otp for reset password");
+                        }
+                      // }
+
+
                     },
                     child:  Center(
                         child: Text(
@@ -185,7 +200,13 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                 onTap: (){
                   if(_formKey.currentState!.validate()){
                     _otpFocusNode.unfocus();
-                    authController.verifyEmail(otp);
+                    if(isFromSignUp.toString()=='true'){
+                      authController.verifyEmail(otp);
+                    }else if(isFromSignUp.toString()=='false'){
+                      authController.verifyOtpForgetPassowrd(otp);
+                      print("verify otp to reset password");
+                    }
+
                   }
                   // if(otp.isEmpty){
                   //   SnackbarUtil.showSnackbar(message: "Please enter OTP", type: SnackbarType.info);

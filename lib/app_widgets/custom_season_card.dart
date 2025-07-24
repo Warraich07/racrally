@@ -14,7 +14,7 @@ class CustomSeasonCard extends StatelessWidget {
   final String location;
   final VoidCallback? onEditTap;
   final VoidCallback? onDeleteTap;
-
+  final bool? showPopUpMenu;
   const CustomSeasonCard({
     super.key,
     this.isCurrent = true,
@@ -24,6 +24,7 @@ class CustomSeasonCard extends StatelessWidget {
     required this.location,
     this.onEditTap,
     this.onDeleteTap,
+    this.showPopUpMenu
   });
 
   @override
@@ -74,7 +75,7 @@ class CustomSeasonCard extends StatelessWidget {
 
                   ],
                 ),
-                  Theme(
+                showPopUpMenu==false?Container():  Theme(
                     data: Theme.of(context).copyWith(
                       popupMenuTheme: PopupMenuThemeData(
                         shape: RoundedRectangleBorder(

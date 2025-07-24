@@ -39,7 +39,6 @@ class _TeamScreenState extends State<TeamScreen> {
   Widget build(BuildContext context) {
     return Obx(
       ()=> Scaffold(
-
         backgroundColor: AppTheme.primaryColor,
         body: teamController.isTeamCreated.value==false?
         Column(
@@ -48,7 +47,7 @@ class _TeamScreenState extends State<TeamScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Team Management",style: AppTheme.mediumHeadingStyle,),
-                Image.asset(AppIcons.event,height: 24,width: 24,)
+                // Image.asset(AppIcons.event,height: 24,width: 24,)
               ],
             ).paddingOnly(top: Platform.isIOS?30:0),
             SizedBox().setHeight(10),
@@ -66,7 +65,7 @@ class _TeamScreenState extends State<TeamScreen> {
               width: 42.w,
               iconPath: AppIcons.addIcon,
               onTap: (){
-                CreateTeamSheet.show(context,false);
+                CreateTeamSheet.show(context,false,'name','location','image','color','1');
               },
               Text: "Create Team",
               borderColor: AppTheme.secondaryColor,
@@ -90,13 +89,26 @@ class _TeamScreenState extends State<TeamScreen> {
                   subTitle: teamController.teamList[0].location,
                   onMenuSelected: (value) {
                     if (value == 'edit') {
-                      CreateTeamSheet.show(context, true);
+                      print(teamController.teamList[0].name);
+                      print(teamController.teamList[0].location);
+                      print(teamController.teamList[0].image);
+                      CreateTeamSheet.show(context, true,teamController.teamList[0].name,teamController.teamList[0].location,teamController.teamList[0].image,teamController.teamList[0].color,teamController.teamList[0].id.toString());
                       print("Edit selected");
                     } else if (value == 'delete') {
+                      CustomDialog.showDeleteDialog(
+                          title: "Delete Team",
+                          description: "This will remove the Team from the system",
+                          iconPath: AppIcons.delete,
+                        onConfirm: (){
+                            // Get.back();
+                            teamController.deleteTeam(teamController.teamList[0].id.toString());
+                        }
+                      );
                       print("Delete selected");
-                    } else if (value == 'send rsvp') {
-                      CustomDialog.showReminderDialog(iconPath: AppIcons.share);
                     }
+                    // else if (value == 'send rsvp') {
+                    //   CustomDialog.showReminderDialog(iconPath: AppIcons.share);
+                    // }
                   },
                 ),
                 teamController.isPlayerInvited.value==true?
@@ -284,7 +296,6 @@ class _TeamScreenState extends State<TeamScreen> {
                     ),
                     child: ClipOval(
                       child: CachedNetworkImage(
-
                         imageUrl:teamController.teamList[0].image,
                         placeholder: (context, url) =>
                             Center(
@@ -295,8 +306,6 @@ class _TeamScreenState extends State<TeamScreen> {
                             error) =>
                             Image.asset(
                               AppImages.topbar_ellipses,scale: 5.3,
-                              // color:   widget.forMyProfile==false?AppColors.whiteColor:AppColors.primaryColor,
-
                             ),
                         fit: BoxFit.cover,
                         // scale:20 ,

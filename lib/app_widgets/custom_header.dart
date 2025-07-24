@@ -96,16 +96,16 @@ class CustomHeader extends StatelessWidget {
                               ],
                             ),
                           ),
-                          PopupMenuItem(
-                            value: 'send rsvp',
-                            child: Row(
-                              children: [
-                                Image.asset(AppIcons.alarm, height: 20, width: 20, color: AppTheme.darkGreyColor),
-                                const SizedBox(width: 10),
-                                Text('Send RSVP', style: AppTheme.bodyMediumGreyStyle),
-                              ],
-                            ),
-                          ),
+                          // PopupMenuItem(
+                          //   value: 'send rsvp',
+                          //   child: Row(
+                          //     children: [
+                          //       Image.asset(AppIcons.alarm, height: 20, width: 20, color: AppTheme.darkGreyColor),
+                          //       const SizedBox(width: 10),
+                          //       Text('Send RSVP', style: AppTheme.bodyMediumGreyStyle),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                         onSelected: onMenuSelected,
                       ),

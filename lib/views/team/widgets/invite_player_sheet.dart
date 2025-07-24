@@ -91,11 +91,13 @@ class InvitePlayerSheet {
                         const SizedBox(height: 18),
                         CustomButton(
                           onTap: () {
-                            // if(_formKey.currentState!.validate()){
+                            if(_formKey.currentState!.validate()){
                               // teamController.sendInvite(emailController.text.toString(), playerType!);
+                              print(emailController.text.toString());
+                              print(playerType!);
                               Get.back();
                               teamController.isPlayerInvited.value=true;
-                            // }
+                            }
 
 
                             // Get.toNamed(AppRoutes.teamDetail);

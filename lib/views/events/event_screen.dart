@@ -96,7 +96,54 @@ class _EventScreenState extends State<EventScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Event Management",style: AppTheme.mediumHeadingStyle,),
-                Image.asset(AppIcons.event,height: 24,width: 24,)
+                // GestureDetector(
+                //     onTap: (){
+                //
+                //       print("object");
+                //     },
+                //     child: Image.asset(AppIcons.event,height: 24,width: 24,)),
+                Theme(
+                  data: Theme.of(context).copyWith(
+                    popupMenuTheme: PopupMenuThemeData(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  child: PopupMenuButton<String>(
+                    icon: Image.asset(AppIcons.event,height: 24,width: 24,),
+                    color: AppTheme.primaryColor,
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'A-Z',
+                        child: Row(
+                          children: [
+                            Icon(Icons.filter_alt_off,color: AppTheme.lightGreyColor,),
+                            const SizedBox(width: 10),
+                            Text('A-Z', style: AppTheme.bodyMediumGreyStyle),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'Z-A',
+                        child: Row(
+                          children: [
+                            Icon(Icons.filter_alt_off,color: AppTheme.lightGreyColor,),
+                            const SizedBox(width: 10),
+                            Text('Z-A', style: AppTheme.bodyMediumGreyStyle),
+                          ],
+                        ),
+                      ),
+                    ],
+                    onSelected: (value) {
+                      if (value == 'edit') {
+                        // onEditTap?.call();
+                      } else if (value == 'delete') {
+                        // onDeleteTap?.call();
+                      }
+                    },
+                  ),
+                ),
               ],
             ).paddingOnly(top: Platform.isIOS?30:0),
             SizedBox().setHeight(10),

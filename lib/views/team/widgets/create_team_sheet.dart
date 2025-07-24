@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,12 @@ import '../../../constants/custom_validators.dart';
 import '../../../utils/snackbar_utils.dart';
 
 class CreateTeamSheet {
-  static void show(BuildContext context,bool isUpdate) {
+  static Color _parseColorFromString(String colorString) {
+    final valueString = colorString.split('(0x')[1].split(')')[0];
+    return Color(int.parse(valueString, radix: 16));
+  }
+
+  static void show(BuildContext context,bool isUpdate,String? name, String? location,String? pathImage,String colorOfTeam,String? teamId) {
 
     File? _pickedImage;
     int selectedIndex = -1;
@@ -30,6 +36,7 @@ class CreateTeamSheet {
      XFile? image;
      String imagePath='';
      String teamColor='';
+     String editImagePath='';
     List<Color> teamColors=[
       Color(0xFFD93229),
       Color(0xFF00C352),
@@ -38,6 +45,7 @@ class CreateTeamSheet {
       Color(0xFF19AFFF),
       Color(0xFF9719FF),
     ];
+    bool isInitialized = false;
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -47,6 +55,32 @@ class CreateTeamSheet {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
+            print(colorOfTeam);
+            if (isUpdate == true && !isInitialized) {
+              teamNameController.text = name ?? '';
+              locationController.text = location ?? '';
+              editImagePath = pathImage ?? '';
+              teamColor = colorOfTeam;
+
+              // Match or add colorOfTeam to teamColors
+              try {
+                // Parse the string back to Color
+                Color parsedColor = _parseColorFromString(colorOfTeam);
+
+                // Check if it already exists in the list
+                final matchIndex = teamColors.indexWhere((c) => c.value == parsedColor.value);
+                if (matchIndex != -1) {
+                  selectedIndex = matchIndex;
+                } else {
+                  teamColors.add(parsedColor);
+                  selectedIndex = teamColors.length - 1;
+                }
+              } catch (e) {
+                print('Error parsing color: $e');
+              }
+
+              isInitialized = true;
+            }
 
             return Padding(
               padding: EdgeInsets.only(
@@ -107,7 +141,32 @@ class CreateTeamSheet {
                                     fit: BoxFit.cover,
                                   ),
                                 )
-                                    : Image.asset(
+                                    :editImagePath.isNotEmpty? Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppTheme.darkBackgroundColor,
+                                  ),
+                                  child: ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl:editImagePath,
+                                      placeholder: (context, url) =>
+                                          Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppTheme.secondaryColor,
+                                              )),
+                                      errorWidget: (context, url,
+                                          error) =>
+                                          Image.asset(
+                                            AppImages.topbar_ellipses,scale: 5.3,
+                                          ),
+                                      fit: BoxFit.cover,
+                                      // scale:20 ,
+                                    ),
+                                  ),
+                                ):
+                                Image.asset(
                                   AppImages.placeHolder,
                                   height: 27,
                                   width: 30,
@@ -322,11 +381,14 @@ class CreateTeamSheet {
                         CustomButton(
                           onTap: () {
                             if(_formKey.currentState!.validate()){
-                              if(imagePath.isEmpty){
+                              if(imagePath.isEmpty &&isUpdate==false){
                                 SnackbarUtil.showSnackbar(message: "Please select image", type: SnackbarType.info);
                               }else if(selectedIndex==-1){
                                 SnackbarUtil.showSnackbar(message: "Please select team color", type: SnackbarType.info);
-                              }else{
+                              }else if(isUpdate==true){
+                                teamController.editTeam(teamId!, teamNameController.text.toString(), locationController.text.toString(), teamColor, imagePath);
+                              }
+                              else{
                                 teamController.createTeam(teamNameController.text.toString(), locationController.text.toString(), teamColor, imagePath);
                               }
                             }

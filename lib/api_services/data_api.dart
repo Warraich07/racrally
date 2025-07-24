@@ -272,6 +272,60 @@ Future<dynamic> multiPartImage(
     }
   }
 
+  Future<dynamic> multiPartImagePut(
+      String api, List<String?> imageFile,String fieldName, Map<String, String> body,
+      ) async {
+
+
+    var uri = Uri.parse(BASE_URL + api);
+    print(uri);
+    print(body);
+    try {
+      var headers = {
+        // please uncomment it
+        'Authorization': 'Bearer ${authController.accessToken.value}'
+      };
+      print('before');
+      var request = http.MultipartRequest('PUT', uri);
+
+
+      if (imageFile.isNotEmpty) {
+        for(int i=0;i<imageFile.length;i++){
+          if(imageFile[i]!=null){
+            print(imageFile);
+            request.files
+                .add(await http.MultipartFile.fromPath(fieldName, imageFile[i]!));
+          }
+
+        }
+
+      }
+      // request.files
+      //     .add(await http.MultipartFile.fromPath('image', imageFile.first));
+      request.fields.addAll(body);
+      // please uncomment it
+      request.headers.addAll(headers);
+      print(request.fields);
+      print(request.files);
+      http.StreamedResponse response = await request
+          .send()
+          .timeout(const Duration(seconds: TIME_OUT_DURATION));
+      final respStr = await response.stream.bytesToString();
+      if (response.statusCode == 200) {
+        // print(await response.stream.bytesToString());
+        return respStr;
+      } else {
+        print(response.reasonPhrase);
+        return respStr;
+      }
+    } on SocketException {
+      throw FetchDataException('No Internet connection', uri.toString());
+    } on TimeoutException {
+      throw ApiNotRespondingException(
+          'API not responded in time', uri.toString());
+    }
+  }
+
   Future<dynamic> multiPartEditProfile(
       String api, String? imageFile ,String fieldName, Map<String, String> body,
       ) async {

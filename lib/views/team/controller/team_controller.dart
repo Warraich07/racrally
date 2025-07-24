@@ -59,7 +59,7 @@ class TeamController extends GetxController {
   Future getTeam() async {
     isLoading.value=true;
 
-
+print("get-team");
     var response = await DataApiService.instance
         .get("/team")
         .catchError((error) {
@@ -102,6 +102,36 @@ class TeamController extends GetxController {
     }
   }
 
+  Future deleteTeam(String teamId) async {
+    _baseController.showLoading();
+    print("get-team");
+    var response = await DataApiService.instance
+        .delete("/team/$teamId")
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    isLoading.value=false;
+    if (result['success'].toString()=="true") {
+          getTeam();
+          SnackbarUtil.showSnackbar(message: "Team Deleted", type: SnackbarType.success);
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
   Future createTeam(String teamName,String location,String color,String imagePath) async {
     _baseController.showLoading();
     Map<String, String> body = {
@@ -136,6 +166,58 @@ class TeamController extends GetxController {
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future editTeam(String teamId, String teamName, String location, String color, String imagePath) async {
+    _baseController.showLoading();
+
+    Map<String, String> body = {
+      'name': teamName,
+      'location': location,
+      'color': color
+    };
+
+    var response;
+
+    if (imagePath.isNotEmpty) {
+      // ✅ Corrected: Use PUT for multipart update
+      response = await DataApiService.instance
+          .multiPartImagePut('/team/$teamId', [imagePath], "image", body)
+          .catchError((error) {
+        if (error is BadRequestException) {
+          SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+        } else {
+          _baseController.handleError(error);
+        }
+      });
+    } else {
+      // No image: use regular PUT
+      response = await DataApiService.instance
+          .put('/team/$teamId', body)
+          .catchError((error) {
+        if (error is BadRequestException) {
+          SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+        } else {
+          _baseController.handleError(error);
+        }
+      });
+    }
+
+    update();
+    _baseController.hideLoading();
+
+    if (response == null) return;
+
+    var result = json.decode(response);
+    if (result['success'].toString() == "true") {
+      isTeamCreated.value = true;
+      teamList.value = [TeamModel.fromJson(result['data'])];
+      Get.back();
+      SnackbarUtil.showSnackbar(message: "Team Updated", type: SnackbarType.success);
+    } else if (result['status'].toString() == "failed" && result['error'].toString() == "true") {
       String message = result['data']['message'];
       SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
     }

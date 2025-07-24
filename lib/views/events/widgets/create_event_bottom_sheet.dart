@@ -197,88 +197,88 @@ class CreateEventSheet {
                         const SizedBox(height: 18),
 
                         // RSVP fields
-                        if (isSwitched)
-                          Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  pickDate(context, rsvpDeadlineController, (selectedDate) {
-                                    dateAndTime = selectedDate;
-                                  });
-
-                                },
-                                child: AbsorbPointer(
-                                  child: CustomTextField(
-                                    controller: rsvpDeadlineController,
-                                    focusNode: focusNodePassword,
-                                    suffixIcon: const Icon(Icons.calendar_today_outlined),
-                                    isObscure: false,
-                                    fieldName: "RSVP Deadline",
-                                    hintText: "Select",
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 18),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // First Reminder Dropdown
-                                  SizedBox(
-                                    width: 44.w,
-                                    child: CustomDropdownField(
-                                      fontSize: 13,
-                                      fieldName: "First Reminder",
-                                      hintText: "Select",
-                                      value: firstReminder,
-                                      items: const [
-                                        DropdownMenuItem(
-                                            value: "24 hours before",
-                                            child: Text("24 hours before")),
-                                        DropdownMenuItem(
-                                            value: "16 hours before",
-                                            child: Text("16 hours before")),
-                                        DropdownMenuItem(
-                                            value: "8 hours before",
-                                            child: Text("8 hours before")),
-                                      ],
-                                      onChanged: (value) {
-                                        setState(() {
-                                          firstReminder = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-
-                                  // Last Reminder Dropdown
-                                  SizedBox(
-                                    width: 44.w,
-                                    child: CustomDropdownField(
-                                      fontSize: 10,
-                                      fieldName: "Last Reminder",
-                                      hintText: "Select",
-                                      value: lastReminder,
-                                      items: const [
-                                        DropdownMenuItem(
-                                            value: "8 hours before",
-                                            child: Text("8 hours before")),
-                                        DropdownMenuItem(
-                                            value: "4 hours before",
-                                            child: Text("4 hours before")),
-                                        DropdownMenuItem(
-                                            value: "2 hours before",
-                                            child: Text("2 hours before")),
-                                      ],
-                                      onChanged: (value) {
-                                        setState(() {
-                                          lastReminder = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
+                        // if (isSwitched)
+                        //   Column(
+                        //     children: [
+                        //       GestureDetector(
+                        //         onTap: () async {
+                        //           pickDate(context, rsvpDeadlineController, (selectedDate) {
+                        //             dateAndTime = selectedDate;
+                        //           });
+                        //
+                        //         },
+                        //         child: AbsorbPointer(
+                        //           child: CustomTextField(
+                        //             controller: rsvpDeadlineController,
+                        //             focusNode: focusNodePassword,
+                        //             suffixIcon: const Icon(Icons.calendar_today_outlined),
+                        //             isObscure: false,
+                        //             fieldName: "RSVP Deadline",
+                        //             hintText: "Select",
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       const SizedBox(height: 18),
+                        //       Row(
+                        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //         children: [
+                        //           // First Reminder Dropdown
+                        //           SizedBox(
+                        //             width: 44.w,
+                        //             child: CustomDropdownField(
+                        //               fontSize: 13,
+                        //               fieldName: "First Reminder",
+                        //               hintText: "Select",
+                        //               value: firstReminder,
+                        //               items: const [
+                        //                 DropdownMenuItem(
+                        //                     value: "24 hours before",
+                        //                     child: Text("24 hours before")),
+                        //                 DropdownMenuItem(
+                        //                     value: "16 hours before",
+                        //                     child: Text("16 hours before")),
+                        //                 DropdownMenuItem(
+                        //                     value: "8 hours before",
+                        //                     child: Text("8 hours before")),
+                        //               ],
+                        //               onChanged: (value) {
+                        //                 setState(() {
+                        //                   firstReminder = value;
+                        //                 });
+                        //               },
+                        //             ),
+                        //           ),
+                        //
+                        //           // Last Reminder Dropdown
+                        //           SizedBox(
+                        //             width: 44.w,
+                        //             child: CustomDropdownField(
+                        //               fontSize: 10,
+                        //               fieldName: "Last Reminder",
+                        //               hintText: "Select",
+                        //               value: lastReminder,
+                        //               items: const [
+                        //                 DropdownMenuItem(
+                        //                     value: "8 hours before",
+                        //                     child: Text("8 hours before")),
+                        //                 DropdownMenuItem(
+                        //                     value: "4 hours before",
+                        //                     child: Text("4 hours before")),
+                        //                 DropdownMenuItem(
+                        //                     value: "2 hours before",
+                        //                     child: Text("2 hours before")),
+                        //               ],
+                        //               onChanged: (value) {
+                        //                 setState(() {
+                        //                   lastReminder = value;
+                        //                 });
+                        //               },
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       )
+                        //     ],
+                        //   ),
 
                         const SizedBox(height: 18),
                         CustomButton(
