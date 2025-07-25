@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:racrally/models/sent_invites_model.dart';
 import 'package:racrally/models/team_model.dart';
 
 import '../../../api_services/api_exceptions.dart';
 import '../../../api_services/data_api.dart';
 import '../../../controllers/base_controller.dart';
+import '../../../models/my_invites_model.dart';
 import '../../../utils/snackbar_utils.dart';
 
 class TeamController extends GetxController {
@@ -15,14 +17,16 @@ class TeamController extends GetxController {
   final BaseController _baseController = BaseController.instance;
   Rxn<TeamModel> teamData=Rxn<TeamModel>();
   RxList<TeamModel> teamList=<TeamModel>[].obs;
+  RxList<SentInvitesModel> sentInvitesList=<SentInvitesModel>[].obs;
+  RxList<MyInvitesModel> myInvitesList=<MyInvitesModel>[].obs;
 
-  Future sendInvite(String email,String role) async {
+
+  Future sendInvite(String teamId,String email,String role) async {
     _baseController.showLoading();
     Map<String, String> body = {
-      "teamId":teamList[0].id.toString(),
+      "id":teamId,
       "email":email,
-      "role":role,
-      "resend" : "false"
+      "role":role
     };
 
     var response = await DataApiService.instance
@@ -45,10 +49,90 @@ class TeamController extends GetxController {
     if (result['success'].toString()=="true") {
       isPlayerInvited.value=true;
       // teamList.value = [TeamModel.fromJson(result['data'])];
+      getTeam();
       Get.back();
       SnackbarUtil.showSnackbar(message: "Invite Sent", type: SnackbarType.success);
 
       // Handle success case
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future getSentInvites(String teamId) async {
+    isLoading.value=true;
+
+    print("get-team");
+    var response = await DataApiService.instance
+        .get("/team/invites/$teamId")
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+    isLoading.value=false;
+    update();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    isLoading.value=false;
+    if (result['success'].toString()=="true") {
+      final data = result['data'];
+
+      // ✅ Check if data is List
+      if (data is List) {
+        // sentInvitesList.value = List<SentInvitesModel>.from(result['data'].map((x) => SentInvitesModel.fromJson(x)));
+
+        sentInvitesList.value = List<SentInvitesModel>.from(
+          data.map((x) => SentInvitesModel.fromJson(x)),
+        );
+        if(sentInvitesList.isNotEmpty){
+          isPlayerInvited.value=true;
+        }
+      } else {
+        // Optional: handle if data is not a list
+        sentInvitesList.clear();
+      }
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future getMyInvites() async {
+    isLoading.value=true;
+
+    print("get-team");
+    var response = await DataApiService.instance
+        .get("/team/my-invites")
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+    isLoading.value=false;
+    update();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    isLoading.value=false;
+    if (result['success'].toString()=="true") {
+      final data = result['data'];
+      if (data is List) {
+
+        myInvitesList.value = List<MyInvitesModel>.from(
+          data.map((x) => MyInvitesModel.fromJson(x)),
+        );
+      }
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");
       String message = result['data']['message'];
@@ -93,7 +177,7 @@ print("get-team");
       );
 
       isTeamCreated.value = teamList.isNotEmpty;
-
+      getSentInvites(teamList[0].id.toString());
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");

@@ -35,6 +35,7 @@ class _TeamScreenState extends State<TeamScreen> {
     super.initState();
     teamController.getTeam();
   }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -118,7 +119,7 @@ class _TeamScreenState extends State<TeamScreen> {
                         children: [
                           CustomButton(
                               onTap: (){
-                                // RSVPSheet.show(context);
+                                InvitePlayerSheet.show(context,teamController.teamList[0].id.toString());
                               },
                               Text: "Invite Member"),
                           SizedBox().setHeight(15),
@@ -195,52 +196,47 @@ class _TeamScreenState extends State<TeamScreen> {
                           SizedBox().setHeight(10),
                           SizedBox(
                             height: 24.h,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: (){
-                                        Get.toNamed(AppRoutes.playerDetails);
-                                    },
-                                    child: CustomCardAttendees(
-                                      name: 'Noraiz Shahid',
-                                      details:
-                                      'noraizshahid@gmail.com',
-                                      isAttending:true,
-                                      isTeamScreen:true,
-                                      onTapSend: (){
-                                      CustomDialog.showDeleteDialog(
+                            child: ListView.builder(
+                              padding: EdgeInsets.only(top: 0),
+                              itemCount:teamController.isActiveRoaster.value==true?teamController.sentInvitesList[0].activeRoster.length:teamController.sentInvitesList[0].reservedPlayers.length,
+                              shrinkWrap: true,
+                                itemBuilder: (context,index){
+                              return teamController.isActiveRoaster.value==true?
+                              GestureDetector(
+                                onTap: (){
+                                  Get.toNamed(AppRoutes.playerDetails);
+                                },
+                                child: CustomCardAttendees(
+                                  name: teamController.sentInvitesList[0].activeRoster[index].user.firstName+" "+teamController.sentInvitesList[0].activeRoster[index].user.lastName,
+                                  details:teamController.sentInvitesList[0].activeRoster[index].user.email,
+                                  isAttending:teamController.sentInvitesList[0].activeRoster[index].status=='pending'?false:true,
+                                  isTeamScreen:true,
+                                  onTapSend: (){
+                                    CustomDialog.showDeleteDialog(
                                         title: "Remove Player",
-                                          description: "This will remove the role from the system",
-                                          iconPath: AppIcons.delete
-                                      );
-                                    },),
-                                  ),
-                                  CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true,isTeamScreen:true,
-
-                                    onTapSend: (){
-                                      CustomDialog.showDeleteDialog(
-                                          title: "Remove Player",
-                                          description: "This will remove the role from the system",
-                                          iconPath: AppIcons.delete
-                                      );
-                                    },),
-                                  CustomCardAttendees(
-                                      name: 'Umer',
-                                      details: 'umer12@gmail.com',
-                                      isAttending:false,
-                                      isTeamScreen:true,
-                                      onTapSend: (){
-                            CustomDialog.showDeleteDialog(
-                            title: "Remove Player",
-                            description: "This will remove the role from the system",
-                            iconPath: AppIcons.delete
-                            );
+                                        description: "This will remove the role from the system",
+                                        iconPath: AppIcons.delete
+                                    );
+                                  },),
+                              ):
+                              GestureDetector(
+                                onTap: (){
+                                  Get.toNamed(AppRoutes.playerDetails);
+                                },
+                                child: CustomCardAttendees(
+                                  name: teamController.sentInvitesList[0].reservedPlayers[index].user.firstName+" "+teamController.sentInvitesList[0].reservedPlayers[index].user.lastName,
+                                  details:teamController.sentInvitesList[0].reservedPlayers[index].user.email,
+                                  isAttending:teamController.sentInvitesList[0].reservedPlayers[index].status=='pending'?false:true,
+                                  isTeamScreen:true,
+                                  onTapSend: (){
+                                    CustomDialog.showDeleteDialog(
+                                        title: "Remove Player",
+                                        description: "This will remove the role from the system",
+                                        iconPath: AppIcons.delete
+                                    );
+                                  },),
+                              );
                             }),
-                                  CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false,isTeamScreen:true),
-                                ],
-                              ),
-                            ),
                           ),
                         ],
                       ).paddingOnly(left: 16,right: 16,top: 10),
@@ -266,7 +262,7 @@ class _TeamScreenState extends State<TeamScreen> {
                       width: 45.w,
                       iconPath: AppIcons.teamMember,
                       onTap: () {
-                        InvitePlayerSheet.show(context);
+                        InvitePlayerSheet.show(context,teamController.teamList[0].id.toString());
                       },
                       Text: "Invite Members",
                       borderColor: AppTheme.secondaryColor,

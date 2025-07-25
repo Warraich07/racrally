@@ -11,7 +11,7 @@ import '../../../utils/snackbar_utils.dart';
 import '../../auth/widgets/custom_dropdown.dart';
 
 class InvitePlayerSheet {
-  static void show(BuildContext context) {
+  static void show(BuildContext context,String teamId) {
 
 
     String? playerType;
@@ -92,11 +92,11 @@ class InvitePlayerSheet {
                         CustomButton(
                           onTap: () {
                             if(_formKey.currentState!.validate()){
-                              // teamController.sendInvite(emailController.text.toString(), playerType!);
+                              teamController.sendInvite(teamId,emailController.text.toString(), playerType=="Active Roaster"?"active_roaster":"reserve_player");
                               print(emailController.text.toString());
                               print(playerType!);
-                              Get.back();
-                              teamController.isPlayerInvited.value=true;
+                              // Get.back();
+                              // teamController.isPlayerInvited.value=true;
                             }
 
 

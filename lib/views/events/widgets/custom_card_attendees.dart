@@ -49,7 +49,15 @@ class CustomCardAttendees extends StatelessWidget {
                   // Info
                  Row(
                    children: [
-                     Image.asset(AppIcons.userIcon,height: 35,),
+                     Container(
+                         padding: EdgeInsets.all(3),
+                         decoration: BoxDecoration(
+                             shape: BoxShape.circle,
+                             border: Border.all(width: 1,color: AppTheme.darkGreyColor)
+                         ),
+                         height: 30,
+                         width: 30,
+                         child: Image.asset(AppIcons.user_place_holder)).paddingAll(5),
                      SizedBox().setWidth(5),
                      Column(
                        crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +139,7 @@ class CustomCardAttendees extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  isAttending == true ? "JOINING" :isAttending == false ? "NOT JOINING":"NO RESPONSE",
+                  isAttending == true ? "JOINING" :isAttending == false ? "NO RESPONSE":"NOT JOINING",
                   style: AppTheme.bodyExtraSmallFontTenStyle.copyWith(
                     color: isAttending == true ? AppTheme.green :isAttending == false ? AppTheme.red:AppTheme.darkGreyColor,
                   ),

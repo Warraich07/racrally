@@ -37,6 +37,7 @@ class AppIcons {
   static String games = "assets/app_icons/overall/games.png";
   static String raoster = "assets/app_icons/overall/roaster.png";
   static String color_picker = "assets/app_icons/overall/color_picker.png";
+  static String user_place_holder = "assets/app_icons/overall/user_place_holder.png";
 
 
 }

@@ -19,6 +19,8 @@ class CustomDialog {
     VoidCallback? onConfirm,
     String? iconPath,
     bool? showIcon,
+    Color? buttonColor,
+    Color? borderColor
   }) {
     return Get.dialog(
 
@@ -71,8 +73,8 @@ class CustomDialog {
 
               /// Confirm Button
               CustomButton(
-                borderColor: AppTheme.red,
-                buttonColor: AppTheme.red,
+                borderColor:buttonColor?? AppTheme.red,
+                buttonColor:borderColor?? AppTheme.red,
                 Text: confirmText,
                 onTap: (){
                 Get.back();
