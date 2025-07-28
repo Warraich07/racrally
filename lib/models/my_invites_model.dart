@@ -7,7 +7,8 @@ class MyInvitesModel {
   final int invitedBy;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final InviteUser user;
+  final InvitedUser user;
+  final InvitedTeam team;
 
   MyInvitesModel({
     required this.id,
@@ -19,6 +20,7 @@ class MyInvitesModel {
     required this.createdAt,
     required this.updatedAt,
     required this.user,
+    required this.team,
   });
 
   factory MyInvitesModel.fromJson(Map<String, dynamic> json) {
@@ -31,7 +33,8 @@ class MyInvitesModel {
       invitedBy: json['invitedBy'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
-      user: InviteUser.fromJson(json['user']),
+      user: InvitedUser.fromJson(json['user']),
+      team: InvitedTeam.fromJson(json['team']),
     );
   }
 
@@ -46,21 +49,22 @@ class MyInvitesModel {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'user': user.toJson(),
+      'team': team.toJson(),
     };
   }
 }
 
-class InviteUser {
+class InvitedUser {
   final String firstName;
   final String lastName;
 
-  InviteUser({
+  InvitedUser({
     required this.firstName,
     required this.lastName,
   });
 
-  factory InviteUser.fromJson(Map<String, dynamic> json) {
-    return InviteUser(
+  factory InvitedUser.fromJson(Map<String, dynamic> json) {
+    return InvitedUser(
       firstName: json['firstName'],
       lastName: json['lastName'],
     );
@@ -70,6 +74,30 @@ class InviteUser {
     return {
       'firstName': firstName,
       'lastName': lastName,
+    };
+  }
+}
+
+class InvitedTeam {
+  final int id;
+  final String name;
+
+  InvitedTeam({
+    required this.id,
+    required this.name,
+  });
+
+  factory InvitedTeam.fromJson(Map<String, dynamic> json) {
+    return InvitedTeam(
+      id: json['id'],
+      name: json['name'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
     };
   }
 }

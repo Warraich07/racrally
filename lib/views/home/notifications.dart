@@ -55,7 +55,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Obx(
             ()=> SizedBox(
               height: 75.h,
-              child:teamController.myInvitesList.isNotEmpty? ListView.builder(
+              child:teamController.isLoading.value?
+              Center(child: CircularProgressIndicator(color: AppTheme.secondaryColor)):
+              teamController.myInvitesList.isNotEmpty? 
+              ListView.builder(
                   padding: EdgeInsets.only(top: 0),
                   shrinkWrap: true,
                   itemCount: teamController.myInvitesList.length,
@@ -85,12 +88,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             GestureDetector(
                               onTap: (){
                                 CustomDialog.showDeleteDialog(
+                                    showSubtitle: true,
+                                    subtitle: teamController.myInvitesList[index].team.name.toString(),
                                     showIcon: false,
                                     title: "Reject",
                                     description: "Are you sure you want to reject this invite?",
                                     confirmText: "Yes",
                                     onConfirm: (){
-                                      Get.back();
+                                      teamController.changeInviteStatus("rejected", teamController.myInvitesList[index].id.toString());
                                     }
                                 );
                               },
@@ -108,6 +113,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             GestureDetector(
                               onTap: (){
                                 CustomDialog.showDeleteDialog(
+                                  showSubtitle: true,
+                                  subtitle: teamController.myInvitesList[index].team.name.toString(),
                                     buttonColor: AppTheme.green,
                                     borderColor: AppTheme.green,
                                     showIcon: false,
@@ -115,7 +122,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     description: "Are you sure you want to accept this invite?",
                                     confirmText: "Yes",
                                     onConfirm: (){
-                                      Get.back();
+                                      teamController.changeInviteStatus("accepted", teamController.myInvitesList[index].id.toString());
                                     }
                                 );
                               },
@@ -139,7 +146,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                   ],
                 );
-              }):Center(child: CircularProgressIndicator(color: AppTheme.secondaryColor),),
+              }):Center(child: Text("No Invite Requests",style: AppTheme.mediumLightHeadingWeight600Style,)),
             ),
           ),
 

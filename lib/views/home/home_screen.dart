@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Container(
-            height:Platform.isIOS?28.h: 45.h,
+            height:Platform.isIOS?28.h: 39.h,
             decoration: BoxDecoration(
               color: AppTheme.secondaryColor,
               borderRadius: const BorderRadius.only(
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
             // color: Colors.yellow,
-            height:Platform.isIOS?57.h: 42.h,
+            height:Platform.isIOS?57.h: 48.h,
             child: SingleChildScrollView(
               child: Column(
                 children: [

@@ -14,11 +14,13 @@ class CustomDialog {
 
   static Future<dynamic> showDeleteDialog({
     String title = 'Delete Event',
+    String subtitle = 'Delete Event',
     String description = 'This will remove the event from the system.',
     String confirmText = 'Yes, Delete it',
     VoidCallback? onConfirm,
     String? iconPath,
     bool? showIcon,
+    bool? showSubtitle,
     Color? buttonColor,
     Color? borderColor
   }) {
@@ -65,6 +67,18 @@ class CustomDialog {
                   )
                 ],
               ),
+              showSubtitle==true?RichText(text: TextSpan(
+                children:[
+                  TextSpan(
+                    text: "Team: ",
+                    style: AppTheme.bodySmallGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),
+                  ),
+                  TextSpan(
+                      text: subtitle.capitalizeFirst,
+                    style: AppTheme.bodySmallGreyStyle.copyWith(color: AppTheme.secondaryColor),
+                  ),
+                ]
+              )).paddingOnly(left: 5):SizedBox(),
               Text(
                 description,
                 style: AppTheme.bodySmallGreyStyle,

@@ -95,7 +95,7 @@ class InvitePlayerSheet {
                               teamController.sendInvite(teamId,emailController.text.toString(), playerType=="Active Roaster"?"active_roaster":"reserve_player");
                               print(emailController.text.toString());
                               print(playerType!);
-                              // Get.back();
+                              Get.back();
                               // teamController.isPlayerInvited.value=true;
                             }
 

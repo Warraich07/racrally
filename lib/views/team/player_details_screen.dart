@@ -26,6 +26,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
   TeamController teamController=Get.find();
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> data = Get.arguments;
     return Scaffold(
       backgroundColor: AppTheme.primaryColor,
       body: Stack(
@@ -36,8 +37,8 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
               CustomHeader(
                 showPopUpMenu: false,
                 showBackArrow: true,
-                title: "Noraiz XI",
-                subTitle: "Manchester,London,UK",
+                title: data['name'],
+                subTitle:  data['type'],
                 onMenuSelected: (value) {
                   if (value == 'edit') {
                     print(teamController.teamList[0].name);
@@ -74,7 +75,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
                               children: [
                                 Image.asset(AppIcons.email,height: 20,width: 20,),
                                 SizedBox().setWidth(5),
-                                Text("noraiz12@gmail.com",style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
+                                Text(data['email'],style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
 
                               ],
                             ),
@@ -101,14 +102,14 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
 
                   SizedBox(
                     height: 45.h,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:true,showPopUpMenu: false,),
-                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:false,showPopUpMenu: false,),
-                          CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:null,showPopUpMenu: false,),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(child: Text("No Seasons Played",style: AppTheme.bodyExtraSmallWeight600Style,),)
+                        // CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:true,showPopUpMenu: false,),
+                        // CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:false,showPopUpMenu: false,),
+                        // CustomSeasonCard(imagePath: AppImages.basketball,title: "Major Cricket League", dateTime: "27 Jun 2025 - 27 Jul 2025", location: "Lahore, Punjab, PK",isCurrent:null,showPopUpMenu: false,),
+                      ],
                     ),
                   ),
                 ],
@@ -124,18 +125,25 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
             child: Column(
               children: [
                 Container(
+                    padding: EdgeInsets.all(3),
                   height: 100,
                   width: 100,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                      AppIcons.userIcon, // use your image path
-                      fit: BoxFit.cover,
+                    decoration: BoxDecoration(
+                        color: AppTheme.primaryDarkColor,
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 1,color: AppTheme.darkGreyColor)
                     ),
-                  )
+                  child: Image.asset(AppIcons.user_place_holder)
                 ),
+                // Container(
+                //     padding: EdgeInsets.all(3),
+                //     decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         border: Border.all(width: 1,color: AppTheme.darkGreyColor)
+                //     ),
+                //     height: 30,
+                //     width: 30,
+                //     child: Image.asset(AppIcons.user_place_holder))
 
               ],
             ),

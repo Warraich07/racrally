@@ -12,7 +12,7 @@ import '../../../utils/snackbar_utils.dart';
 class TeamController extends GetxController {
   RxBool isTeamCreated=false.obs;
   RxBool isPlayerInvited=false.obs;
-  RxBool isActiveRoaster=false.obs;
+  RxBool isActiveRoaster=true.obs;
   RxBool isLoading=false.obs;
   final BaseController _baseController = BaseController.instance;
   Rxn<TeamModel> teamData=Rxn<TeamModel>();
@@ -61,9 +61,40 @@ class TeamController extends GetxController {
     }
   }
 
+  Future reSendInvite(String userId) async {
+    _baseController.showLoading();
+
+    var response = await DataApiService.instance
+        .put("/team/resend-invite/$userId",{})
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+
+    var result = json.decode(response);
+    if (result['success'].toString()=="true") {
+      Get.back();
+      SnackbarUtil.showSnackbar(message: "Invite Re-Sent", type: SnackbarType.success);
+
+      // Handle success case
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
   Future getSentInvites(String teamId) async {
     isLoading.value=true;
-
     print("get-team");
     var response = await DataApiService.instance
         .get("/team/invites/$teamId")
@@ -93,6 +124,8 @@ class TeamController extends GetxController {
         );
         if(sentInvitesList.isNotEmpty){
           isPlayerInvited.value=true;
+        }else{
+          isPlayerInvited.value=false;
         }
       } else {
         // Optional: handle if data is not a list
@@ -139,6 +172,74 @@ class TeamController extends GetxController {
       SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
     }
   }
+
+  Future changeInviteStatus(String status,String id) async {
+    _baseController.showLoading();
+    print("/team/set-invite");
+    Map<String, String> body = {
+      "status" : status,
+      "id" : id
+    };
+    var response = await DataApiService.instance
+        .post("/team/set-invite",body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+    _baseController.hideLoading();
+    update();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+    isLoading.value=false;
+    if (result['success'].toString()=="true") {
+        Get.back();
+        if(status=="accepted"){
+          SnackbarUtil.showSnackbar(message: "You have been added to the team", type: SnackbarType.success);
+        }else{
+          SnackbarUtil.showSnackbar(message: "Invite rejected", type: SnackbarType.success);
+
+        }
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
+  Future removeMemberFromTeam(String userId,String teamID) async {
+    _baseController.showLoading();
+    print("/team/remove-member");
+    var response = await DataApiService.instance
+        .delete("/team/remove-member?userId=$userId&teamId=$teamID")
+        .catchError((error) {
+      if (error is BadRequestException) {
+        // var apiError = json.decode(error.message!);
+        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+    _baseController.hideLoading();
+    update();
+    if (response == null) return;
+    print(response + " responded");
+    var result = json.decode(response);
+
+    if (result['success'].toString()=="true") {
+      getTeam();
+
+        SnackbarUtil.showSnackbar(message: "Member removed", type: SnackbarType.success);
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
   
   Future getTeam() async {
     isLoading.value=true;
@@ -175,8 +276,12 @@ print("get-team");
       teamList.value = List<TeamModel>.from(
           teams.map((x) => TeamModel.fromJson(x))
       );
+        if(teamList.isNotEmpty){
+          isTeamCreated.value=true;
+        }else{
+          isTeamCreated.value=false;
+        }
 
-      isTeamCreated.value = teamList.isNotEmpty;
       getSentInvites(teamList[0].id.toString());
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
@@ -208,7 +313,11 @@ print("get-team");
     isLoading.value=false;
     if (result['success'].toString()=="true") {
           getTeam();
+
           SnackbarUtil.showSnackbar(message: "Team Deleted", type: SnackbarType.success);
+          isPlayerInvited.value=false;
+          sentInvitesList.clear();
+          teamList.clear();
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");
       String message = result['data']['message'];
@@ -307,8 +416,8 @@ print("get-team");
     }
   }
 
-  void toggleRoaster(){
-    isActiveRoaster.value=!isActiveRoaster.value;
+  void toggleRoaster(bool value){
+    isActiveRoaster.value=value;
   }
 
 }

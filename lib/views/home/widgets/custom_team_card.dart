@@ -123,7 +123,6 @@ class _CustomTeamCardState extends State<CustomTeamCard> {
                   ),
                 ],
               ),
-
             ],
           ).paddingSymmetric(horizontal: 12)
         ],

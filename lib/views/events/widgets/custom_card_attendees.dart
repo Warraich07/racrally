@@ -110,9 +110,9 @@ class CustomCardAttendees extends StatelessWidget {
                       ],
                       onSelected: (value) {
                         if (value == 'remove') {
-                          onTapSend?.call();
-                        } else if (value == 'sendInvite') {
                           onDeleteTap?.call();
+                        } else if (value == 'sendInvite') {
+                          onTapSend?.call();
                         }
                       },
                     ),
@@ -127,7 +127,7 @@ class CustomCardAttendees extends StatelessWidget {
             alignment: Alignment.topRight,
             child: Container(
               height: 18,
-              width: isAttending == true ? 80 :isAttending == false ?100: 85,
+              width: isAttending == true ? 80 :isAttending == false ?100: 100,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
@@ -139,7 +139,7 @@ class CustomCardAttendees extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  isAttending == true ? "JOINING" :isAttending == false ? "NO RESPONSE":"NOT JOINING",
+                  isAttending == true ? "JOINING" :isAttending == false ? "NOT JOINING":"NO RESPONSE",
                   style: AppTheme.bodyExtraSmallFontTenStyle.copyWith(
                     color: isAttending == true ? AppTheme.green :isAttending == false ? AppTheme.red:AppTheme.darkGreyColor,
                   ),

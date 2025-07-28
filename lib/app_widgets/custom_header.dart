@@ -116,7 +116,7 @@ class CustomHeader extends StatelessWidget {
             ).paddingOnly(top: 40, left: 16),
           ),
           SizedBox(height: 50),
-          Text(title ?? "Noraiz XI", style: AppTheme.mediumHeadingFont600Style),
+          Text(title?.capitalizeFirst ?? "Noraiz XI", style: AppTheme.mediumHeadingFont600Style),
           showSubtitle == false
               ? Container()
               : Text(subTitle ?? "Manchester,London,UK", style: AppTheme.bodyExtraSmallWeight400Style),
