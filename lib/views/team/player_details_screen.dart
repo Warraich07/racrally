@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:racrally/app_widgets/custom_season_card.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/extensions/width_extension.dart';
-import 'package:racrally/views/team/widgets/invite_player_sheet.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_theme/app_theme.dart';
-import '../../app_widgets/custom_button.dart';
 import '../../app_widgets/custom_header.dart';
 import '../../constants/app_icons.dart';
-import '../../constants/app_images.dart';
-import '../../utils/custom_dialog.dart';
-import '../events/widgets/custom_card_attendees.dart';
 import 'controller/team_controller.dart';
 
 class PlayerDetailsScreen extends StatefulWidget {
@@ -63,7 +56,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
                       Container(
                         decoration: BoxDecoration(
                           color:AppTheme.primaryLittleDarkColor.withOpacity(.7),
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12),
                           ),
@@ -74,7 +67,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
                             Row(
                               children: [
                                 Image.asset(AppIcons.email,height: 20,width: 20,),
-                                SizedBox().setWidth(5),
+                                const SizedBox().setWidth(5),
                                 Text(data['email'],style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
 
                               ],
@@ -90,7 +83,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
                       )
                     ],
                   ),
-                  SizedBox().setHeight(15),
+                  const SizedBox().setHeight(15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -98,7 +91,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
 
                     ],
                   ),
-                  SizedBox().setHeight(10),
+                  const SizedBox().setHeight(10),
 
                   SizedBox(
                     height: 45.h,
@@ -125,7 +118,7 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
             child: Column(
               children: [
                 Container(
-                    padding: EdgeInsets.all(3),
+                    padding: const EdgeInsets.all(3),
                   height: 100,
                   width: 100,
                     decoration: BoxDecoration(
@@ -135,16 +128,6 @@ class _PlayerDetailsScreenState extends State<PlayerDetailsScreen> {
                     ),
                   child: Image.asset(AppIcons.user_place_holder)
                 ),
-                // Container(
-                //     padding: EdgeInsets.all(3),
-                //     decoration: BoxDecoration(
-                //         shape: BoxShape.circle,
-                //         border: Border.all(width: 1,color: AppTheme.darkGreyColor)
-                //     ),
-                //     height: 30,
-                //     width: 30,
-                //     child: Image.asset(AppIcons.user_place_holder))
-
               ],
             ),
           ),

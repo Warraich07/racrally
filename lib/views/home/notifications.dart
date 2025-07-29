@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_theme/app_theme.dart';
 import 'package:racrally/constants/app_icons.dart';
-import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/extensions/width_extension.dart';
 import 'package:racrally/views/team/controller/team_controller.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_widgets/custom_button.dart';
 import '../../utils/custom_dialog.dart';
 
@@ -48,7 +46,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Container(width: 50,)
                   ],
                 ).paddingOnly(left: 16,right: 16),
-                SizedBox().setHeight(20),
+                const SizedBox().setHeight(20),
               ],
             ),
           ),
@@ -56,10 +54,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ()=> SizedBox(
               height: 75.h,
               child:teamController.isLoading.value?
-              Center(child: CircularProgressIndicator(color: AppTheme.secondaryColor)):
+              const Center(child: CircularProgressIndicator(color: AppTheme.secondaryColor)):
               teamController.myInvitesList.isNotEmpty? 
               ListView.builder(
-                  padding: EdgeInsets.only(top: 0),
+                  padding: const EdgeInsets.only(top: 0),
                   shrinkWrap: true,
                   itemCount: teamController.myInvitesList.length,
                   itemBuilder: (context,index){
@@ -71,7 +69,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(3),
+                              padding: const EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(width: 1,color: AppTheme.darkGreyColor)
@@ -79,8 +77,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 height: 25,
                                 width: 25,
                                 child: Image.asset(AppIcons.user_place_holder)).paddingAll(5),
-                            SizedBox().setWidth(5),
-                            Text(teamController.myInvitesList[index].user.firstName+" "+teamController.myInvitesList[index].user.lastName,style: AppTheme.bodyMediumStyle,),
+                            const SizedBox().setWidth(5),
+                            Text("${teamController.myInvitesList[index].user.firstName} ${teamController.myInvitesList[index].user.lastName}",style: AppTheme.bodyMediumStyle,),
                           ],
                         ),
                         Row(
@@ -95,7 +93,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     description: "Are you sure you want to reject this invite?",
                                     confirmText: "Yes",
                                     onConfirm: (){
-                                      teamController.changeInviteStatus("rejected", teamController.myInvitesList[index].id.toString());
+                                      teamController.changeInviteStatus("rejected", teamController.myInvitesList[index].id.toString(),false);
                                     }
                                 );
                               },
@@ -106,10 +104,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     borderRadius: BorderRadius.circular(100),
                                     color: AppTheme.red.withOpacity(.1)
                                 ),
-                                child: Icon(Icons.clear,size: 20,color: Color(0xFFEC4F47),),
+                                child: const Icon(Icons.clear,size: 20,color: Color(0xFFEC4F47),),
                               ),
                             ),
-                            SizedBox().setWidth(5),
+                            const SizedBox().setWidth(5),
                             GestureDetector(
                               onTap: (){
                                 CustomDialog.showDeleteDialog(
@@ -122,7 +120,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     description: "Are you sure you want to accept this invite?",
                                     confirmText: "Yes",
                                     onConfirm: (){
-                                      teamController.changeInviteStatus("accepted", teamController.myInvitesList[index].id.toString());
+                                      teamController.changeInviteStatus("accepted", teamController.myInvitesList[index].id.toString(),true);
                                     }
                                 );
                               },
@@ -133,7 +131,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     borderRadius: BorderRadius.circular(100),
                                     color: AppTheme.primaryCardColor.withOpacity(.1)
                                 ),
-                                child: Icon(Icons.check,size: 20,color: Color(0xFF16B364),),
+                                child: const Icon(Icons.check,size: 20,color: Color(0xFF16B364),),
                               ),
                             )
                           ],
@@ -162,7 +160,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             isAuth: true,
             isGoogle: false,
             isOnBoarding: true,
-            onBoardingText: Text("Clear All"),
+            onBoardingText: const Text("Clear All"),
           ).paddingOnly(left: 16,right: 16,bottom: 20)
         ],
       ).paddingOnly(top: 30),

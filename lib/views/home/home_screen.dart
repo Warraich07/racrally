@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/constants/app_icons.dart';
 import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
-import 'package:racrally/routes/app_pages.dart';
 import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:racrally/views/home/widgets/custom_event_card.dart';
@@ -24,10 +22,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Color> cardColors=[
-    Color(0xFF16B364),
-    Color(0xFFEC4F47),
-    Color(0xFFEF6820),
-    Color(0xFFEAAA08),
+    const Color(0xFF16B364),
+    const Color(0xFFEC4F47),
+    const Color(0xFFEF6820),
+    const Color(0xFFEAAA08),
   ];
   List<String> cardTexts=[
     'Total Players',
@@ -78,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Welcome 👋",style: AppTheme.bodyMediumStyle.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor),),
-                        Text(authController.userData.value!.firstName.capitalizeFirst!+" "+authController.userData.value!.lastName,style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.primaryColor),)
+                        Text("${authController.userData.value!.firstName.capitalizeFirst!} ${authController.userData.value!.lastName}",style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.primaryColor),)
                       ],
                     ),
                     const Spacer(),
@@ -131,17 +129,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ).paddingOnly(left: 16,right: 16,top:Platform.isIOS?60: 40,bottom: 20),
           ),
-          Container(
+          SizedBox(
             // color: Colors.yellow,
             height:Platform.isIOS?57.h: 48.h,
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   GridView.builder(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 20),
                     shrinkWrap: true,
                     itemCount: 4,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 14,
@@ -163,14 +161,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(cardTexts[index],style: AppTheme.bodyExtraSmallStyle,).paddingSymmetric(horizontal: 10),
-                            Spacer(flex: 1,),
+                            const Spacer(flex: 1,),
                             Text(cardAnalysis[index],style: AppTheme.subHeadingStyle,).paddingSymmetric(horizontal: 10),
-                            Spacer(flex: 2,),
+                            const Spacer(flex: 2,),
                             Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 color: cardColors[index].withOpacity(.1),
-                                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight:  Radius.circular(8))
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(8),bottomRight:  Radius.circular(8))
                               ),
                               child: Text("Includes subs & coaches",style: AppTheme.bodyExtraSmallFontTenStyle.copyWith(color: cardColors[index]),).paddingSymmetric(horizontal: 10,vertical: 2),
                             )
@@ -180,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                  SizedBox().setHeight(15),
+                  const SizedBox().setHeight(15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -188,8 +186,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text("See All",style: AppTheme.bodyMediumFont600Style.copyWith(color: AppTheme.secondaryColor),),
                     ],
                   ),
-                  SizedBox().setHeight(10),
-                 CustomEventCard()
+                  const SizedBox().setHeight(10),
+                 const CustomEventCard()
                 ],
               ).paddingSymmetric(horizontal: 16),
             ),

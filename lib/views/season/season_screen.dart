@@ -1,19 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_season_card.dart';
 import '../../app_widgets/custom_text_field.dart';
 import '../../constants/app_icons.dart';
 import '../../constants/app_images.dart';
 import '../../routes/app_routes.dart';
-import '../../utils/custom_dialog.dart';
-import '../events/widgets/custom_card.dart';
 import 'widgets/create_season_sheet.dart';
 
 class SeasonScreen extends StatefulWidget {
@@ -55,7 +51,7 @@ class _SeasonScreenState extends State<SeasonScreen> {
             onPressed: () {
               CreateSeasonSheet.show(context);
             },
-            child: Icon(Icons.add,color: AppTheme.primaryColor,),
+            child: const Icon(Icons.add,color: AppTheme.primaryColor,),
           ),
         ),
 
@@ -70,14 +66,14 @@ class _SeasonScreenState extends State<SeasonScreen> {
                   Image.asset(AppIcons.event,height: 24,width: 24,)
                 ],
               ),
-              SizedBox().setHeight(10),
+              const SizedBox().setHeight(10),
               CustomTextField(
                 hintText: "Search here",
                 prefixIcon: AppIcons.search,
                 prefixIconColor: AppTheme.lightGreyColor,
                 onChanged: onSearchChanged,
               ),
-              SizedBox().setHeight(15),
+              const SizedBox().setHeight(15),
               SizedBox(
                 height: 45.h,
                 child: SingleChildScrollView(

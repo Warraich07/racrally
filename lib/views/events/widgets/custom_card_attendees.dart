@@ -50,15 +50,15 @@ class CustomCardAttendees extends StatelessWidget {
                  Row(
                    children: [
                      Container(
-                         padding: EdgeInsets.all(3),
+                         padding: const EdgeInsets.all(3),
                          decoration: BoxDecoration(
                              shape: BoxShape.circle,
                              border: Border.all(width: 1,color: AppTheme.darkGreyColor)
                          ),
                          height: 30,
                          width: 30,
-                         child: Image.asset(AppIcons.user_place_holder)).paddingAll(5),
-                     SizedBox().setWidth(5),
+                         child: Image.asset(AppIcons.user_place_holder)),
+                     const SizedBox().setWidth(5),
                      Column(
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [

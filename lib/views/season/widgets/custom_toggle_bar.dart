@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../app_theme/app_theme.dart'; // assuming you're using sizer
 
 class CustomToggleBar extends StatelessWidget {
@@ -33,8 +32,8 @@ class CustomToggleBar extends StatelessWidget {
               border: Border.all(
                 width: 1,
                 color:isSelected?
-                AppTheme.darkGreyColor:
-                AppTheme.darkGreyColor.withOpacity(0.1),
+                AppTheme.darkGreyColor.withOpacity(0.2):
+                AppTheme.darkGreyColor.withOpacity(0.001),
               ),
             ),
             child: Center(

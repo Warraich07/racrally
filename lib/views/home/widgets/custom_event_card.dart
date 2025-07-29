@@ -27,7 +27,7 @@ class _CustomEventCardState extends State<CustomEventCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Spacer(flex: 1,),
+          const Spacer(flex: 1,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -55,9 +55,9 @@ class _CustomEventCardState extends State<CustomEventCard> {
               ),
             ],
           ),
-          Spacer(flex: 2,),
+          const Spacer(flex: 2,),
           Text("Annual Team Lunch",style: AppTheme.bodyMediumFont600Style,),
-          Spacer(flex: 1,),
+          const Spacer(flex: 1,),
           Text("Maplewood Park – Field 3",style: AppTheme.bodyExtraSmallStyle.copyWith(color: AppTheme.darkBackgroundColor),),
         ],
       ).paddingSymmetric(horizontal: 10,vertical: 10),

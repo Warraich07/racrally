@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
@@ -10,7 +8,6 @@ import 'package:racrally/extensions/width_extension.dart';
 import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:racrally/views/auth/widgets/custom_dropdown.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
 import '../../constants/app_images.dart';
@@ -102,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             validator: (value) => CustomValidator.firstName(value),
                             fieldName: "First Name",
                             hintText: "Enter first name...",)),
-                          SizedBox().setWidth(10),
+                          const SizedBox().setWidth(10),
                           Expanded(child: CustomTextField(
                             isChangeErrorFont:true,
                             controller: lastNameController,
@@ -113,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         ],
                       ),
-                      SizedBox().setHeight(18),
+                      const SizedBox().setHeight(18),
                       CustomTextField(
                         controller: emailController,
                         validator: (value) => CustomValidator.email(value),
@@ -152,13 +149,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 showPassword=!showPassword;
                               });
                             },
-                            child: Icon(Icons.remove_red_eye_rounded)):GestureDetector(
+                            child: const Icon(Icons.remove_red_eye_rounded)):GestureDetector(
                             onTap: (){
                               setState(() {
                                 showPassword=!showPassword;
                               });
                             },
-                            child: Icon(Icons.remove_red_eye_outlined)),
+                            child: const Icon(Icons.remove_red_eye_outlined)),
                         isObscure:showPassword?true:false,
                         fieldName: "Password",
                         hintText: "Enter your Password",
@@ -190,7 +187,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     color: AppTheme.textfieldBorderColor.withOpacity(0.3),
                                   ),
                                 ),
-                                child:  showCheck? Icon(Icons.check, size: 13,color:  AppTheme.secondaryColor,).paddingAll(1):Container(),
+                                child:  showCheck? const Icon(Icons.check, size: 13,color:  AppTheme.secondaryColor,).paddingAll(1):Container(),
                               ),
 
                           ),

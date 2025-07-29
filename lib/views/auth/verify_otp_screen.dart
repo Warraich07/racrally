@@ -5,12 +5,10 @@ import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:racrally/constants/app_icons.dart';
 import 'package:racrally/extensions/height_extension.dart';
-import 'package:racrally/routes/app_routes.dart';
 import 'package:sizer/sizer.dart';
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
 import '../../constants/custom_validators.dart';
-import '../../utils/snackbar_utils.dart';
 import 'controller/auth_controller.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
@@ -88,15 +86,15 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   Get.back();
                 },
                 child: Image.asset(AppIcons.arrow_back_sharp,width: 20,)),
-            SizedBox().setHeight(5.h),
+            const SizedBox().setHeight(5.h),
             Text("Enter Your OTP",style: AppTheme.subHeadingMediumStyle,),
             Text("Enter your OTP you got on your email",style: AppTheme.bodySmallGreyStyle,),
-            SizedBox().setHeight(4.h),
+            const SizedBox().setHeight(4.h),
             Form(
               key: _formKey,
               child: Theme(
                 data: Theme.of(context).copyWith(
-                  inputDecorationTheme: InputDecorationTheme(
+                  inputDecorationTheme: const InputDecorationTheme(
                     errorStyle: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -114,7 +112,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   obscureText: false,
                   animationType: AnimationType.none,
                   cursorColor: Colors.black,
-                  textStyle:  TextStyle(fontSize: 16,fontFamily: "medium",color: AppTheme.darkBackgroundColor),
+                  textStyle:  const TextStyle(fontSize: 16,fontFamily: "medium",color: AppTheme.darkBackgroundColor),
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -195,7 +193,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             CustomButton(
                 onTap: (){
                   if(_formKey.currentState!.validate()){

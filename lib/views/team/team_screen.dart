@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,15 +9,12 @@ import 'package:racrally/extensions/width_extension.dart';
 import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/views/team/controller/team_controller.dart';
 import 'package:racrally/views/team/widgets/create_team_sheet.dart';
-import 'package:racrally/views/team/widgets/custom_team_card.dart';
 import 'package:racrally/views/team/widgets/invite_player_sheet.dart';
 import 'package:sizer/sizer.dart';
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_header.dart';
-import '../../app_widgets/custom_text_field.dart';
 import '../../constants/app_icons.dart';
 import '../../utils/custom_dialog.dart';
-import '../events/widgets/create_event_bottom_sheet.dart';
 import '../events/widgets/custom_card_attendees.dart';
 
 class TeamScreen extends StatefulWidget {
@@ -43,7 +39,7 @@ class _TeamScreenState extends State<TeamScreen> {
     return Obx(
       ()=> Scaffold(
         backgroundColor: AppTheme.primaryColor,
-        body:teamController.isLoading.value?Center(
+        body:teamController.isLoading.value?const Center(
           child: CircularProgressIndicator(
             color: AppTheme.secondaryColor,
           ),
@@ -57,16 +53,16 @@ class _TeamScreenState extends State<TeamScreen> {
                 // Image.asset(AppIcons.event,height: 24,width: 24,)
               ],
             ).paddingOnly(top: Platform.isIOS?30:0),
-            SizedBox().setHeight(10),
+            const SizedBox().setHeight(10),
 
-            Spacer(flex: 1,),
+            const Spacer(flex: 1,),
             Image.asset(AppImages.teamMembers,width: 35.w,),
             Text("You haven’t created a team yet",style: AppTheme.mediumLightHeadingWeight600Style,),
             Center(child: Text(
               "Start by building your team and inviting players",
               textAlign: TextAlign.center,
               style: AppTheme.bodyExtraSmallWeight400Style,)),
-            SizedBox().setHeight(10),
+            const SizedBox().setHeight(10),
             CustomButton(
               height: 40,
               width: 42.w,
@@ -81,7 +77,7 @@ class _TeamScreenState extends State<TeamScreen> {
               isAuth: true,
               isGoogle: false,
             ),
-            Spacer(flex: 2,),
+            const Spacer(flex: 2,),
 
 
           ],
@@ -92,6 +88,7 @@ class _TeamScreenState extends State<TeamScreen> {
             Column(
               children: [
                 CustomHeader(
+                  showBody: false,
                   title: teamController.teamList[0].name,
                   subTitle: teamController.teamList[0].location,
                   onMenuSelected: (value) {
@@ -120,7 +117,7 @@ class _TeamScreenState extends State<TeamScreen> {
                 ),
                 teamController.isPlayerInvited.value==true?
                     SizedBox(
-                      height: 51.h,
+                      height: 52.h,
                       child: Column(
                         children: [
                           CustomButton(
@@ -128,7 +125,7 @@ class _TeamScreenState extends State<TeamScreen> {
                                 InvitePlayerSheet.show(context,teamController.teamList[0].id.toString());
                               },
                               Text: "Invite Member"),
-                          SizedBox().setHeight(15),
+                          const SizedBox().setHeight(15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -150,7 +147,7 @@ class _TeamScreenState extends State<TeamScreen> {
                               ),
                             ],
                           ),
-                          SizedBox().setHeight(10),
+                          const SizedBox().setHeight(10),
                          Container(
                            height: 40,
                            decoration: BoxDecoration(
@@ -203,85 +200,90 @@ class _TeamScreenState extends State<TeamScreen> {
                              ],
                            ).paddingSymmetric(horizontal: 5),
                          ),
-                          SizedBox().setHeight(10),
-                          SizedBox(
-                            height: 28.h,
-                            child:teamController.isActiveRoaster.value==true?
-                            teamController.sentInvitesList[0].activeRoster.isEmpty?
-                            Center(
-                              child: Text("No Active Roasters",style: AppTheme.bodyExtraSmallWeight600Style,),
-                            ): ListView.builder(
-                              padding: EdgeInsets.only(top: 0),
-                              itemCount:teamController.sentInvitesList[0].activeRoster.length,
-                              shrinkWrap: true,
-                                itemBuilder: (context,index){
-                              return
-                              GestureDetector(
-                                onTap: (){
-                                  Get.toNamed(AppRoutes.playerDetails,arguments: {
-                                    'name':teamController.sentInvitesList[0].activeRoster[index].user.firstName+" "+teamController.sentInvitesList[0].activeRoster[index].user.lastName,
-                                    'email':teamController.sentInvitesList[0].activeRoster[index].user.email,
-                                    'type':'Active Roaster'
-                                  });
-                                },
-                                child: CustomCardAttendees(
-                                  onDeleteTap: (){
-                                    CustomDialog.showDeleteDialog(
-                                        title: "Remove Player",
-                                        description: "This will remove the role from the system",
-                                        iconPath: AppIcons.delete,
-                                      onConfirm: (){
-                                        teamController.removeMemberFromTeam(teamController.sentInvitesList[0].activeRoster[index].userId.toString(), teamController.sentInvitesList[0].activeRoster[index].teamId.toString());
-                                      }
-                                    );
-                                  },
-                                  
-                                  name: teamController.sentInvitesList[0].activeRoster[index].user.firstName+" "+teamController.sentInvitesList[0].activeRoster[index].user.lastName,
-                                  details:teamController.sentInvitesList[0].activeRoster[index].user.email,
-                                  isAttending:teamController.sentInvitesList[0].activeRoster[index].status=='pending'?null:teamController.sentInvitesList[0].activeRoster[index].status=='accepted'?true:false,
-                                  isTeamScreen:true,
-                                  onTapSend: (){
-                                    teamController.reSendInvite(teamController.sentInvitesList[0].activeRoster[index].id.toString());
-                                  },),
-                              );
-                            }):teamController.sentInvitesList[0].reservedPlayers.isEmpty?
-                            Center(
-                              child: Text("No Reserved Players",style: AppTheme.bodyExtraSmallWeight600Style,),
-                            ):ListView.builder(
-                                padding: EdgeInsets.only(top: 0),
-                                itemCount:teamController.sentInvitesList[0].reservedPlayers.length,
+                          const SizedBox().setHeight(10),
+                          Container(
+                            // color: Colors.yellowAccent,
+                            child: Expanded(
+                              // height: 30.h,
+                              child:teamController.isActiveRoaster.value==true?
+                              teamController.sentInvitesList[0].activeRoster.isEmpty?
+                              Center(
+                                child: Text("No Active Roasters",style: AppTheme.bodyExtraSmallWeight600Style,),
+                              ): ListView.builder(
+                                physics: ScrollPhysics(),
+                                padding: const EdgeInsets.only(top: 0,bottom: 0),
+                                itemCount:teamController.sentInvitesList[0].activeRoster.length,
                                 shrinkWrap: true,
-                                itemBuilder: (context,index){
-                                  return GestureDetector(
-
-                                    onTap: (){
-                                      Get.toNamed(AppRoutes.playerDetails,arguments: {
-                                        'name':teamController.sentInvitesList[0].reservedPlayers[index].user.firstName+" "+teamController.sentInvitesList[0].reservedPlayers[index].user.lastName,
-                                        'email':teamController.sentInvitesList[0].reservedPlayers[index].user.email,
-                                        'type':'Reserved Player'
-                                      });
+                                  itemBuilder: (context,index){
+                                return
+                                GestureDetector(
+                                  onTap: (){
+                                    Get.toNamed(AppRoutes.playerDetails,arguments: {
+                                      'name':teamController.sentInvitesList[0].activeRoster[index].user.firstName+" "+teamController.sentInvitesList[0].activeRoster[index].user.lastName,
+                                      'email':teamController.sentInvitesList[0].activeRoster[index].user.email,
+                                      'type':'Active Roaster'
+                                    });
+                                  },
+                                  child: CustomCardAttendees(
+                                    onDeleteTap: (){
+                                      CustomDialog.showDeleteDialog(
+                                          title: "Remove Player",
+                                          description: "This will remove the role from the system",
+                                          iconPath: AppIcons.delete,
+                                        onConfirm: (){
+                                          teamController.removeMemberFromTeam(teamController.sentInvitesList[0].activeRoster[index].userId.toString(), teamController.sentInvitesList[0].activeRoster[index].teamId.toString());
+                                        }
+                                      );
                                     },
-                                    child: CustomCardAttendees(
-                                      name: teamController.sentInvitesList[0].reservedPlayers[index].user.firstName+" "+teamController.sentInvitesList[0].reservedPlayers[index].user.lastName,
-                                      details:teamController.sentInvitesList[0].reservedPlayers[index].user.email,
-                                      isAttending:teamController.sentInvitesList[0].reservedPlayers[index].status=='pending'?null:teamController.sentInvitesList[0].reservedPlayers[index].status=='accepted'?true:false,
-                                      isTeamScreen:true,
-                                        onDeleteTap: (){
-                                          CustomDialog.showDeleteDialog(
-                                              title: "Remove Player",
-                                              description: "This will remove the role from the system",
-                                              iconPath: AppIcons.delete,
-                                            onConfirm: (){
-                                              teamController.removeMemberFromTeam(teamController.sentInvitesList[0].reservedPlayers[index].id.toString(), teamController.sentInvitesList[0].reservedPlayers[index].teamId.toString());
-                                            }
-                                          );
-                                        },
+                                    
+                                    name: teamController.sentInvitesList[0].activeRoster[index].user.firstName+" "+teamController.sentInvitesList[0].activeRoster[index].user.lastName,
+                                    details:teamController.sentInvitesList[0].activeRoster[index].user.email,
+                                    isAttending:teamController.sentInvitesList[0].activeRoster[index].status=='pending'?null:teamController.sentInvitesList[0].activeRoster[index].status=='accepted'?true:false,
+                                    isTeamScreen:true,
                                     onTapSend: (){
-                                      teamController.reSendInvite(teamController.sentInvitesList[0].reservedPlayers[index].id.toString());
-
+                                      teamController.reSendInvite(teamController.sentInvitesList[0].activeRoster[index].id.toString());
                                     },),
-                                  );
-                                }),
+                                );
+                              }):teamController.sentInvitesList[0].reservedPlayers.isEmpty?
+                              Center(
+                                child: Text("No Reserved Players",style: AppTheme.bodyExtraSmallWeight600Style,),
+                              ):ListView.builder(
+                                  physics: ScrollPhysics(),
+                                  padding: const EdgeInsets.only(top: 0,bottom: 0),
+                                  itemCount:teamController.sentInvitesList[0].reservedPlayers.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context,index){
+                                    return GestureDetector(
+                            
+                                      onTap: (){
+                                        Get.toNamed(AppRoutes.playerDetails,arguments: {
+                                          'name':teamController.sentInvitesList[0].reservedPlayers[index].user.firstName+" "+teamController.sentInvitesList[0].reservedPlayers[index].user.lastName,
+                                          'email':teamController.sentInvitesList[0].reservedPlayers[index].user.email,
+                                          'type':'Reserved Player'
+                                        });
+                                      },
+                                      child: CustomCardAttendees(
+                                        name: teamController.sentInvitesList[0].reservedPlayers[index].user.firstName+" "+teamController.sentInvitesList[0].reservedPlayers[index].user.lastName,
+                                        details:teamController.sentInvitesList[0].reservedPlayers[index].user.email,
+                                        isAttending:teamController.sentInvitesList[0].reservedPlayers[index].status=='pending'?null:teamController.sentInvitesList[0].reservedPlayers[index].status=='accepted'?true:false,
+                                        isTeamScreen:true,
+                                          onDeleteTap: (){
+                                            CustomDialog.showDeleteDialog(
+                                                title: "Remove Player",
+                                                description: "This will remove the role from the system",
+                                                iconPath: AppIcons.delete,
+                                              onConfirm: (){
+                                                teamController.removeMemberFromTeam(teamController.sentInvitesList[0].reservedPlayers[index].id.toString(), teamController.sentInvitesList[0].reservedPlayers[index].teamId.toString());
+                                              }
+                                            );
+                                          },
+                                      onTapSend: (){
+                                        teamController.reSendInvite(teamController.sentInvitesList[0].reservedPlayers[index].id.toString());
+                            
+                                      },),
+                                    );
+                                  }),
+                            ),
                           ),
                         ],
                       ).paddingOnly(left: 16,right: 16,top: 10),
@@ -290,7 +292,7 @@ class _TeamScreenState extends State<TeamScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Spacer(flex: 1),
-                    SizedBox().setHeight(5.h),
+                    const SizedBox().setHeight(5.h),
                     Image.asset(AppImages.teamMembers, width: 20.w),
                     Text("No team members yet", style: AppTheme.mediumLightHeadingWeight600Style),
                     Center(
@@ -300,7 +302,7 @@ class _TeamScreenState extends State<TeamScreen> {
                         style: AppTheme.bodyExtraSmallWeight400Style,
                       ),
                     ),
-                    SizedBox().setHeight(10),
+                    const SizedBox().setHeight(10),
                     CustomButton(
                       textSize: 14,
                       height: 40,
@@ -339,7 +341,7 @@ class _TeamScreenState extends State<TeamScreen> {
                       child: CachedNetworkImage(
                         imageUrl:teamController.teamList[0].image,
                         placeholder: (context, url) =>
-                            Center(
+                            const Center(
                                 child: CircularProgressIndicator(
                                   color: AppTheme.secondaryColor,
                                 )),

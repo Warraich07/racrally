@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:racrally/constants/app_icons.dart';
 import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
-import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/views/team/controller/team_controller.dart';
 import 'package:sizer/sizer.dart';
 import '../../../app_theme/app_theme.dart';
@@ -38,12 +37,12 @@ class CreateTeamSheet {
      String teamColor='';
      String editImagePath='';
     List<Color> teamColors=[
-      Color(0xFFD93229),
-      Color(0xFF00C352),
-      Color(0xFFFBBC05),
-      Color(0xFF4285F4),
-      Color(0xFF19AFFF),
-      Color(0xFF9719FF),
+      const Color(0xFFD93229),
+      const Color(0xFF00C352),
+      const Color(0xFFFBBC05),
+      const Color(0xFF4285F4),
+      const Color(0xFF19AFFF),
+      const Color(0xFF9719FF),
     ];
     bool isInitialized = false;
     showModalBottomSheet(
@@ -152,7 +151,7 @@ class CreateTeamSheet {
                                     child: CachedNetworkImage(
                                       imageUrl:editImagePath,
                                       placeholder: (context, url) =>
-                                          Center(
+                                          const Center(
                                               child: CircularProgressIndicator(
                                                 color: AppTheme.secondaryColor,
                                               )),
@@ -241,11 +240,11 @@ class CreateTeamSheet {
                                 color: AppTheme.darkBackgroundColor
                               ),
                               ).paddingOnly(left: 16,right: 16,),
-                              SizedBox().setHeight(10),
+                              const SizedBox().setHeight(10),
                               SizedBox(
                                 height: 40,
                                 child: ListView.builder(
-                                  padding: EdgeInsets.only(left: 16),
+                                  padding: const EdgeInsets.only(left: 16),
                                   scrollDirection: Axis.horizontal,
                                   itemCount: teamColors.length + 1, // +1 for the icon
                                   itemBuilder: (context, index) {
@@ -412,7 +411,7 @@ class CreateTeamSheet {
   static Future<void> pickDate(BuildContext context, TextEditingController controller) async {
     final ThemeData theme = ThemeData(
       brightness: Brightness.light,
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         onSurfaceVariant: AppTheme.secondaryColor,
         onSecondary: AppTheme.darkBackgroundColor,
         primary: AppTheme.secondaryColor,

@@ -4,6 +4,7 @@ import 'package:racrally/extensions/height_extension.dart';
 import 'package:sizer/sizer.dart';
 import '../../app_theme/app_theme.dart';
 import '../../constants/app_icons.dart';
+import '../chat/chat_screen.dart';
 import '../events/event_screen.dart';
 import '../home/home_screen.dart';
 import '../season/season_screen.dart';
@@ -26,7 +27,7 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
     const TeamScreen(),
     const EventScreen(),
     const SeasonScreen(),
-    const SeasonScreen(),
+    const ChatScreen(),
   ];
 
   @override
@@ -83,12 +84,12 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
         showUnselectedLabels: true,
         selectedItemColor: AppTheme.secondaryColor,
         unselectedItemColor: Colors.black.withOpacity(0.6),
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           fontSize: 12,
           color: AppTheme.secondaryColor,
           fontFamily: 'medium',
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontSize: 12,
           color: AppTheme.darkBackgroundColor,
           fontFamily: 'medium',
@@ -99,8 +100,8 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _generalController.currentIndex == 0? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):SizedBox(height: 10,width: 15,),
-                  SizedBox().setHeight(2),
+                  _generalController.currentIndex == 0? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):const SizedBox(height: 10,width: 15,),
+                  const SizedBox().setHeight(2),
                   Image.asset(
                     _generalController.currentIndex == 0
                         ?  AppIcons.bottomBarOne
@@ -111,7 +112,7 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
                         ? AppTheme.secondaryColor
                         : AppTheme.darkBackgroundColor,
                   ),
-                  SizedBox().setHeight(3),
+                  const SizedBox().setHeight(3),
                 ],
               ),
             ),
@@ -122,8 +123,8 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _generalController.currentIndex == 1? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):SizedBox(height: 10,width: 15,),
-                  SizedBox().setHeight(2),
+                  _generalController.currentIndex == 1? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):const SizedBox(height: 10,width: 15,),
+                  const SizedBox().setHeight(2),
                   Image.asset(
                     _generalController.currentIndex == 1
                         ? AppIcons.bottomBarTwo
@@ -134,7 +135,7 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
                         ? AppTheme.secondaryColor
                         : AppTheme.darkBackgroundColor,
                   ),
-                  SizedBox().setHeight(3),
+                  const SizedBox().setHeight(3),
                 ],
               ),
             ),
@@ -145,8 +146,8 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _generalController.currentIndex == 2? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):SizedBox(height: 10,width: 15,),
-                  SizedBox().setHeight(2),
+                  _generalController.currentIndex == 2? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):const SizedBox(height: 10,width: 15,),
+                  const SizedBox().setHeight(2),
                   Image.asset(
                     _generalController.currentIndex == 2
                         ? AppIcons.bottomBarThree
@@ -157,7 +158,7 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
                         ? AppTheme.secondaryColor
                         : AppTheme.darkBackgroundColor,
                   ),
-                  SizedBox().setHeight(3),
+                  const SizedBox().setHeight(3),
                 ],
               ),
             ),
@@ -168,8 +169,8 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _generalController.currentIndex == 3? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):SizedBox(height: 10,width: 15,),
-                  SizedBox().setHeight(2),
+                  _generalController.currentIndex == 3? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):const SizedBox(height: 10,width: 15,),
+                  const SizedBox().setHeight(2),
                   Image.asset(
                     _generalController.currentIndex == 3
                         ? AppIcons.bottomBarFour
@@ -180,7 +181,7 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
                         ? AppTheme.secondaryColor
                         : AppTheme.darkBackgroundColor,
                   ),
-                  SizedBox().setHeight(3),
+                  const SizedBox().setHeight(3),
                 ],
               ),
             ),
@@ -191,8 +192,8 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _generalController.currentIndex == 4? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):SizedBox(height: 10,width: 15,),
-                  SizedBox().setHeight(2),
+                  _generalController.currentIndex == 4? Image.asset(AppIcons.halfEllipses,width: 15,height: 10,):const SizedBox(height: 10,width: 15,),
+                  const SizedBox().setHeight(2),
                   Image.asset(
                     _generalController.currentIndex == 4
                         ? AppIcons.bottomBarFive
@@ -203,7 +204,7 @@ class _CustomBottomBarrState extends State<CustomBottomBarr> {
                         ? AppTheme.secondaryColor
                         : AppTheme.darkBackgroundColor,
                   ),
-                  SizedBox().setHeight(3),
+                  const SizedBox().setHeight(3),
 
                 ],
               ),

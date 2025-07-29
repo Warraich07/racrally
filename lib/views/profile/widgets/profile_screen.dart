@@ -42,7 +42,7 @@ class _CustomTileState extends State<CustomTile> {
            ): Image.asset(AppIcons.arrow_forward,height: 15,),
           ],
         ),
-        SizedBox().setHeight(5),
+        const SizedBox().setHeight(5),
         Divider(
           color: AppTheme.textfieldBorderColor.withOpacity(0.3),
         )

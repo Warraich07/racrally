@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:racrally/models/sent_invites_model.dart';
 import 'package:racrally/models/team_model.dart';
-
 import '../../../api_services/api_exceptions.dart';
 import '../../../api_services/data_api.dart';
 import '../../../controllers/base_controller.dart';
@@ -173,12 +172,13 @@ class TeamController extends GetxController {
     }
   }
 
-  Future changeInviteStatus(String status,String id) async {
+  Future changeInviteStatus(String status,String id,bool isAccepted) async {
     _baseController.showLoading();
     print("/team/set-invite");
     Map<String, String> body = {
-      "status" : status,
-      "id" : id
+      // "status" : status,
+      "id" : id,
+      "isAccepted":isAccepted?'accepted':'rejected'
     };
     var response = await DataApiService.instance
         .post("/team/set-invite",body)

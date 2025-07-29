@@ -1,15 +1,10 @@
-
-
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_theme/app_theme.dart';
-import 'package:racrally/constants/app_icons.dart';
 import 'package:racrally/constants/app_images.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_widgets/custom_button.dart';
 import '../../routes/app_routes.dart';
 import '../../services/local_storage/shared_preferences.dart';

@@ -16,7 +16,7 @@ class CreateGameScreen extends StatelessWidget {
       backgroundColor: AppTheme.primaryColor,
       body: Column(
         children: [
-          SizedBox().setHeight(40),
+          const SizedBox().setHeight(40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -25,14 +25,14 @@ class CreateGameScreen extends StatelessWidget {
               Container(width: 30,)
             ],
           ),
-          SizedBox().setHeight(10),
+          const SizedBox().setHeight(10),
           GestureDetector(
               onTap: (){
                 Get.toNamed(AppRoutes.gameDetails);
               },
-              child: CustomGameCard()),
-          Spacer(),
-          CustomButton(Text: "Create New Game")
+              child: const CustomGameCard()),
+          const Spacer(),
+          const CustomButton(Text: "Create New Game")
         ],
       ).paddingSymmetric(horizontal: 16,vertical: 16),
     );

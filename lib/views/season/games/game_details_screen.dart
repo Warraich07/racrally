@@ -37,7 +37,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox().setHeight(40),
+            const SizedBox().setHeight(40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -52,7 +52,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                     ),
                   ),
                   child: PopupMenuButton<String>(
-                    icon: Icon(Icons.more_vert),
+                    icon: const Icon(Icons.more_vert),
                     color: AppTheme.primaryColor,
                     itemBuilder: (context) => [
                       PopupMenuItem(
@@ -87,9 +87,9 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                 ),
               ],
             ),
-            SizedBox().setHeight(5),
-            CustomGameCard(),
-            SizedBox().setHeight(20),
+            const SizedBox().setHeight(5),
+            const CustomGameCard(),
+            const SizedBox().setHeight(20),
             Container(
               height: 40,
               decoration: BoxDecoration(
@@ -103,7 +103,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                 onTap: seasonController.toggleTab,
               )).paddingSymmetric(horizontal: 5),
             ),
-            SizedBox().setHeight(15),
+            const SizedBox().setHeight(15),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -152,8 +152,8 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                     ],
                   ).paddingOnly(left: 10,right: 10,top: 10,bottom: 10),
                   ListView.builder(
-                    physics: ScrollPhysics(),
-                    padding: EdgeInsets.only(top: 0),
+                    physics: const ScrollPhysics(),
+                    padding: const EdgeInsets.only(top: 0),
                     itemCount: statuses.length,
                       shrinkWrap: true,
                       itemBuilder: (context,index){

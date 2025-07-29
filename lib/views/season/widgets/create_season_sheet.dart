@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +11,6 @@ import '../../../constants/app_icons.dart';
 import '../../../constants/app_images.dart';
 import '../../../models/text_field_model.dart';
 import '../../../utils/snackbar_utils.dart';
-import '../../auth/widgets/custom_dropdown.dart';
 
 class CreateSeasonSheet {
   static void show(BuildContext context) {
@@ -150,7 +148,7 @@ class CreateSeasonSheet {
                               children: [
                                 CustomTextField(
                                   controller: venueFields[index].controller,
-                                  fieldName: venueFields[index].label.toString()+" "+(index+1).toString(),
+                                  fieldName: "${venueFields[index].label} ${index+1}",
                                   hintText: "Enter venue...",
                                 ),
                                 const SizedBox(height: 18),
@@ -240,7 +238,7 @@ class CreateSeasonSheet {
   static Future<void> pickDate(BuildContext context, TextEditingController controller) async {
     final ThemeData theme = ThemeData(
       brightness: Brightness.light,
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         onSurfaceVariant: AppTheme.secondaryColor,
         onSecondary: AppTheme.darkBackgroundColor,
         primary: AppTheme.secondaryColor,

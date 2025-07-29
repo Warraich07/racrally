@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
 import '../../../app_theme/app_theme.dart';
 import '../../../app_widgets/custom_button.dart';
 import '../../../app_widgets/custom_text_field.dart';
 import '../../../constants/custom_validators.dart';
-import '../../../utils/snackbar_utils.dart';
 import '../../auth/widgets/custom_dropdown.dart';
 import '../controller/event_controller.dart';
 
@@ -335,7 +333,7 @@ class CreateEventSheet {
       ) async {
     final ThemeData theme = ThemeData(
       brightness: Brightness.light,
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         onSurfaceVariant: AppTheme.secondaryColor,
         onSecondary: AppTheme.darkBackgroundColor,
         primary: AppTheme.secondaryColor,

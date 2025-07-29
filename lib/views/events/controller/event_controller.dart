@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:racrally/models/event_model.dart';
 
@@ -16,6 +19,10 @@ class EventController extends GetxController {
   // Rxn<TeamModel> teamData=Rxn<TeamModel>();
   RxList<EventModel> eventList=<EventModel>[].obs;
   RxList<EventModel> eventListBackup=<EventModel>[].obs;
+  RxString detailEventName=''.obs;
+  RxString detailEventDate=''.obs;
+  RxString detailEventLocation=''.obs;
+  RxBool isSearch=false.obs;
 
   Future createEvent(String name,String location,String dateAndTime,bool rsvp,String inviteAttendee ) async {
     isLoading.value=true;
@@ -92,6 +99,9 @@ class EventController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
+      detailEventName.value=(result['data']['name']);
+      detailEventLocation.value=(result['data']['location']);
+      detailEventDate.value=formatDate(result['data']['date']);
       getEvents();
       Get.back();
       SnackbarUtil.showSnackbar(
@@ -111,7 +121,7 @@ class EventController extends GetxController {
     }
   }
 
-  Future deleteEvent(String eventId) async {
+  Future deleteEvent(String eventId,bool isFromDetailsScreen) async {
     isLoading.value=true;
     final BaseController _baseController = BaseController.instance;
 
@@ -133,9 +143,10 @@ class EventController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
+      if(isFromDetailsScreen){Get.back();}
       eventList.clear();
       getEvents();
-      // Get.back();
+
       SnackbarUtil.showSnackbar(
         message: "Event Deleted",
         type: SnackbarType.success,
@@ -155,6 +166,7 @@ class EventController extends GetxController {
 
 
   Future getEvents() async {
+    isSearch.value=false;
     isLoading.value=true;
     final BaseController _baseController = BaseController.instance;
 
@@ -193,12 +205,18 @@ class EventController extends GetxController {
     }
   }
 
-  Future searchEvents(String searchQuery) async {
+  Future searchEvents(String searchQuery,String order,bool search) async {
+    isSearch.value=search;
     isLoading.value=true;
     final BaseController _baseController = BaseController.instance;
-
+    String endPoint='';
+    if(search==false){
+       endPoint='/event?order=$order';
+    }else{
+      endPoint='/event?name=$searchQuery&order=$order';
+    }
     var response = await DataApiService.instance
-        .get("/event/event?name=$searchQuery")
+        .get(endPoint)
         .catchError((error) {
       if (error is BadRequestException) {
         // var apiError = json.decode(error.message!);

@@ -37,7 +37,7 @@ class CustomHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height:showBody==true?39.h: 36.h,
+      height:showBody==true?39.h: 34.h,
       child: Column(
         children: [
           Container(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../app_theme/app_theme.dart';
 import '../../../constants/app_icons.dart';
 
@@ -49,7 +48,7 @@ class CustomTilePlayer extends StatelessWidget {
                   child: SizedBox(
                     height: 40,
                     child:suffixIcon?? PopupMenuButton<String>(
-                      icon: Icon(Icons.more_vert),
+                      icon: const Icon(Icons.more_vert),
                       color: AppTheme.primaryColor,
                       itemBuilder: (context) => [
                         PopupMenuItem(

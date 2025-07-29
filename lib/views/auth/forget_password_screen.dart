@@ -1,13 +1,9 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/constants/app_icons.dart';
 import 'package:racrally/extensions/height_extension.dart';
-import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
 import '../../app_widgets/custom_text_field.dart';
@@ -44,10 +40,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     Get.back();
                   },
                   child: Image.asset(AppIcons.arrow_back_sharp,width: 20,)),
-              SizedBox().setHeight(5.h),
+              const SizedBox().setHeight(5.h),
               Text("Forget Password",style: AppTheme.subHeadingMediumStyle,),
               Text("Enter your correct email and you will receive an OTP",style: AppTheme.bodySmallGreyStyle,),
-              SizedBox().setHeight(4.h),
+              const SizedBox().setHeight(4.h),
               Form(
                 key: _formKey,
                 child: CustomTextField(
@@ -59,7 +55,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 ),
               ),
               // Spacer(),
-              SizedBox().setHeight(41.h),
+              const SizedBox().setHeight(41.h),
               CustomButton(
                   onTap: (){
                     if(_formKey.currentState!.validate()){

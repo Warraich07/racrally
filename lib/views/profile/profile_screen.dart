@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
@@ -8,17 +7,14 @@ import 'package:racrally/routes/app_routes.dart';
 import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:racrally/views/profile/widgets/profile_screen.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
 import '../../app_widgets/custom_header.dart';
 import '../../constants/app_icons.dart';
-import '../../constants/app_images.dart';
 import '../../constants/custom_validators.dart';
 import '../../services/local_storage/shared_preferences.dart';
 import '../../utils/custom_dialog.dart';
 import '../auth/widgets/custom_dropdown.dart';
-import '../team/widgets/create_team_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -59,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CustomHeader(
                       showBackArrow: true,
                       showPopUpMenu: false,
-                      title: authController.userData.value!.firstName.capitalizeFirst!+" "+authController.userData.value!.lastName.capitalizeFirst!,
+                      title: "${authController.userData.value!.firstName.capitalizeFirst!} ${authController.userData.value!.lastName.capitalizeFirst!}",
                       showSubtitle: false,
                       onMenuSelected: (value) {
                         if (value == 'edit') {
@@ -103,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox().setHeight(5),
+                      const SizedBox().setHeight(5),
                       CustomTextField(
                         controller: nameController,
                         fieldName: "Name",
@@ -137,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: AppTheme.darkGreyColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8)
                         ),
-                        child: Column(
+                        child: const Column(
                           children: [
                             CustomTile(title: "Allow Notifications",isNotificationTile:true),
                             CustomTile(title: "Privacy Policy",),
@@ -161,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
 
                 children: [
-                  SizedBox().setHeight(10),
+                  const SizedBox().setHeight(10),
                   CustomButton(
                     onTap: () {
                         CustomDialog.showDeleteDialog(
@@ -183,9 +179,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isAuth: true,
                     isGoogle: false,
                     isOnBoarding: true,
-                    onBoardingText: Text("Logout"),
+                    onBoardingText: const Text("Logout"),
                   ),
-                  SizedBox().setHeight(10),
+                  const SizedBox().setHeight(10),
                   CustomButton(
                     onTap: () {
               
@@ -197,9 +193,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isAuth: true,
                     isGoogle: false,
                     isOnBoarding: true,
-                    onBoardingText: Text("Change Password"),
+                    onBoardingText: const Text("Change Password"),
                   ),
-                  SizedBox().setHeight(10),
+                  const SizedBox().setHeight(10),
                   CustomButton(
                     onTap: () {
 
@@ -211,10 +207,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isAuth: true,
                     isGoogle: false,
                     isOnBoarding: true,
-                    onBoardingText: Text("Delete Account"),
+                    onBoardingText: const Text("Delete Account"),
                   ),
-                  SizedBox().setHeight(10),
-                  CustomButton(Text: "Save Changes"),
+                  const SizedBox().setHeight(10),
+                  const CustomButton(Text: "Save Changes"),
                   
                   SizedBox(height: Platform.isIOS?20:0,)
                 ],

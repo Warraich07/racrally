@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
@@ -11,7 +10,6 @@ import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:racrally/views/auth/controller/social_sign_in_controller.dart';
 import 'package:racrally/views/bottom_nav_bar/controller/bottom_bar_controller.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
 import '../../constants/app_images.dart';
@@ -105,13 +103,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       showPassword=!showPassword;
                                     });
                                   },
-                                  child: Icon(Icons.remove_red_eye_rounded)):GestureDetector(
+                                  child: const Icon(Icons.remove_red_eye_rounded)):GestureDetector(
                                   onTap: (){
                                     setState(() {
                                       showPassword=!showPassword;
                                     });
                                   },
-                                  child: Icon(Icons.remove_red_eye_outlined)),
+                                  child: const Icon(Icons.remove_red_eye_outlined)),
                           isObscure:showPassword?true:false,
                           fieldName: "Password",
                           hintText: "Enter your Password",
@@ -142,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     color: AppTheme.textfieldBorderColor.withOpacity(0.3),
                                   ),
                                 ),
-                                child:  rememberMe? Icon(Icons.check, size: 13,color:  AppTheme.secondaryColor,).paddingAll(1):Container(),
+                                child:  rememberMe? const Icon(Icons.check, size: 13,color:  AppTheme.secondaryColor,).paddingAll(1):Container(),
                               ),
 
                           ),

@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:racrally/app_widgets/custom_header.dart';
@@ -40,7 +38,7 @@ class _SeasonDetailsScreenState extends State<SeasonDetailsScreen> {
         children: [
           Stack(
             children: [
-              CustomHeader(
+              const CustomHeader(
                 type: " Cricket",
                 title: "Football super league",
                 subTitle: "27 Jun 2025 - 27 Jul 2025",
@@ -82,10 +80,10 @@ class _SeasonDetailsScreenState extends State<SeasonDetailsScreen> {
               // mainAxisAlignment: ,
               children: [
                 GridView.builder(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.only(top: 20),
                   shrinkWrap: true,
                   itemCount: 4,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 14,
@@ -115,7 +113,7 @@ class _SeasonDetailsScreenState extends State<SeasonDetailsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.asset(cardImages[index],height: 30,width: 30,),
-                            SizedBox().setHeight(5),
+                            const SizedBox().setHeight(5),
                             Text(cardText[index],style: AppTheme.bodyMediumStyle,)
                               // Image.asset(name)
 

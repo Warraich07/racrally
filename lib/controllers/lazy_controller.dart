@@ -3,6 +3,7 @@ import 'package:racrally/views/auth/controller/auth_controller.dart';
 import 'package:racrally/views/auth/controller/social_sign_in_controller.dart';
 import 'package:racrally/views/intro/controller/splash_controller.dart';
 import '../views/bottom_nav_bar/controller/bottom_bar_controller.dart';
+import '../views/chat/controller/chat_controller.dart';
 import '../views/events/controller/event_controller.dart';
 import '../views/home/controller/home_controller.dart';
 import '../views/season/controller/season_controller.dart';
@@ -12,6 +13,7 @@ class LazyController extends Bindings{
   @override
   void dependencies() {
     // TODO: implement dependencies
+    Get.put(ChatController());
     Get.put(HomeController());
     Get.put(AuthController());
     Get.put(SocialSignInController());

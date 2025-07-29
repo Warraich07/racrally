@@ -59,7 +59,7 @@ class CustomTeamCard extends StatelessWidget {
                         ),
                         child: Image.asset(AppImages.basketball).paddingAll(5),
                       ),
-                      SizedBox().setWidth(10),
+                      const SizedBox().setWidth(10),
                       // Image.asset("name"),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
