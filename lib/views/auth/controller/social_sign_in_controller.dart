@@ -13,6 +13,8 @@ import 'auth_controller.dart';
 class SocialSignInController extends GetxController {
   RxString userId = "".obs;
   RxString userName = "".obs;
+  RxString firstName = "".obs;
+  RxString lastName = "".obs;
   RxString appleUserName = "".obs;
   RxString userEmail = "".obs;
   RxString userPhoto = "".obs;
@@ -50,20 +52,29 @@ class SocialSignInController extends GetxController {
       // Get user details
       User? user = userCredential.user;
       if (user != null) {
-        userId.value = user.uid; // Google User ID
-        userName.value = user.displayName ?? "No Name";
+        userId.value = user.uid;
         userEmail.value = user.email ?? "No Email";
         userPhoto.value = user.photoURL ?? "";
-        // Get.put(GeneralController().onBottomBarTapped(0));
-        // Get.put(AuthController().loginUser(userEmail.value, '', false, userId.value));
 
+        String fullName = user.displayName ?? "No Name";
+        List<String> nameParts = fullName.split(" ");
+
+         firstName.value = nameParts.isNotEmpty ? nameParts.first : "";
+         lastName.value = nameParts.length > 1 ? nameParts.sublist(1).join(" ") : "";
+
+        print("First Name: $firstName");
+        print("Last Name: $lastName");
+        // Optional: store them in variables or reactive values
+        userName.value = fullName;
+        // firstNameRx.value = firstName;
+        // lastNameRx.value = lastName;
       }
 
       print("User ID: ${userId.value}");
       print("User Name: ${userName.value}");
       print("User Email: ${userEmail.value}");
       print("User Photo: ${userPhoto.value}");
-      // authController.signUp(userName.value, userEmail.value, '', false, userId.value,userPhoto.value);
+      authController.loginUserWithSocialMethod(firstName.value, lastName.value, userEmail.value, 'Admin', 'google', userId.value, true);
       _baseController.hideLoading();
     } catch (e) {
       _baseController.hideLoading();

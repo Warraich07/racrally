@@ -215,8 +215,7 @@ class _TeamScreenState extends State<TeamScreen> {
                                 itemCount:teamController.sentInvitesList[0].activeRoster.length,
                                 shrinkWrap: true,
                                   itemBuilder: (context,index){
-                                return
-                                GestureDetector(
+                                return GestureDetector(
                                   onTap: (){
                                     Get.toNamed(AppRoutes.playerDetails,arguments: {
                                       'name':teamController.sentInvitesList[0].activeRoster[index].user.firstName+" "+teamController.sentInvitesList[0].activeRoster[index].user.lastName,
@@ -225,6 +224,7 @@ class _TeamScreenState extends State<TeamScreen> {
                                     });
                                   },
                                   child: CustomCardAttendees(
+                                    isAlreadyJoined: teamController.sentInvitesList[0].activeRoster[index].status=='accepted'?true:false,
                                     onDeleteTap: (){
                                       CustomDialog.showDeleteDialog(
                                           title: "Remove Player",
@@ -235,7 +235,6 @@ class _TeamScreenState extends State<TeamScreen> {
                                         }
                                       );
                                     },
-                                    
                                     name: teamController.sentInvitesList[0].activeRoster[index].user.firstName+" "+teamController.sentInvitesList[0].activeRoster[index].user.lastName,
                                     details:teamController.sentInvitesList[0].activeRoster[index].user.email,
                                     isAttending:teamController.sentInvitesList[0].activeRoster[index].status=='pending'?null:teamController.sentInvitesList[0].activeRoster[index].status=='accepted'?true:false,
@@ -254,7 +253,7 @@ class _TeamScreenState extends State<TeamScreen> {
                                   shrinkWrap: true,
                                   itemBuilder: (context,index){
                                     return GestureDetector(
-                            
+
                                       onTap: (){
                                         Get.toNamed(AppRoutes.playerDetails,arguments: {
                                           'name':teamController.sentInvitesList[0].reservedPlayers[index].user.firstName+" "+teamController.sentInvitesList[0].reservedPlayers[index].user.lastName,
@@ -263,6 +262,8 @@ class _TeamScreenState extends State<TeamScreen> {
                                         });
                                       },
                                       child: CustomCardAttendees(
+                                        isAlreadyJoined: teamController.sentInvitesList[0].reservedPlayers[index].status=='accepted'?true:false,
+
                                         name: teamController.sentInvitesList[0].reservedPlayers[index].user.firstName+" "+teamController.sentInvitesList[0].reservedPlayers[index].user.lastName,
                                         details:teamController.sentInvitesList[0].reservedPlayers[index].user.email,
                                         isAttending:teamController.sentInvitesList[0].reservedPlayers[index].status=='pending'?null:teamController.sentInvitesList[0].reservedPlayers[index].status=='accepted'?true:false,
@@ -273,7 +274,7 @@ class _TeamScreenState extends State<TeamScreen> {
                                                 description: "This will remove the role from the system",
                                                 iconPath: AppIcons.delete,
                                               onConfirm: (){
-                                                teamController.removeMemberFromTeam(teamController.sentInvitesList[0].reservedPlayers[index].id.toString(), teamController.sentInvitesList[0].reservedPlayers[index].teamId.toString());
+                                                teamController.removeMemberFromTeam(teamController.sentInvitesList[0].reservedPlayers[index].userId.toString(), teamController.sentInvitesList[0].reservedPlayers[index].teamId.toString());
                                               }
                                             );
                                           },

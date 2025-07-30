@@ -74,6 +74,57 @@ class AuthController extends GetxController {
     }
   }
 
+  Future loginUserWithSocialMethod(String firstName,String lastName,String email,String role,String authMethod,String socialId,bool rememberMe) async {
+    _baseController.showLoading();
+    print("entry 1");
+    Map<String, String> body = {
+      "firstName":firstName,
+      "lastName":lastName,
+      "email":email,
+      "role":role,
+      "authMethod" : authMethod ,// facebook
+      "socialId" : socialId
+    };
+    print("entry 2");
+    var response = await DataApiService.instance
+        .post('/social-auth', body)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        CustomDialog.showErrorDialog(
+            title: 'Error!', showTitle: true, description: apiError["reason"]);
+      } else {
+        _baseController.handleError(error);
+      }
+    });
+    print("entry 3");
+    update();
+    _baseController.hideLoading();
+    if (response == null) return;
+    print(response + " responded");
+
+    var result = json.decode(response);
+    if (result['success'].toString()=="true") {
+      userData.value=UserModel.fromJson(result['data']);
+      accessToken.value=result['data']['token'];
+      _authPreference.saveUserData(data: jsonEncode(userData.value?.toJson()));
+      print("${jsonEncode(userData.value?.toJson())} this is user data");
+      _authPreference.saveUserDataToken(token: accessToken.value);
+      Get.offAndToNamed(AppRoutes.bottomBar);
+      if(rememberMe==true){
+        _authPreference.setUserLoggedIn(true);
+      }
+      // Handle success case
+    } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
+      print("error is here");
+      String message = result['data']['message'];
+      if(result['data']['message']=="Verification pending, please verify your email first"){
+        Get.toNamed(AppRoutes.signUp);
+      }
+      SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
+    }
+  }
+
   Future verifyEmail(String otp) async {
     _baseController.showLoading();
     Map<String, String> body = {
@@ -249,15 +300,15 @@ class AuthController extends GetxController {
   }
 
   Future signUpUser(String firstName, String lastName, String email,
-      String password, String gender) async {
+      String password) async {
     _baseController.showLoading();
     Map<String, String> body = {
       "firstName": firstName,
       "lastName": lastName,
       "email": email,
       "password": password,
-      "gender": gender,
-      "role": "Admin"
+      // "gender": gender,
+      "role": "Admin",
     };
 
     var response = await DataApiService.instance
@@ -291,7 +342,7 @@ class AuthController extends GetxController {
       storedFirstNameForReuse.value=firstName;
       storedLastNameForReuse.value=lastName;
       storedRoleForReuse.value='Admin';
-      storedGenderForReuse.value=gender;
+      // storedGenderForReuse.value=gender;
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true"){
       print("error is here");
@@ -307,7 +358,7 @@ class AuthController extends GetxController {
       "lastName": storedLastNameForReuse.value,
       "email": storedEmailForReuse.value,
       "password": storedPasswordForReuse.value,
-      "gender": storedGenderForReuse.value,
+      // "gender": storedGenderForReuse.value,
       "role": storedRoleForReuse.value
     };
 

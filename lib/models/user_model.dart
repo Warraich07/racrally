@@ -4,7 +4,7 @@ class UserModel {
   final String lastName;
   final String email;
   final String role;
-  final String gender;
+  // final String gender;
   final String status;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -16,7 +16,7 @@ class UserModel {
     required this.lastName,
     required this.email,
     required this.role,
-    required this.gender,
+    // required this.gender,
     required this.status,
     required this.createdAt,
     required this.updatedAt,
@@ -29,7 +29,7 @@ class UserModel {
     lastName: json['lastName'],
     email: json['email'],
     role: json['role'],
-    gender: json['gender'],
+    // gender: json['gender'],
     status: json['status'],
     createdAt: DateTime.parse(json['createdAt']),
     updatedAt: DateTime.parse(json['updatedAt']),
@@ -42,7 +42,7 @@ class UserModel {
     'lastName': lastName,
     'email': email,
     'role': role,
-    'gender': gender,
+    // 'gender': gender,
     'status': status,
     'createdAt': createdAt.toIso8601String(),
     'updatedAt': updatedAt.toIso8601String(),

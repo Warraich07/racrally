@@ -5,6 +5,7 @@ import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/extensions/width_extension.dart';
 import 'package:racrally/views/events/controller/event_controller.dart';
 import 'package:racrally/views/events/widgets/create_event_bottom_sheet.dart';
+import 'package:racrally/views/events/widgets/custom_card_attendees.dart';
 import 'package:sizer/sizer.dart';
 import '../../app_theme/app_theme.dart';
 import '../../constants/app_icons.dart';
@@ -20,8 +21,15 @@ class EventDetailsScreen extends StatefulWidget {
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
   EventController eventController=Get.find();
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // final Map<String, dynamic> data = Get.arguments;
+    // eventController.getEventDetails(data['eventId'].toString());
+  }
+  @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> data = Get.arguments;
+    // final Map<String, dynamic> data = Get.arguments;
 
     return Obx(
       ()=> Scaffold(
@@ -94,13 +102,13 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             ],
                             onSelected: (value) {
                               if (value == 'edit') {
-                                CreateEventSheet.show(context,data['eventName'], data['location'], data['date'], false,  data['inviteAttendee'], data['eventId'].toString(),true,data['dateANdTimeForUpdateEvent']);
+                                // CreateEventSheet.show(context,data['eventName'], data['location'], data['date'], false,  data['inviteAttendee'], data['eventId'].toString(),true,data['dateANdTimeForUpdateEvent']);
                                 // onEditTap?.call();
                               } else if (value == 'delete') {
                                 CustomDialog.showDeleteDialog(
                                     onConfirm: (){
 
-                                      eventController.deleteEvent(data['eventId'].toString(),true);
+                                      // eventController.deleteEvent(data['eventId'].toString(),true);
                                     },
                                     iconPath: AppIcons.delete);
                                 // onDeleteTap?.call();
@@ -111,7 +119,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       ],
                     ),
                     const Spacer(),
-                    Center(child: Text(eventController.detailEventName.value,style: AppTheme.mediumHeadingFont600Style,)),
+                    Center(child: Text(eventController.eventDetailsList[0].name,style: AppTheme.mediumHeadingFont600Style,)),
                     const SizedBox().setHeight(10)
                   ],
                 ).paddingOnly(top: 40,left: 16),
@@ -130,7 +138,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                          children: [
                            Image.asset(AppIcons.calendar,height: 20,width: 20,),
                            const SizedBox().setWidth(5),
-                           Text(eventController.detailEventDate.value,style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
+                           Text(eventController.formatDate(eventController.eventDetailsList[0].date.toString()),style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
 
                          ],
                        ),
@@ -141,7 +149,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                          children: [
                            Image.asset(AppIcons.location,height: 20,width: 20,),
                            const SizedBox().setWidth(5),
-                           Text(eventController.detailEventLocation.value,style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
+                           Text(eventController.eventDetailsList[0].location.toString(),style: AppTheme.bodyMediumGreyStyle.copyWith(color: AppTheme.darkBackgroundColor),),
 
                          ],
                        )
@@ -173,22 +181,38 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   const SizedBox().setHeight(10),
                   SizedBox(
                     height: 43.h,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 43.h,
-                            child: Center(
-                              child: Text("No Attendees Yet",style: AppTheme.mediumLightHeadingWeight600Style),
-                            ),
-                          )
-                          // CustomCardAttendees(name: 'Noraiz Shahid', details: 'noraizshahid@gmail.com',isAttending:null),
-                          // CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true),
-                          // CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
-                          // CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 43.h,
+                          child:eventController.eventDetailsList[0].invites.isNotEmpty?
+                              ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: eventController.eventDetailsList[0].invites.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context,index){
+                                return CustomCardAttendees(
+                                  onTapSend: (){
+                                    print("re sent");
+                                  },
+                                    onDeleteTap: (){
+                                      eventController.removeMemberFromEvent(eventController.eventDetailsList[index].invites[index].user.id.toString(), eventController.eventDetailsList[index].invites[index].eventId.toString());
+                                    print("delete");
+                                    },
+                                    name: eventController.eventDetailsList[index].invites[index].user.firstName.toString()+" "+eventController.eventDetailsList[index].invites[index].user.lastName,
+                                    details: eventController.eventDetailsList[index].invites[index].user.email,
+                                    isAttending:eventController.eventDetailsList[index].invites[index].status=='pending'?null:
+                                    eventController.eventDetailsList[index].invites[index].status=='accepted'?true:false);
+                              }): Center(
+                            child: Text("No Attendees Yet",style: AppTheme.mediumLightHeadingWeight600Style),
+                          ),
+                        )
+                        // CustomCardAttendees(name: 'Noraiz Shahid', details: 'noraizshahid@gmail.com',isAttending:null),
+                        // CustomCardAttendees(name: 'Talha', details: 'talha12@gmail.com',isAttending:true),
+                        // CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
+                        // CustomCardAttendees(name: 'Umer', details: 'umer12@gmail.com',isAttending:false),
+                      ],
                     ),
                   ),
 

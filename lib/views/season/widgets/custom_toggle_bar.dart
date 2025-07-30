@@ -6,10 +6,12 @@ class CustomToggleBar extends StatelessWidget {
   final List<String> items;
   final int selectedIndex;
   final void Function(int index) onTap;
+  final double? cardWidth;
 
   const CustomToggleBar({
     super.key,
     required this.items,
+    this.cardWidth,
     required this.selectedIndex,
     required this.onTap,
   });
@@ -25,7 +27,7 @@ class CustomToggleBar extends StatelessWidget {
           onTap: () => onTap(index),
           child: Container(
             height: 32,
-            width: 28.w,
+            width: cardWidth??28.w,
             decoration: BoxDecoration(
               color: isSelected ? AppTheme.extraLightGreyColor : null,
               borderRadius: BorderRadius.circular(8),

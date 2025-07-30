@@ -8,6 +8,7 @@ import '../../../constants/app_icons.dart';
 class CustomCardAttendees extends StatelessWidget {
   final bool? isAttending;
   final bool? isTeamScreen;
+  final bool? isAlreadyJoined;
   final String name;
   final String details;
   final VoidCallback? onTapSend;
@@ -17,6 +18,7 @@ class CustomCardAttendees extends StatelessWidget {
     super.key,
     this.isAttending,
     this.isTeamScreen,
+    this.isAlreadyJoined,
     required this.name,
     required this.details,
     this.onTapSend,
@@ -86,7 +88,8 @@ class CustomCardAttendees extends StatelessWidget {
                       color: AppTheme.primaryColor,
                       itemBuilder: (context) => [
 
-                        PopupMenuItem(
+                        if (isAlreadyJoined!=true)
+                          PopupMenuItem(
                           value:isTeamScreen==true?'sendInvite': 'sendInvite',
                           child: Row(
                             children: [

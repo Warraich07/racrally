@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:racrally/models/my_event_invites_model.dart';
+import 'package:racrally/models/my_team_invites_model.dart';
 import 'package:racrally/models/sent_invites_model.dart';
 import 'package:racrally/models/team_model.dart';
 import '../../../api_services/api_exceptions.dart';
 import '../../../api_services/data_api.dart';
 import '../../../controllers/base_controller.dart';
-import '../../../models/my_invites_model.dart';
 import '../../../utils/snackbar_utils.dart';
 
 class TeamController extends GetxController {
@@ -17,8 +18,13 @@ class TeamController extends GetxController {
   Rxn<TeamModel> teamData=Rxn<TeamModel>();
   RxList<TeamModel> teamList=<TeamModel>[].obs;
   RxList<SentInvitesModel> sentInvitesList=<SentInvitesModel>[].obs;
-  RxList<MyInvitesModel> myInvitesList=<MyInvitesModel>[].obs;
+  RxList<MyTeamInvitesModel> myTeamInvitesList=<MyTeamInvitesModel>[].obs;
+  RxList<MyEventInvitesModel> myEventInvitesList=<MyEventInvitesModel>[].obs;
+  final RxInt selectedToggleIndex = 0.obs;
 
+  void toggleTab(int index) {
+    selectedToggleIndex.value = index;
+  }
 
   Future sendInvite(String teamId,String email,String role) async {
     _baseController.showLoading();
@@ -81,6 +87,9 @@ class TeamController extends GetxController {
 
     var result = json.decode(response);
     if (result['success'].toString()=="true") {
+      if(teamList.isNotEmpty){
+        getSentInvites(teamList[0].id.toString());
+      }
       Get.back();
       SnackbarUtil.showSnackbar(message: "Invite Re-Sent", type: SnackbarType.success);
 
@@ -158,13 +167,23 @@ class TeamController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
-      final data = result['data'];
-      if (data is List) {
 
-        myInvitesList.value = List<MyInvitesModel>.from(
-          data.map((x) => MyInvitesModel.fromJson(x)),
+      final data = result['data'];
+
+      // ✅ Parse teamInvites
+      if (data['teamInvites'] != null) {
+        myTeamInvitesList.value = List<MyTeamInvitesModel>.from(
+          data['teamInvites'].map((item) => MyTeamInvitesModel.fromJson(item)),
         );
       }
+
+      // ✅ Parse eventInvites
+      if (data['eventInvites'] != null) {
+        myEventInvitesList.value = List<MyEventInvitesModel>.from(
+          data['eventInvites'].map((item) => MyEventInvitesModel.fromJson(item)),
+        );
+      }
+
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");
       String message = result['data']['message'];
@@ -199,7 +218,7 @@ class TeamController extends GetxController {
     if (result['success'].toString()=="true") {
         Get.back();
         if(status=="accepted"){
-          SnackbarUtil.showSnackbar(message: "You have been added to the team", type: SnackbarType.success);
+          SnackbarUtil.showSnackbar(message: "Invite Accepted", type: SnackbarType.success);
         }else{
           SnackbarUtil.showSnackbar(message: "Invite rejected", type: SnackbarType.success);
 
@@ -240,6 +259,8 @@ class TeamController extends GetxController {
       SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
     }
   }
+
+
   
   Future getTeam() async {
     isLoading.value=true;
@@ -278,11 +299,12 @@ print("get-team");
       );
         if(teamList.isNotEmpty){
           isTeamCreated.value=true;
+          getSentInvites(teamList[0].id.toString());
         }else{
           isTeamCreated.value=false;
         }
 
-      getSentInvites(teamList[0].id.toString());
+
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       print("error is here");

@@ -116,23 +116,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         validator: (value) => CustomValidator.email(value),
                         focusNode: focusNodeEmail,
                         fieldName: "Email",hintText: "Enter your Email",),
-                      const SizedBox().setHeight(18),
-                      // dropdown
-                      CustomDropdownField(
-                        validator: (value) => CustomValidator.selectGenderRange(value),
-                        fieldName: "Gender",
-                        hintText: "Select gender",
-                        value: selectedGender,
-                        items: const [
-                          DropdownMenuItem(value: "Male", child: Text("Male")),
-                          DropdownMenuItem(value: "Female", child: Text("Female")),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedGender = value;
-                          });
-                        },
-                      ),
+                      // const SizedBox().setHeight(18),
+                      // // dropdown
+                      // CustomDropdownField(
+                      //   validator: (value) => CustomValidator.selectGenderRange(value),
+                      //   fieldName: "Gender",
+                      //   hintText: "Select gender",
+                      //   value: selectedGender,
+                      //   items: const [
+                      //     DropdownMenuItem(value: "Male", child: Text("Male")),
+                      //     DropdownMenuItem(value: "Female", child: Text("Female")),
+                      //   ],
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       selectedGender = value;
+                      //     });
+                      //   },
+                      // ),
 
 
                       // CustomDropDown(hintText: hintText, dropDownData: dropDownData, icon: icon, onChanged: onChanged, selectedValue: selectedValue)
@@ -212,7 +212,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   lastNameController.text.toString(),
                                   emailController.text.toString(),
                                   passwordController.text.toString(),
-                                 selectedGender!,);
+                              );
                             }
 
                             }
@@ -264,7 +264,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Text("Already have an account?",style: AppTheme.bodySmallGreyStyle,),
                           GestureDetector(
                             onTap: (){
-
                               Get.offAndToNamed(AppRoutes.login);
                             },
                             child: Text(

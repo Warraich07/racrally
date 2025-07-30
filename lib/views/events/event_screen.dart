@@ -9,10 +9,12 @@ import 'package:racrally/utils/custom_dialog.dart';
 import 'package:racrally/views/events/controller/event_controller.dart';
 import 'package:racrally/views/events/widgets/create_event_bottom_sheet.dart';
 import 'package:racrally/views/events/widgets/custom_card.dart';
+import 'package:racrally/views/team/controller/team_controller.dart';
 import 'package:sizer/sizer.dart';
 import '../../app_theme/app_theme.dart';
 import '../../app_widgets/custom_button.dart';
 import '../../constants/app_icons.dart';
+import '../bottom_nav_bar/controller/bottom_bar_controller.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({super.key});
@@ -28,7 +30,8 @@ class _EventScreenState extends State<EventScreen> {
   final TextEditingController dateController = TextEditingController();
   Timer? _debounce;
   EventController eventController=Get.find();
-
+  TeamController teamController=Get.find();
+  final GeneralController _generalController = Get.put(GeneralController());
   void onSearchChanged(String value) {
     // Cancel previous timer
     setState(() {
@@ -75,8 +78,22 @@ class _EventScreenState extends State<EventScreen> {
               child: FloatingActionButton(
                 backgroundColor: AppTheme.secondaryColor,
                 onPressed: () {
-                  focusNodeSearchHere.unfocus();
-                  CreateEventSheet.show(context, "name", "location", "dateAndTime", false, "inviteAttendee", "eventId", false,"dateandtimeforupdate");
+                  // if(teamController.teamList.isNotEmpty){
+                    focusNodeSearchHere.unfocus();
+                    CreateEventSheet.show(context, "name", "location", "dateAndTime", false, "inviteAttendee", "eventId", false,"dateandtimeforupdate");
+                  // }else{
+                  //   CustomDialog.showDeleteDialog(
+                  //       buttonColor: AppTheme.secondaryColor,
+                  //       borderColor: AppTheme.secondaryColor,
+                  //       showIcon: false,
+                  //       title: "Create Your Team First",
+                  //       description: "You need a team before you can create events and invite members.",
+                  //       confirmText: "Create Team",
+                  //       onConfirm: (){
+                  //         Get.back();
+                  //       }
+                  //   );
+                  // }
                 },
                 child:  const Icon(Icons.add,color: AppTheme.primaryColor,),
               ),
@@ -189,6 +206,7 @@ class _EventScreenState extends State<EventScreen> {
                                   eventController.detailEventDate.value=eventController.formatDate(event.date.toString()).capitalizeFirst!;
                                   eventController.detailEventName.value= event.name.capitalizeFirst!;
                                   eventController.detailEventLocation.value=event.location.capitalizeFirst!;
+                                  eventController.getEventDetails(event.id.toString());
                             },
                             child: CustomCard(
                               onEditTap: (){
@@ -229,7 +247,24 @@ class _EventScreenState extends State<EventScreen> {
                               width: 42.w,
                               iconPath: AppIcons.addIcon,
                               onTap: (){
-                                CreateEventSheet.show(context, "name", "location", "formattedDate", false, "inviteAttendee", "eventId", false, "dateAndTimeForUpdateEvent");
+                                if(teamController.teamList.isNotEmpty){
+                                  CreateEventSheet.show(context, "name", "location", "formattedDate", false, "inviteAttendee", "eventId", false, "dateAndTimeForUpdateEvent");
+                                }else{
+                                  CustomDialog.showDeleteDialog(
+                                      buttonColor: AppTheme.secondaryColor,
+                                      borderColor: AppTheme.secondaryColor,
+                                      showIcon: false,
+                                      title: "Create Your Team First",
+                                      description: "You need a team before you can create events and invite members.",
+                                      confirmText: "Create Team",
+                                      onConfirm: (){
+                                        Get.back();
+                                        _generalController.onBottomBarTapped(1);
+
+                                      }
+                                  );
+                                }
+
                               },
                               Text: "Create Event",
                               borderColor: AppTheme.secondaryColor,

@@ -37,7 +37,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       emailController.text=authController.userData.value!.email;
       nameController.text=authController.userData.value!.firstName.capitalizeFirst!+" "+authController.userData.value!.lastName.capitalizeFirst!;
-      selectedGender=authController.userData.value!.gender;
+      // selectedGender=authController.userData.value!.gender;
+      selectedGender="Male";
     });
   }
   @override
@@ -111,22 +112,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         fieldName: "Email",
                         hintText: "talha@gmail.com",
                       ),
-                      const SizedBox().setHeight(18),
-                      CustomDropdownField(
-                        validator: (value) => CustomValidator.selectGenderRange(value),
-                        fieldName: "Gender",
-                        hintText: "Select gender",
-                        value: selectedGender,
-                        items: const [
-                          DropdownMenuItem(value: "Male", child: Text("Male")),
-                          DropdownMenuItem(value: "Female", child: Text("Female")),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedGender = value;
-                          });
-                        },
-                      ),
+                      // const SizedBox().setHeight(18),
+                      // CustomDropdownField(
+                      //   validator: (value) => CustomValidator.selectGenderRange(value),
+                      //   fieldName: "Gender",
+                      //   hintText: "Select gender",
+                      //   value: selectedGender,
+                      //   items: const [
+                      //     DropdownMenuItem(value: "Male", child: Text("Male")),
+                      //     DropdownMenuItem(value: "Female", child: Text("Female")),
+                      //   ],
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       selectedGender = value;
+                      //     });
+                      //   },
+                      // ),
                       const SizedBox().setHeight(18),
                       Container(
                         decoration: BoxDecoration(
