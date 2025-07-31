@@ -44,10 +44,12 @@ class _EventScreenState extends State<EventScreen> {
     _debounce = Timer(const Duration(milliseconds: 0), () {
 
       if(value.isEmpty){
+        eventController.isSearch.value=false;
         eventController.getEvents(isInitialLoad:true);
       }else{
         // eventController.getEvents(isInitialLoad:true,isSearched:true,searchQuery:value);
         // eventController.searchEvents(value, "asc", true);
+        eventController.filterEventsEvents(searchQuery:value);
       }
 
       print("User stopped typing. Final value: $value");
@@ -58,6 +60,7 @@ class _EventScreenState extends State<EventScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    eventController.isSearch.value=false;
     eventController.getEvents(isInitialLoad: true);
   }
   bool _isDisposed = false;
@@ -79,6 +82,7 @@ class _EventScreenState extends State<EventScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         floatingActionButton:Obx(
             ()=> Container(
             child: eventController.eventList.isEmpty?Container(): ClipRRect(
@@ -173,52 +177,57 @@ class _EventScreenState extends State<EventScreen> {
                 children: [
 
                   const SizedBox().setHeight(10),
-                  CustomTextField(
-                    focusNode: focusNodeSearchHere,
-                    hintText: "Search here",
-                    prefixIcon: AppIcons.search,
-                    prefixIconColor: AppTheme.lightGreyColor,
-                    onChanged: onSearchChanged,
-                  ),
+
+                CustomTextField(
+                      focusNode: focusNodeSearchHere,
+                      hintText: "Search here",
+                      prefixIcon: AppIcons.search,
+                      prefixIconColor: AppTheme.lightGreyColor,
+                      onChanged: onSearchChanged,
+                    ),
+
                   const SizedBox().setHeight(15),
                   Obx(
                         () => eventController.isLoading.value
-                        ? const Center(
-                      child: CircularProgressIndicator(color: AppTheme.secondaryColor),
-                    )
+                        ? SizedBox(
+                          height:eventController.isSearch.value? 38.h:38.h,
+                          child: const Center(
+                                                child: CircularProgressIndicator(color: AppTheme.secondaryColor),
+                                              ),
+                        )
                         : eventController.eventList.isNotEmpty
                         ? Expanded(
                           child: SmartRefresher(
                             physics: BouncingScrollPhysics(),
                             controller: _refreshController,
                             enablePullDown: false,
-                            enablePullUp: eventController.isMoreDataAvailable.value,
-                            onRefresh: () async {
-                              try {
-                                await eventController.getEvents(isInitialLoad: true);
-                                if (mounted && !_isDisposed) {
-                                  _refreshController.refreshCompleted();
-                                  _refreshController.resetNoData();
-                                }
-                              } catch (e) {
-                                if (mounted && !_isDisposed) {
-                                  _refreshController.refreshFailed();
-                                }
-                              }
-                            },
+                            // enablePullUp: eventController.isMoreDataAvailable.value,
+                            // onRefresh: () async {
+                            //   try {
+                            //     await eventController.getEvents(isInitialLoad: true);
+                            //     if (mounted && !_isDisposed) {
+                            //       _refreshController.refreshCompleted();
+                            //       _refreshController.resetNoData();
+                            //     }
+                            //   } catch (e) {
+                            //     if (mounted && !_isDisposed) {
+                            //       _refreshController.refreshFailed();
+                            //     }
+                            //   }
+                            // },
 
-                            onLoading: () async {
-                                if (eventController.isMoreDataAvailable.value) {
-                                  await eventController.getEvents();
-                                  if (!eventController.isMoreDataAvailable.value) {
-                                    _refreshController.loadNoData();
-                                  } else {
-                                    _refreshController.loadComplete();
-                                  }
-                                } else {
-                                  _refreshController.loadNoData();
-                                }
-                              },
+                            // onLoading: () async {
+                            //     if (eventController.isMoreDataAvailable.value) {
+                            //       await eventController.getEvents();
+                            //       if (!eventController.isMoreDataAvailable.value) {
+                            //         _refreshController.loadNoData();
+                            //       } else {
+                            //         _refreshController.loadComplete();
+                            //       }
+                            //     } else {
+                            //       _refreshController.loadNoData();
+                            //     }
+                            //   },
                               child: ListView.builder(
                               padding: const EdgeInsets.only(top: 0,bottom: 40),
                               itemCount: eventController.eventList.length,
@@ -271,53 +280,59 @@ class _EventScreenState extends State<EventScreen> {
                           ),
                         )
                         :eventController.isSearch.value?SizedBox(
-                            height: 40.h,
-                            child: Center(child: Text("No Events Found", style: AppTheme.mediumLightHeadingWeight600Style))): Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(AppIcons.event_icon,width: 35.w,),
-                          Text("No Events Yet!",style: AppTheme.mediumLightHeadingWeight600Style,),
-                          Center(child: Text(
-                            "Start creating events and invite members.",
-                            textAlign: TextAlign.center,
-                            style: AppTheme.bodyExtraSmallWeight400Style,)),
-                          const SizedBox().setHeight(10),
-                          CustomButton(
-                            height: 40,
-                            width: 42.w,
-                            iconPath: AppIcons.addIcon,
-                            onTap: (){
-                              if(teamController.teamList.isNotEmpty){
-                                CreateEventSheet.show(context, "name", "location", "formattedDate", false, "inviteAttendee", "eventId", false, "dateAndTimeForUpdateEvent",false);
-                              }else{
-                                CustomDialog.showDeleteDialog(
-                                    buttonColor: AppTheme.secondaryColor,
-                                    borderColor: AppTheme.secondaryColor,
-                                    showIcon: false,
-                                    title: "Create Your Team First",
-                                    description: "You need a team before you can create events and invite members.",
-                                    confirmText: "Create Team",
-                                    onConfirm: (){
-                                      Get.back();
-                                      _generalController.onBottomBarTapped(1);
-
-                                    }
-                                );
-                              }
-
-                            },
-                            Text: "Create Event",
-                            borderColor: AppTheme.secondaryColor,
-                            buttonColor: AppTheme.secondaryColor,
-                            textColor: AppTheme.primaryColor,
-                            isAuth: true,
-                            isGoogle: false,
-                          ),
-                          const SizedBox().setHeight(20),
-                        ],
-                      ),
-                    ),
+                            height: 35.h,
+                            child: Center(child: Text("No Events Found", style: AppTheme.mediumLightHeadingWeight600Style))):
+                        SizedBox(
+                          height:eventController.isLoading.value?30.h: 60.h,
+                              child: Center(
+                                                    child: SingleChildScrollView(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Image.asset(AppIcons.event_icon,width: 35.w,),
+                                                          Text("No Events Yet!",style: AppTheme.mediumLightHeadingWeight600Style,),
+                                                          Center(child: Text(
+                                                                                    "Start creating events and invite members.",
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: AppTheme.bodyExtraSmallWeight400Style,)),
+                                                          const SizedBox().setHeight(10),
+                                                          CustomButton(
+                                                                                    height: 40,
+                                                                                    width: 42.w,
+                                                                                    iconPath: AppIcons.addIcon,
+                                                                                    onTap: (){
+                                                                                      if(teamController.teamList.isNotEmpty){
+                                                                                        CreateEventSheet.show(context, "name", "location", "formattedDate", false, "inviteAttendee", "eventId", false, "dateAndTimeForUpdateEvent",false);
+                                                                                      }else{
+                                                                                        CustomDialog.showDeleteDialog(
+                                                                                            buttonColor: AppTheme.secondaryColor,
+                                                                                            borderColor: AppTheme.secondaryColor,
+                                                                                            showIcon: false,
+                                                                                            title: "Create Your Team First",
+                                                                                            description: "You need a team before you can create events and invite members.",
+                                                                                            confirmText: "Create Team",
+                                                                                            onConfirm: (){
+                                                                                              Get.back();
+                                                                                              _generalController.onBottomBarTapped(1);
+                                                      
+                                                                                            }
+                                                                                        );
+                                                                                      }
+                                                      
+                                                                                    },
+                                                                                    Text: "Create Event",
+                                                                                    borderColor: AppTheme.secondaryColor,
+                                                                                    buttonColor: AppTheme.secondaryColor,
+                                                                                    textColor: AppTheme.primaryColor,
+                                                                                    isAuth: true,
+                                                                                    isGoogle: false,
+                                                          ),
+                                                          const SizedBox().setHeight(20),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                            ),
                   )
                 ],
               ).paddingOnly(left: 16,right: 16),

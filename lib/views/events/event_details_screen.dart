@@ -202,6 +202,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                   shrinkWrap: true,
                                   itemBuilder: (context,index){
                                 return CustomCardAttendees(
+                                    isTeamScreen:true,
                                   onTapSend: (){
                                     eventController.reSendInvite(eventController.eventDetailsList[index].invites[index].user.id.toString(), eventController.eventDetailsList[index].invites[index].eventId.toString(),eventController.eventDetailsList[index].invites[index].id.toString());
                                     print("re send");

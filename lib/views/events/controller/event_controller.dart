@@ -121,7 +121,7 @@ class EventController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
-      getEvents();
+      getEvents(isInitialLoad: true);
       Get.back();
       SnackbarUtil.showSnackbar(
         message: "Event Created",
@@ -168,7 +168,7 @@ class EventController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
-      getEvents();
+      getEvents(isInitialLoad: true);
       Get.back();
       SnackbarUtil.showSnackbar(
         message: "Event Updated",
@@ -213,7 +213,7 @@ class EventController extends GetxController {
     if (result['success'].toString()=="true") {
       if(isFromDetailsScreen){Get.back();}
       eventList.clear();
-      getEvents();
+      getEvents(isInitialLoad: true);
 
       SnackbarUtil.showSnackbar(
         message: "Event Deleted",
@@ -232,7 +232,7 @@ class EventController extends GetxController {
     }
   }
   RxInt page = 1.obs;
-  RxInt size = 2.obs;
+  RxInt size = 10.obs;
   RxInt totalCount = 0.obs;
   RxBool isMoreDataAvailable = true.obs;
   RxString currentOrder = ''.obs;
@@ -243,7 +243,7 @@ class EventController extends GetxController {
       page.value = 1;
       totalCount.value = 0;
       eventList.clear();
-       size.value = 2;
+       size.value = 10;
       isMoreDataAvailable.value = true;
 
       // Store current filter for future pagination
@@ -297,27 +297,25 @@ class EventController extends GetxController {
   }
 
 
-  Future filterEventsEvents({bool isInitialLoad = true,bool isSearched=false,String order='asc',String searchQuery='',bool isFilter=false}) async {
+  Future filterEventsEvents({bool isInitialLoad = true,String searchQuery=''}) async {
     isSearch.value=true;
     if (isInitialLoad) {
       page.value = 1;
       eventList.clear();
       // totalCount.value=0;
+      eventList.clear();
       isMoreDataAvailable.value = true;
     }
 
     if (!isMoreDataAvailable.value) return;
 
     isLoading.value = true;
-    isSearch.value = false;
+    // isSearch.value = false;
 
     final BaseController _baseController = BaseController.instance;
     String endPoint='';
-    if(isSearched){
       endPoint="/event?page=${page.value}&size=${size.value}&name=$searchQuery";
-    }else{
-      endPoint="/event?page=${page.value}&size=${size.value}&order=$order";
-    }
+
     var response = await DataApiService.instance
         .get(endPoint)
         .catchError((error) {

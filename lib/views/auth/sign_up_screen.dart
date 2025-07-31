@@ -14,6 +14,7 @@ import '../../constants/app_images.dart';
 import '../../constants/custom_validators.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/snackbar_utils.dart';
+import 'controller/social_sign_in_controller.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -38,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final genderController=TextEditingController();
   final passwordController=TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final SocialSignInController socialSignInController=Get.find();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -237,9 +239,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox().setHeight(18),
                       CustomButton(
                         onTap: (){
-                          if(_formKey.currentState!.validate()){
-                            print("object");
-                          }
+                          socialSignInController.signInWithGoogle();
                         },
                         Text: "Google",
                         borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
