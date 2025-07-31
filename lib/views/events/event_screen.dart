@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:racrally/app_widgets/custom_text_field.dart';
 import 'package:racrally/extensions/height_extension.dart';
 import 'package:racrally/routes/app_routes.dart';
@@ -32,6 +33,7 @@ class _EventScreenState extends State<EventScreen> {
   EventController eventController=Get.find();
   TeamController teamController=Get.find();
   final GeneralController _generalController = Get.put(GeneralController());
+
   void onSearchChanged(String value) {
     // Cancel previous timer
     setState(() {
@@ -42,9 +44,10 @@ class _EventScreenState extends State<EventScreen> {
     _debounce = Timer(const Duration(milliseconds: 0), () {
 
       if(value.isEmpty){
-        eventController.getEvents();
+        eventController.getEvents(isInitialLoad:true);
       }else{
-        eventController.searchEvents(value, "asc", true);
+        // eventController.getEvents(isInitialLoad:true,isSearched:true,searchQuery:value);
+        // eventController.searchEvents(value, "asc", true);
       }
 
       print("User stopped typing. Final value: $value");
@@ -55,15 +58,20 @@ class _EventScreenState extends State<EventScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   
-    eventController.getEvents();
+    eventController.getEvents(isInitialLoad: true);
   }
+  bool _isDisposed = false;
 
   @override
   void dispose() {
-    _debounce?.cancel(); // Clean up
+    _isDisposed = true;
+    _refreshController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
+
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -80,7 +88,7 @@ class _EventScreenState extends State<EventScreen> {
                 onPressed: () {
                   // if(teamController.teamList.isNotEmpty){
                     focusNodeSearchHere.unfocus();
-                    CreateEventSheet.show(context, "name", "location", "dateAndTime", false, "inviteAttendee", "eventId", false,"dateandtimeforupdate");
+                    CreateEventSheet.show(context, "name", "location", "dateAndTime", false, "inviteAttendee", "eventId", false,"dateandtimeforupdate",false);
                   // }else{
                   //   CustomDialog.showDeleteDialog(
                   //       buttonColor: AppTheme.secondaryColor,
@@ -147,16 +155,15 @@ class _EventScreenState extends State<EventScreen> {
                         ),
                       ),
                     ],
-                    onSelected: (value) {
-                      focusNodeSearchHere.unfocus();
-                      if (value == 'A-Z') {
-                        eventController.searchEvents("", "asc", false);
-                        print("A-Z");
-                      } else if (value == 'Z-A') {
-                        print("Z-A");
-                        eventController.searchEvents("", "desc", false);
+                      onSelected: (value) {
+                        focusNodeSearchHere.unfocus();
+                        if (value == 'A-Z') {
+                          // eventController.eventList.clear();
+                          eventController.getEvents(isInitialLoad: true, isFilter: true, order: 'asc');
+                        } else if (value == 'Z-A') {
+                          eventController.getEvents(isInitialLoad: true, isFilter: true, order: 'desc');
+                        }
                       }
-                    },
                   ),
                 ),
               ],
@@ -164,7 +171,7 @@ class _EventScreenState extends State<EventScreen> {
             Expanded(
               child: Column(
                 children: [
-              
+
                   const SizedBox().setHeight(10),
                   CustomTextField(
                     focusNode: focusNodeSearchHere,
@@ -174,108 +181,141 @@ class _EventScreenState extends State<EventScreen> {
                     onChanged: onSearchChanged,
                   ),
                   const SizedBox().setHeight(15),
-                  Expanded(
-                    child: Obx(
-                          () => eventController.isLoading.value
-                          ? const Center(
-                        child: CircularProgressIndicator(color: AppTheme.secondaryColor),
-                      )
-                          : eventController.eventList.isNotEmpty
-                          ? ListView.builder(
-                        padding: const EdgeInsets.only(top: 0,bottom: 40),
-                        itemCount: eventController.eventList.length,
-                        itemBuilder: (context, index) {
-                          final event = eventController.eventList[index];
-                          final DateTime now = DateTime.now();
-                          final DateTime today = DateTime(now.year, now.month, now.day);
-                          final DateTime eventDateTime = DateTime.parse(event.date.toString());
-                          final DateTime eventDateOnly = DateTime(eventDateTime.year, eventDateTime.month, eventDateTime.day);
-                          final bool isUpcoming = eventDateOnly.isAfter(today) || eventDateOnly.isAtSameMomentAs(today);
-              
-                          return GestureDetector(
-                            onTap: (){
-                                  Get.toNamed(AppRoutes.eventDetail,
-                                  arguments: {
-                                    'eventName': event.name.capitalizeFirst!,
-                                    'date': eventController.formatDate(event.date.toString()).capitalizeFirst!,
-                                    'location': event.location.capitalizeFirst,
-                                    'eventId':event.id,
-                                    'inviteAttendee': event.inviteAttandee,
-                                    'dateANdTimeForUpdateEvent':event.date.toString()
-                                  });
-                                  eventController.detailEventDate.value=eventController.formatDate(event.date.toString()).capitalizeFirst!;
-                                  eventController.detailEventName.value= event.name.capitalizeFirst!;
-                                  eventController.detailEventLocation.value=event.location.capitalizeFirst!;
-                                  eventController.getEventDetails(event.id.toString());
-                            },
-                            child: CustomCard(
-                              onEditTap: (){
-                                CreateEventSheet.show(context, event.name.capitalizeFirst!, event.location.capitalizeFirst!, eventController.formatDate(event.date.toString()).capitalizeFirst!, false, event.inviteAttandee, event.id.toString(),true,event.date.toString());
-                                print("object");
-                              },
-                              onDeleteTap:(){
-                                CustomDialog.showDeleteDialog(
-                                    onConfirm: (){
-                                      eventController.deleteEvent(event.id.toString(),false);
-                                    },
-                                    iconPath: AppIcons.delete);
-                              },
-                              isUpComing: isUpcoming,
-                              title: event.name.capitalizeFirst!,
-                              dateTime: eventController.formatDate(event.date.toString()).capitalizeFirst!,
-                              location: event.location.capitalizeFirst!,
-              
-                            ),
-                          );
-                        },
-                      )
-                          :eventController.isSearch.value?SizedBox(
-                              height: 40.h,
-                              child: Center(child: Text("No Events Found", style: AppTheme.mediumLightHeadingWeight600Style))): Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(AppIcons.event_icon,width: 35.w,),
-                            Text("No Events Yet!",style: AppTheme.mediumLightHeadingWeight600Style,),
-                            Center(child: Text(
-                              "Start creating events and invite members.",
-                              textAlign: TextAlign.center,
-                              style: AppTheme.bodyExtraSmallWeight400Style,)),
-                            const SizedBox().setHeight(10),
-                            CustomButton(
-                              height: 40,
-                              width: 42.w,
-                              iconPath: AppIcons.addIcon,
-                              onTap: (){
-                                if(teamController.teamList.isNotEmpty){
-                                  CreateEventSheet.show(context, "name", "location", "formattedDate", false, "inviteAttendee", "eventId", false, "dateAndTimeForUpdateEvent");
-                                }else{
-                                  CustomDialog.showDeleteDialog(
-                                      buttonColor: AppTheme.secondaryColor,
-                                      borderColor: AppTheme.secondaryColor,
-                                      showIcon: false,
-                                      title: "Create Your Team First",
-                                      description: "You need a team before you can create events and invite members.",
-                                      confirmText: "Create Team",
-                                      onConfirm: (){
-                                        Get.back();
-                                        _generalController.onBottomBarTapped(1);
-
-                                      }
-                                  );
+                  Obx(
+                        () => eventController.isLoading.value
+                        ? const Center(
+                      child: CircularProgressIndicator(color: AppTheme.secondaryColor),
+                    )
+                        : eventController.eventList.isNotEmpty
+                        ? Expanded(
+                          child: SmartRefresher(
+                            physics: BouncingScrollPhysics(),
+                            controller: _refreshController,
+                            enablePullDown: false,
+                            enablePullUp: eventController.isMoreDataAvailable.value,
+                            onRefresh: () async {
+                              try {
+                                await eventController.getEvents(isInitialLoad: true);
+                                if (mounted && !_isDisposed) {
+                                  _refreshController.refreshCompleted();
+                                  _refreshController.resetNoData();
                                 }
+                              } catch (e) {
+                                if (mounted && !_isDisposed) {
+                                  _refreshController.refreshFailed();
+                                }
+                              }
+                            },
+
+                            onLoading: () async {
+                                if (eventController.isMoreDataAvailable.value) {
+                                  await eventController.getEvents();
+                                  if (!eventController.isMoreDataAvailable.value) {
+                                    _refreshController.loadNoData();
+                                  } else {
+                                    _refreshController.loadComplete();
+                                  }
+                                } else {
+                                  _refreshController.loadNoData();
+                                }
+                              },
+                              child: ListView.builder(
+                              padding: const EdgeInsets.only(top: 0,bottom: 40),
+                              itemCount: eventController.eventList.length,
+                              itemBuilder: (context, index) {
+                            final event = eventController.eventList[index];
+                            final DateTime now = DateTime.now();
+                            final DateTime today = DateTime(now.year, now.month, now.day);
+                            final DateTime eventDateTime = DateTime.parse(event.date.toString());
+                            final DateTime eventDateOnly = DateTime(eventDateTime.year, eventDateTime.month, eventDateTime.day);
+                            final bool isUpcoming = eventDateOnly.isAfter(today) || eventDateOnly.isAtSameMomentAs(today);
+
+                            return GestureDetector(
+                              onTap: (){
+                                eventController.getEventDetails(event.id.toString());
+                                    Get.toNamed(AppRoutes.eventDetail,
+                                    arguments: {
+                                      'eventName': event.name.capitalizeFirst!,
+                                      'date': eventController.formatDate(event.date.toString()).capitalizeFirst!,
+                                      'location': event.location.capitalizeFirst,
+                                      'eventId':event.id,
+                                      'inviteAttendee': event.inviteAttandee,
+                                      'dateANdTimeForUpdateEvent':event.date.toString()
+                                    });
+                                    eventController.detailEventDate.value=eventController.formatDate(event.date.toString()).capitalizeFirst!;
+                                    eventController.detailEventName.value= event.name.capitalizeFirst!;
+                                    eventController.detailEventLocation.value=event.location.capitalizeFirst!;
 
                               },
-                              Text: "Create Event",
-                              borderColor: AppTheme.secondaryColor,
-                              buttonColor: AppTheme.secondaryColor,
-                              textColor: AppTheme.primaryColor,
-                              isAuth: true,
-                              isGoogle: false,
-                            ),
-                            const SizedBox().setHeight(20),
-                          ],
-                        ),
+                              child: CustomCard(
+                                onEditTap: (){
+                                  CreateEventSheet.show(context, event.name.capitalizeFirst!, event.location.capitalizeFirst!, eventController.formatDate(event.date.toString()).capitalizeFirst!, false, event.inviteAttandee, event.id.toString(),true,event.date.toString(),false);
+                                  print("object");
+                                },
+                                onDeleteTap:(){
+                                  CustomDialog.showDeleteDialog(
+                                      onConfirm: (){
+                                        eventController.deleteEvent(event.id.toString(),false);
+                                      },
+                                      iconPath: AppIcons.delete);
+                                },
+                                isUpComing: isUpcoming,
+                                title: event.name.capitalizeFirst!,
+                                dateTime: eventController.formatDate(event.date.toString()).capitalizeFirst!,
+                                location: event.location.capitalizeFirst!,
+
+                              ),
+                            );
+                                                    },
+                                                  ),
+                          ),
+                        )
+                        :eventController.isSearch.value?SizedBox(
+                            height: 40.h,
+                            child: Center(child: Text("No Events Found", style: AppTheme.mediumLightHeadingWeight600Style))): Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(AppIcons.event_icon,width: 35.w,),
+                          Text("No Events Yet!",style: AppTheme.mediumLightHeadingWeight600Style,),
+                          Center(child: Text(
+                            "Start creating events and invite members.",
+                            textAlign: TextAlign.center,
+                            style: AppTheme.bodyExtraSmallWeight400Style,)),
+                          const SizedBox().setHeight(10),
+                          CustomButton(
+                            height: 40,
+                            width: 42.w,
+                            iconPath: AppIcons.addIcon,
+                            onTap: (){
+                              if(teamController.teamList.isNotEmpty){
+                                CreateEventSheet.show(context, "name", "location", "formattedDate", false, "inviteAttendee", "eventId", false, "dateAndTimeForUpdateEvent",false);
+                              }else{
+                                CustomDialog.showDeleteDialog(
+                                    buttonColor: AppTheme.secondaryColor,
+                                    borderColor: AppTheme.secondaryColor,
+                                    showIcon: false,
+                                    title: "Create Your Team First",
+                                    description: "You need a team before you can create events and invite members.",
+                                    confirmText: "Create Team",
+                                    onConfirm: (){
+                                      Get.back();
+                                      _generalController.onBottomBarTapped(1);
+
+                                    }
+                                );
+                              }
+
+                            },
+                            Text: "Create Event",
+                            borderColor: AppTheme.secondaryColor,
+                            buttonColor: AppTheme.secondaryColor,
+                            textColor: AppTheme.primaryColor,
+                            isAuth: true,
+                            isGoogle: false,
+                          ),
+                          const SizedBox().setHeight(20),
+                        ],
                       ),
                     ),
                   )

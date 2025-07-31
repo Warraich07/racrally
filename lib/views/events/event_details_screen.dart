@@ -29,7 +29,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    // final Map<String, dynamic> data = Get.arguments;
+    final Map<String, dynamic> data = Get.arguments;
 
     return Obx(
       ()=> Scaffold(
@@ -43,7 +43,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         //
         // ),
         backgroundColor: AppTheme.primaryColor,
-        body:  Column(
+        body:eventController.isLoading.value?
+        SizedBox(
+          height: 100.h,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: AppTheme.secondaryColor,
+            ),
+          ),
+        ):
+        Column(
             children: [
               Container(
                 width: double.infinity,
@@ -102,13 +111,13 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             ],
                             onSelected: (value) {
                               if (value == 'edit') {
-                                // CreateEventSheet.show(context,data['eventName'], data['location'], data['date'], false,  data['inviteAttendee'], data['eventId'].toString(),true,data['dateANdTimeForUpdateEvent']);
+                                CreateEventSheet.show(context,data['eventName'], data['location'], data['date'], false,  data['inviteAttendee'], data['eventId'].toString(),true,data['dateANdTimeForUpdateEvent'],true);
                                 // onEditTap?.call();
                               } else if (value == 'delete') {
                                 CustomDialog.showDeleteDialog(
                                     onConfirm: (){
 
-                                      // eventController.deleteEvent(data['eventId'].toString(),true);
+                                      eventController.deleteEvent(data['eventId'].toString(),true);
                                     },
                                     iconPath: AppIcons.delete);
                                 // onDeleteTap?.call();
@@ -194,7 +203,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                   itemBuilder: (context,index){
                                 return CustomCardAttendees(
                                   onTapSend: (){
-                                    print("re sent");
+                                    eventController.reSendInvite(eventController.eventDetailsList[index].invites[index].user.id.toString(), eventController.eventDetailsList[index].invites[index].eventId.toString(),eventController.eventDetailsList[index].invites[index].id.toString());
+                                    print("re send");
                                   },
                                     onDeleteTap: (){
                                       eventController.removeMemberFromEvent(eventController.eventDetailsList[index].invites[index].user.id.toString(), eventController.eventDetailsList[index].invites[index].eventId.toString());

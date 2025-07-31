@@ -11,7 +11,7 @@ import '../../auth/widgets/custom_dropdown.dart';
 import '../controller/event_controller.dart';
 
 class CreateEventSheet {
-  static void show(BuildContext context,String? name,String? location,String? formattedDate,bool? rsvp,String? inviteAttendee ,String? eventId,bool? isUpdate,String? dateAndTimeForUpdateEvent) {
+  static void show(BuildContext context,String? name,String? location,String? formattedDate,bool? rsvp,String? inviteAttendee ,String? eventId,bool? isUpdate,String? dateAndTimeForUpdateEvent,bool isFromEventDetailsScreen) {
     final EventController controller = Get.find();
     final focusNodePassword = FocusNode();
     EventController eventController=Get.find();
@@ -293,7 +293,8 @@ class CreateEventSheet {
                                   dateAndTime,
                                   false,
                                   playerType!,
-                                eventId.toString()
+                                eventId.toString(),
+                                isFromEventDetailsScreen
                               );
                             }else{
                               print("creation");

@@ -204,20 +204,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         children: [
                           Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 1,
-                                    color: AppTheme.darkGreyColor,
-                                  ),
-                                ),
-                                height: 25,
-                                width: 25,
-                                child: Image.asset(AppIcons.user_place_holder),
-                              ).paddingAll(5),
-                              const SizedBox().setWidth(5),
                               Text(
                                 "${invite.user.firstName} ${invite.user.lastName}",
                                 style: AppTheme.bodyMediumStyle,
@@ -229,6 +215,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               GestureDetector(
                                 onTap: () {
                                   CustomDialog.showDeleteDialog(
+                                    subTitleHeading: "Event Name: ",
                                     showSubtitle: true,
                                     subtitle: invite.event.name.toString(),
                                     showIcon: false,
@@ -263,6 +250,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               GestureDetector(
                                 onTap: () {
                                   CustomDialog.showDeleteDialog(
+                                    subTitleHeading: "Event Name: ",
                                     showSubtitle: true,
                                     subtitle: invite.event.name.toString(),
                                     buttonColor: AppTheme.green,
