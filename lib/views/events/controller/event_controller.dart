@@ -5,6 +5,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:racrally/models/event_details_model.dart';
 import 'package:racrally/models/event_model.dart';
 
@@ -21,11 +22,16 @@ class EventController extends GetxController {
   RxList<EventModel> eventList=<EventModel>[].obs;
   RxList<EventDetailsModel> eventDetailsList=<EventDetailsModel>[].obs;
   RxList<EventModel> eventListBackup=<EventModel>[].obs;
-  RxString detailEventName=''.obs;
-  RxString detailEventDate=''.obs;
-  RxString detailEventLocation=''.obs;
+  final RefreshController refreshController = RefreshController(initialRefresh: false);
   RxBool isSearch=false.obs;
+  RxBool isFilter=false.obs;
+  RxString order=''.obs;
   final BaseController _baseController = BaseController.instance;
+
+  void updateIsFilterAndOrder(bool value,String orderValue){
+    isFilter.value;
+    order.value=orderValue;
+  }
 
 
   Future reSendInvite(String userId,String eventId,String inviteId) async {
@@ -95,6 +101,8 @@ class EventController extends GetxController {
 
   Future createEvent(String name,String location,String dateAndTime,bool rsvp,String inviteAttendee ) async {
     isLoading.value=true;
+    // isMoreDataAvailable.value = true;
+    // refreshController.resetNoData();
     final BaseController _baseController = BaseController.instance;
     Map<String, String> body = {
       "name": name,
@@ -121,7 +129,8 @@ class EventController extends GetxController {
     var result = json.decode(response);
     isLoading.value=false;
     if (result['success'].toString()=="true") {
-      getEvents(isInitialLoad: true);
+      await getEvents(isInitialLoad: true);
+      refreshController.resetNoData();
       Get.back();
       SnackbarUtil.showSnackbar(
         message: "Event Created",
@@ -232,69 +241,53 @@ class EventController extends GetxController {
     }
   }
   RxInt page = 1.obs;
-  RxInt size = 10.obs;
+  RxInt size = 2.obs;
   RxInt totalCount = 0.obs;
   RxBool isMoreDataAvailable = true.obs;
-  RxString currentOrder = ''.obs;
-  RxBool isFiltered = false.obs;
 
-  Future getEvents({bool isInitialLoad = false, bool? isFilter, String? order}) async {
+  Future<void> getEvents({bool isInitialLoad = false}) async {
+    isLoading.value=true;
     if (isInitialLoad) {
       page.value = 1;
-      totalCount.value = 0;
       eventList.clear();
-       size.value = 10;
       isMoreDataAvailable.value = true;
 
-      // Store current filter for future pagination
-      if (isFilter != null) isFiltered.value = isFilter;
-      if (order != null) currentOrder.value = order;
     }
 
     if (!isMoreDataAvailable.value) return;
+    String endPoint='';
+    if(isFilter.value==true){
+      endPoint='/event?page=${page.value}&size=2&order=$order';
+    }else{
+      endPoint='/event?page=${page.value}&size=2';
+    }
+    try {
+      final response = await DataApiService.instance.get(endPoint);
+      if (response == null) return;
 
-    isLoading.value = true;
-    final BaseController _baseController = BaseController.instance;
+      final result = json.decode(response);
+      isLoading.value=false;
+      if (result['success'] != true) return;
 
-    String endPoint = isFiltered.value
-        ? "/event?page=${page.value}&size=${size.value}&order=${currentOrder.value}"
-        : "/event?page=${page.value}&size=${size.value}";
-
-    var response = await DataApiService.instance.get(endPoint).catchError((error) {
-      isLoading.value = false;
-      if (error is BadRequestException) {
-        SnackbarUtil.showSnackbar(message: "Bad Request", type: SnackbarType.error);
-      } else {
-        _baseController.handleError(error);
-      }
-    });
-
-    update();
-    _baseController.hideLoading();
-    if (response == null) return;
-
-    var result = json.decode(response);
-    isLoading.value = false;
-
-    if (result['success'].toString() == "true") {
-      List<EventModel> newEvents = List<EventModel>.from(
+      final List<EventModel> newEvents = List<EventModel>.from(
         result['data']['events'].map((x) => EventModel.fromJson(x)),
       );
 
-      totalCount.value = int.tryParse(result['data']['count'].toString()) ?? 0;
       eventList.addAll(newEvents);
-      if (eventList.length >= totalCount.value) {
+
+      final totalCount = int.tryParse(result['data']['count'].toString()) ?? 0;
+      if (eventList.length >= totalCount) {
         isMoreDataAvailable.value = false;
       } else {
         page.value += 1;
       }
-    } else if (result['status'].toString() == "failed" && result['error'].toString() == "true") {
-      String message = result['data']['message'];
-      if (message == 'Event not found') {
-        isMoreDataAvailable.value = false;
-      }
+
+      update();
+    } catch (e) {
+      BaseController.instance.handleError(e);
     }
   }
+
 
 
   Future filterEventsEvents({bool isInitialLoad = true,String searchQuery=''}) async {
@@ -356,7 +349,14 @@ class EventController extends GetxController {
   }
 
 
+  RxInt totalAcceptedInvites=0.obs;
+  RxInt totalRejectedInvites=0.obs;
+  RxInt totalNoResponseInvites=0.obs;
+
   Future getEventDetails(String eventId) async {
+    totalAcceptedInvites.value=0;
+    totalRejectedInvites.value=0;
+    totalNoResponseInvites.value=0;
     isLoading.value=true;
     final BaseController _baseController = BaseController.instance;
     var response = await DataApiService.instance
@@ -378,6 +378,11 @@ class EventController extends GetxController {
     isLoading.value=false;
     if (result['success'].toString()=="true") {
       eventDetailsList.value = List<EventDetailsModel>.from(result['data'].map((x) => EventDetailsModel.fromJson(x)));
+      if (eventDetailsList.isNotEmpty && eventDetailsList[0].invites != null) {
+        for (var invite in eventDetailsList[0].invites) {
+          _countStatus(invite.status);
+        }
+      }
       // Handle success case
     } else if(result['status'].toString()=="failed"&&result['error'].toString()=="true") {
       isLoading.value=false;
@@ -390,10 +395,26 @@ class EventController extends GetxController {
     }
   }
 
+  void _countStatus(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'accepted':
+        totalAcceptedInvites.value++;
+        break;
+      case 'pending':
+        totalNoResponseInvites.value++;
+        break;
+      default:
+        totalRejectedInvites.value++;
+    }
+  }
+
 
   String formatDate(String dateTimeString) {
     final DateTime dateTime = DateTime.parse(dateTimeString).toLocal(); // Convert to local time
     return DateFormat('EEEE, MMMM d – h:mm a').format(dateTime);
   }
 
+  void resetPagination() {
+    refreshController.resetNoData();
+  }
 }

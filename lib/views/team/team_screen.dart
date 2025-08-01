@@ -133,15 +133,24 @@ class _TeamScreenState extends State<TeamScreen> {
                               Row(
                                 children: [
                                   Row(
-                                    children: [ Image.asset(AppIcons.accepted,height: 18,width: 18,),const SizedBox().setWidth(3),Text("12",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                                    children: [
+                                      Image.asset(AppIcons.accepted,height: 18,width: 18,),
+                                      const SizedBox().setWidth(3),
+                                      Text(teamController.isActiveRoaster.value?teamController.totalAcceptedInvitesActiveRoaster.value.toString():teamController.totalAcceptedInvitesReservePlayer.value.toString(),style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
                                   ),
                                   const SizedBox().setWidth(5),
                                   Row(
-                                    children: [ Image.asset(AppIcons.cancelled,height: 18,width: 18,),const SizedBox().setWidth(3),Text("05",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                                    children: [
+                                      Image.asset(AppIcons.cancelled,height: 18,width: 18,),
+                                      const SizedBox().setWidth(3),
+                                      Text(teamController.isActiveRoaster.value?teamController.totalRejectedInvitesActiveRoaster.value.toString():teamController.totalRejectedInvitesReservePlayer.value.toString(),style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
                                   ),
                                   const SizedBox().setWidth(5),
                                   Row(
-                                    children: [ Image.asset(AppIcons.pending,height: 18,width: 18,),const SizedBox().setWidth(3),Text("05",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                                    children: [
+                                      Image.asset(AppIcons.pending,height: 18,width: 18,),
+                                      const SizedBox().setWidth(3),
+                                      Text(teamController.isActiveRoaster.value?teamController.totalNoResponseInvitesActiveRoaster.value.toString():teamController.totalNoResponseInvitesReservePlayer.value.toString(),style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
                                   ),
                                 ],
                               ),

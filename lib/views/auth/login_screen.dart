@@ -98,7 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               validator: (value) => CustomValidator.password(value),
                               suffixIcon: showPassword?GestureDetector(
                                   onTap: (){
-
                                     setState(() {
                                       showPassword=!showPassword;
                                     });
@@ -200,18 +199,18 @@ class _LoginScreenState extends State<LoginScreen> {
                          textColor: AppTheme.darkBackgroundColor,
                          isAuth: true,
                        ),
-                      const SizedBox().setHeight(14),
-                       CustomButton(
-                         onTap: (){
-                           socialSignInController.signInWithFacebook();
-                         },
-                         Text: "Facebook",
-                         borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
-                         buttonColor: AppTheme.primaryColor,
-                         textColor: AppTheme.darkBackgroundColor,
-                         isAuth: true,
-                         isGoogle: false,
-                       ),
+                      // const SizedBox().setHeight(14),
+                      //  CustomButton(
+                      //    onTap: (){
+                      //      socialSignInController.signInWithFacebook();
+                      //    },
+                      //    Text: "Facebook",
+                      //    borderColor: AppTheme.textfieldBorderColor.withOpacity(.3),
+                      //    buttonColor: AppTheme.primaryColor,
+                      //    textColor: AppTheme.darkBackgroundColor,
+                      //    isAuth: true,
+                      //    isGoogle: false,
+                      //  ),
                       const SizedBox().setHeight(30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

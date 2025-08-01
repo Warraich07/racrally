@@ -101,6 +101,13 @@ class TeamController extends GetxController {
     }
   }
 
+  RxInt totalAcceptedInvitesActiveRoaster=0.obs;
+  RxInt totalRejectedInvitesActiveRoaster=0.obs;
+  RxInt totalNoResponseInvitesActiveRoaster=0.obs;
+  RxInt totalAcceptedInvitesReservePlayer=0.obs;
+  RxInt totalRejectedInvitesReservePlayer=0.obs;
+  RxInt totalNoResponseInvitesReservePlayer=0.obs;
+
   Future getSentInvites(String teamId) async {
     isLoading.value=true;
     print("get-team");
@@ -132,6 +139,16 @@ class TeamController extends GetxController {
         );
         if(sentInvitesList.isNotEmpty){
           isPlayerInvited.value=true;
+          // Start-count values for accepted,rejected and pending statuses
+          for (var invite in sentInvitesList) {
+            for (var player in invite.activeRoster) {
+              _countStatus(player.status,true);
+            }
+            for (var player in invite.reservedPlayers) {
+              _countStatus(player.status,false);
+            }
+          }
+          // End-count values for accepted,rejected and pending statuses
         }else{
           isPlayerInvited.value=false;
         }
@@ -145,6 +162,27 @@ class TeamController extends GetxController {
       SnackbarUtil.showSnackbar(message: message, type: SnackbarType.error);
     }
   }
+
+  void _countStatus(String status,bool isActiveRoasters) {
+    if(isActiveRoasters){
+      if (status == "accepted") {
+        totalAcceptedInvitesActiveRoaster.value++;
+      } else if (status == "pending") {
+        totalNoResponseInvitesActiveRoaster.value++;
+      } else {
+        totalRejectedInvitesActiveRoaster.value++;
+      }
+    }else{
+      if (status == "accepted") {
+        totalAcceptedInvitesReservePlayer.value++;
+      } else if (status == "pending") {
+        totalNoResponseInvitesReservePlayer.value++;
+      } else {
+        totalRejectedInvitesReservePlayer.value++;
+      }
+    }
+  }
+
 
   Future getMyInvites() async {
     isLoading.value=true;
@@ -263,6 +301,12 @@ class TeamController extends GetxController {
 
   
   Future getTeam() async {
+    totalAcceptedInvitesActiveRoaster.value=0;
+    totalAcceptedInvitesReservePlayer.value=0;
+    totalRejectedInvitesReservePlayer.value=0;
+    totalRejectedInvitesActiveRoaster.value=0;
+    totalNoResponseInvitesReservePlayer.value=0;
+    totalNoResponseInvitesActiveRoaster.value=0;
     isLoading.value=true;
 
 print("get-team");

@@ -60,20 +60,19 @@ class _EventScreenState extends State<EventScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    eventController.isSearch.value=false;
     eventController.getEvents(isInitialLoad: true);
+    // eventController.resetPagination();
   }
   bool _isDisposed = false;
 
   @override
   void dispose() {
     _isDisposed = true;
-    _refreshController.dispose();
     _debounce?.cancel();
     super.dispose();
   }
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +162,11 @@ class _EventScreenState extends State<EventScreen> {
                         focusNodeSearchHere.unfocus();
                         if (value == 'A-Z') {
                           // eventController.eventList.clear();
-                          eventController.getEvents(isInitialLoad: true, isFilter: true, order: 'asc');
+                          eventController.updateIsFilterAndOrder(true,'asc');
+                          eventController.getEvents(isInitialLoad: true,);
                         } else if (value == 'Z-A') {
-                          eventController.getEvents(isInitialLoad: true, isFilter: true, order: 'desc');
+                          eventController.updateIsFilterAndOrder(true,'desc');
+                          eventController.getEvents(isInitialLoad: true,);
                         }
                       }
                   ),
@@ -198,36 +199,25 @@ class _EventScreenState extends State<EventScreen> {
                         : eventController.eventList.isNotEmpty
                         ? Expanded(
                           child: SmartRefresher(
-                            physics: BouncingScrollPhysics(),
-                            controller: _refreshController,
-                            enablePullDown: false,
-                            // enablePullUp: eventController.isMoreDataAvailable.value,
-                            // onRefresh: () async {
-                            //   try {
-                            //     await eventController.getEvents(isInitialLoad: true);
-                            //     if (mounted && !_isDisposed) {
-                            //       _refreshController.refreshCompleted();
-                            //       _refreshController.resetNoData();
-                            //     }
-                            //   } catch (e) {
-                            //     if (mounted && !_isDisposed) {
-                            //       _refreshController.refreshFailed();
-                            //     }
-                            //   }
-                            // },
-
-                            // onLoading: () async {
-                            //     if (eventController.isMoreDataAvailable.value) {
-                            //       await eventController.getEvents();
-                            //       if (!eventController.isMoreDataAvailable.value) {
-                            //         _refreshController.loadNoData();
-                            //       } else {
-                            //         _refreshController.loadComplete();
-                            //       }
-                            //     } else {
-                            //       _refreshController.loadNoData();
-                            //     }
-                            //   },
+                            physics: const BouncingScrollPhysics(),
+                            controller: eventController.refreshController,
+                            enablePullDown: true,
+                            enablePullUp: eventController.isMoreDataAvailable.value,
+                            onRefresh: () async {
+                              await eventController.getEvents(isInitialLoad: true);
+                              eventController.refreshController.refreshCompleted();
+                              eventController.refreshController.resetNoData();
+                            },
+                            onLoading: () async {
+                             if(eventController.isFilter.value){
+                               await eventController.getEvents();
+                             }else{
+                               await eventController.getEvents();
+                             }
+                              eventController.isMoreDataAvailable.value
+                                  ? eventController.refreshController.loadComplete()
+                                  : eventController.refreshController.loadNoData();
+                            },
                               child: ListView.builder(
                               padding: const EdgeInsets.only(top: 0,bottom: 40),
                               itemCount: eventController.eventList.length,
@@ -240,23 +230,28 @@ class _EventScreenState extends State<EventScreen> {
                             final bool isUpcoming = eventDateOnly.isAfter(today) || eventDateOnly.isAtSameMomentAs(today);
 
                             return GestureDetector(
-                              onTap: (){
-                                eventController.getEventDetails(event.id.toString());
-                                    Get.toNamed(AppRoutes.eventDetail,
-                                    arguments: {
-                                      'eventName': event.name.capitalizeFirst!,
-                                      'date': eventController.formatDate(event.date.toString()).capitalizeFirst!,
-                                      'location': event.location.capitalizeFirst,
-                                      'eventId':event.id,
-                                      'inviteAttendee': event.inviteAttandee,
-                                      'dateANdTimeForUpdateEvent':event.date.toString()
-                                    });
-                                    eventController.detailEventDate.value=eventController.formatDate(event.date.toString()).capitalizeFirst!;
-                                    eventController.detailEventName.value= event.name.capitalizeFirst!;
-                                    eventController.detailEventLocation.value=event.location.capitalizeFirst!;
+                                onTap: () async {
+                                  await eventController.getEventDetails(event.id.toString());
 
-                              },
-                              child: CustomCard(
+                                  // Delay navigation slightly to avoid async conflict (optional)
+                                  Future.delayed(Duration(milliseconds: 100), () {
+                                    if (mounted) {
+                                      Get.toNamed(
+                                        AppRoutes.eventDetail,
+                                        arguments: {
+                                          'eventName': event.name.capitalizeFirst!,
+                                          'date': eventController.formatDate(event.date.toString()).capitalizeFirst!,
+                                          'location': event.location.capitalizeFirst,
+                                          'eventId': event.id,
+                                          'inviteAttendee': event.inviteAttandee,
+                                          'dateANdTimeForUpdateEvent': event.date.toString()
+                                        },
+                                      );
+                                    }
+                                  });
+                                },
+
+                                child: CustomCard(
                                 onEditTap: (){
                                   CreateEventSheet.show(context, event.name.capitalizeFirst!, event.location.capitalizeFirst!, eventController.formatDate(event.date.toString()).capitalizeFirst!, false, event.inviteAttandee, event.id.toString(),true,event.date.toString(),false);
                                   print("object");

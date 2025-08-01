@@ -173,15 +173,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       Row(
                         children: [
                           Row(
-                            children: [ Image.asset(AppIcons.accepted,height: 18,width: 18,),const SizedBox().setWidth(3),Text("12",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                            children: [ Image.asset(AppIcons.accepted,height: 18,width: 18,),const SizedBox().setWidth(3),Text(eventController.totalAcceptedInvites.value.toString(),style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
                           ),
                           const SizedBox().setWidth(5),
                           Row(
-                            children: [ Image.asset(AppIcons.cancelled,height: 18,width: 18,),const SizedBox().setWidth(3),Text("05",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                            children: [ Image.asset(AppIcons.cancelled,height: 18,width: 18,),const SizedBox().setWidth(3),Text(eventController.totalRejectedInvites.value.toString(),style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
                           ),
                           const SizedBox().setWidth(5),
                           Row(
-                            children: [ Image.asset(AppIcons.pending,height: 18,width: 18,),const SizedBox().setWidth(3),Text("10",style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
+                            children: [ Image.asset(AppIcons.pending,height: 18,width: 18,),const SizedBox().setWidth(3),Text(eventController.totalNoResponseInvites.value.toString(),style: AppTheme.bodyExtraSmallStyle.copyWith( color:AppTheme.darkBackgroundColor),)],
                           )
                         ],
                       ),
@@ -201,7 +201,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 itemCount: eventController.eventDetailsList[0].invites.length,
                                   shrinkWrap: true,
                                   itemBuilder: (context,index){
+                                  var invites=eventController.eventDetailsList[index].invites[index];
+
                                 return CustomCardAttendees(
+                                    isAlreadyJoined: invites.status=='accepted'?true:false,
                                     isTeamScreen:true,
                                   onTapSend: (){
                                     eventController.reSendInvite(eventController.eventDetailsList[index].invites[index].user.id.toString(), eventController.eventDetailsList[index].invites[index].eventId.toString(),eventController.eventDetailsList[index].invites[index].id.toString());
